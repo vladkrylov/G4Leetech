@@ -1,0 +1,3 @@
+For correct work with MPI first compile folder mpi_interface, so fist do
+cd mpi_interface
+make

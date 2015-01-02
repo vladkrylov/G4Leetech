@@ -1,0 +1,9 @@
+.cproject
+.project
+
+nbproject/
+screenshots/
+
+*.zip
+*.heprep
+*.properties

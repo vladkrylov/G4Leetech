@@ -1,0 +1,58 @@
+/vis/open HepRepFile
+/vis/scene/create
+/vis/scene/add/volume
+/vis/sceneHandler/attach
+/vis/viewer/flush
+/vis/scene/add/trajectories smooth
+/vis/scene/add/hits
+/vis/viewer/set/viewpointThetaPhi 0 0 deg
+
+#one file
+/vis/scene/endOfEventAction accumulate
+
+/Micromegas/det/SetGeomID 5
+/Micromegas/det/setField 223 gauss
+/Micromegas/det/setCupThick 3 mm
+
+#/Micromegas/det/setApertureThick 7 cm
+#/Micromegas/det/setApertureRaduis 2 mm
+#/Micromegas/det/setDet1InRad 0 mm
+#/Micromegas/det/setDet1OutRad 2 mm
+#/Micromegas/det/setDet1X 33.7 cm
+
+#calibrovka
+/Micromegas/det/setApertureThick 0.1 mm
+/Micromegas/det/setApertureRaduis 2.99 cm
+/Micromegas/det/setDet1InRad 3 cm
+/Micromegas/det/setDet1OutRad 1 m
+/Micromegas/det/setDet1X 0 cm
+
+/Micromegas/det/setRotationDeg 45 deg
+
+/Micromegas/det/setMaxStep 0.1 mm
+/Micromegas/det/setMaxLength 5.0 m
+/Micromegas/det/setMaxTime 20 s
+/Micromegas/det/setMinEkin 10 keV
+/Micromegas/det/setMionRang 0.01 mm
+
+#G4double maxStep   = 0.1*mm;
+#G4double maxLength = 5.0*m;
+#G4double maxTime   = 20.0*ns; 
+#G4double minEkin   = 1.0/100*MeV;
+#G4double mionRang  = 0.01*mm;  
+
+/Micromegas/det/update
+
+#gamma, e-, e+, mu-, mu+, pi-, pi+, kaon-, kaon+, anti_proton, proton
+/Micromegas/gun/PerticleType e- 
+/Micromegas/gun/ParticlePosition 0.0 0.0 0.0
+#/Micromegas/gun/ParticleDirection 1.0 0.0 0.0
+/Micromegas/gun/ParticleDirection 0.0 0.0 0.0
+/Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
+#/Micromegas/gun/ParticleMomentum 1.0 1.0 -999
+/Micromegas/gun/ParticleMomentum 0.0 1.5 -999
+
+/Micromegas/RootFile micromegas_Vis.root
+/Micromegas/printModulo 10000
+
+/run/beamOn 100

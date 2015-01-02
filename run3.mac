@@ -1,0 +1,37 @@
+/Micromegas/det/SetGeomID 3
+/Micromegas/det/setField 400 gauss
+										#/Micromegas/det/setCupThick 0.00001 nm
+										#/Micromegas/det/setApertureThick 0.00001 nm
+/Micromegas/det/setCupThick 3 mm
+/Micromegas/det/setApertureThick 7 cm
+/Micromegas/det/setApertureRaduis 1 mm
+
+/Micromegas/det/setDet1InRad 0 mm
+/Micromegas/det/setDet1OutRad 7 mm
+/Micromegas/det/setDet1X 16.7 cm
+
+/Micromegas/det/setMaxStep 0.1 mm
+/Micromegas/det/setMaxLength 5.0 m
+/Micromegas/det/setMaxTime 20 ns
+/Micromegas/det/setMinEkin 10 keV
+/Micromegas/det/setMionRang 0.01 mm
+
+#G4double maxStep   = 0.1*mm;
+#G4double maxLength = 5.0*m;
+#G4double maxTime   = 20.0*ns; 
+#G4double minEkin   = 1.0/100*MeV;
+#G4double mionRang  = 0.01*mm;  
+
+/Micromegas/det/update
+
+#gamma, e-, e+, mu-, mu+, pi-, pi+, kaon-, kaon+, anti_proton, proton
+/Micromegas/gun/PerticleType e- 
+/Micromegas/gun/ParticlePosition 0.0 0.0 -200.0
+/Micromegas/gun/ParticleDirection 0.0 0.0 1.0
+/Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
+/Micromegas/gun/ParticleMomentum 5.0 5.0 -999
+
+/Micromegas/RootFile micromegas_Vis.root
+/Micromegas/printModulo 10000
+
+/run/beamOn 1
