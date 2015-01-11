@@ -7,7 +7,7 @@ name := micromegasParallel
 G4TARGET := $(name)
 G4EXLIB := true
 MPI_interf := $(G4WORKDIR)/MicromegasParallel/mpi_interface
-MPI := /home/vlad/Program_Files/openmpi-1.6.3/_installation
+MPI := /home/vlad/Program_Files/openmpi-1.4.2/build
 
 ifndef G4INSTALL
   G4INSTALL = ../../..
@@ -32,9 +32,12 @@ EXTRALIBS = $(shell root-config --glibs)
 ifdef ROOTSYS
   CPPFLAGS += -I$(shell $(ROOTSYS)/bin/root-config --incdir)
   LDLIBS   += $(shell $(ROOTSYS)/bin/root-config --libs)
+else
+  CPPFLAGS += -I$(shell root-config --incdir)
+  LDLIBS   += $(shell root-config --libs)
 endif
 
-CPPFLAGS +=-I/home/vlad/Program_Files/geant4.9.5/geant4.9.5.p02/no_include
+CPPFLAGS +=-I/home/vlad/Program_Files/Geant4/geant4.9.5.p02/no_include
 
 CPPFLAGS +=-I/home/vlad/Program_Files/root/include
 # CPPFLAGS +=-I/u/ofedorch/root/include/

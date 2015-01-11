@@ -17,9 +17,9 @@
 #include "G4VisExecutive.hh"
 #endif
 
-#ifdef G4UI_USE
-#include "G4UIExecutive.hh"
-#endif
+// #ifdef G4UI_USE
+// #include "G4UIExecutive.hh"
+// #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -97,16 +97,16 @@ int main(int argc,char** argv)
     }
   else
     {  // interactive mode : define UI session
-#ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
-     // UImanager->ApplyCommand("/control/execute vis.mac"); 
-#endif
-      if (ui->IsGUI())
-	//UImanager->ApplyCommand("/control/execute gui.mac");
-      ui->SessionStart();
-      delete ui;
-#endif
+//#ifdef G4UI_USE
+//      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+//#ifdef G4VIS_USE
+//     // UImanager->ApplyCommand("/control/execute vis.mac");
+//#endif
+//      if (ui->IsGUI())
+//	//UImanager->ApplyCommand("/control/execute gui.mac");
+//      ui->SessionStart();
+//      delete ui;
+//#endif
     }
 
   // Job termination

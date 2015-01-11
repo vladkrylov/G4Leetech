@@ -40,7 +40,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/intercoms/include \
             -I$(G4BASE)/graphics_reps/include
 
-CPPFLAGS += -I/home/vlad/Program_Files/openmpi-1.6.3/_installation/include
+CPPFLAGS += -I/home/vlad/Program_Files/openmpi-1.4.2/build/include
 
 include $(G4INSTALL)/config/common.gmk
 
