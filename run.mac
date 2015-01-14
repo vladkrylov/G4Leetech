@@ -1,29 +1,14 @@
-/vis/open HepRepFile
-/vis/scene/create
-/vis/scene/add/volume
-/vis/sceneHandler/attach
-/vis/viewer/flush
-/vis/viewer/set/autoRefresh false
-#/tracking/storeTrajectory 1
-/vis/scene/add/trajectories smooth
-#/vis/scene/add/hits
-/vis/viewer/set/viewpointThetaPhi 0 0 deg
 
-#one file
-/vis/scene/endOfEventAction accumulate 10000000
-#/vis/scene/endOfEventAction refresh
-
-/Micromegas/det/SetGeomID 8
+/Micromegas/det/SetGeomID 10
 
 #P=1MeV
 #/Micromegas/det/setField 223 gauss
 #P=100keV
 #/Micromegas/det/setField 22.5 gauss
 #P=5MeV
-#/Micromegas/det/setField 500 gauss
+/Micromegas/det/setField 500 gauss
 #E=100keV
-/Micromegas/det/setField 81.5 gauss
-#/Micromegas/det/setField 163 gauss
+#/Micromegas/det/setField 81.5 gauss
 		
 /Micromegas/det/setCupThick 7 mm
 
@@ -82,10 +67,7 @@
 #/Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
 #/Micromegas/gun/ParticleMomentum 5.0 5.0 -999
 
-/Micromegas/RootFile micromegas_Vis.root
+/Micromegas/RootFile micromegas_Run.root
 /Micromegas/printModulo 100000
 
-#/run/beamOn 1000000
-/run/beamOn 100
-#/run/beamOn 8000000
-#/run/beamOn 3000
+/run/beamOn 1000000

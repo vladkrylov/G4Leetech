@@ -1,0 +1,5 @@
+#!/bin/bash
+
+mpirun -np 4 ../bin/Linux-g++/micromegasParallel run.mac
+root -l UniteRoots.cxx
+mv United.root new_G12.root

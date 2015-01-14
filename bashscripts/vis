@@ -1,0 +1,9 @@
+#!/bin/bash
+
+G4HepRappJava="/home/vlad/Program_Files/java/jre1.6.0_30/bin/java"
+G4HepRapp="/home/vlad/5g4work/HepRApp.jar"
+G4VisFile="/home/vlad/5g4work/MicromegasParallel/G4Data1.heprep"
+
+#$(G4HepRappJava) -jar G4HepRapp - file G4VisFile
+`$(G4HepRappJava)`
+
