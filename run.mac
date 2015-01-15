@@ -6,9 +6,9 @@
 #P=100keV
 #/Micromegas/det/setField 22.5 gauss
 #P=5MeV
-/Micromegas/det/setField 500 gauss
+#/Micromegas/det/setField 500 gauss
 #E=100keV
-#/Micromegas/det/setField 81.5 gauss
+/Micromegas/det/setField 81.5 gauss
 		
 /Micromegas/det/setCupThick 7 mm
 

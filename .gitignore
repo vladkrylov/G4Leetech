@@ -3,7 +3,7 @@
 
 nbproject/
 screenshots/
-
+*.root
 *.zip
 *.heprep
 *.properties
