@@ -1,4 +1,4 @@
-name := micromegasParallel
+name := LeetechParallel
 G4TARGET := $(name)
 G4EXLIB := true
 MPI_interface := ./mpi_interface

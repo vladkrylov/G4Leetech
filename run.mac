@@ -70,4 +70,4 @@
 /Micromegas/RootFile micromegas_Run.root
 /Micromegas/printModulo 100000
 
-/run/beamOn 1000000
+/run/beamOn 100000
