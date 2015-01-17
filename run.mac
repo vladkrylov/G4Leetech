@@ -9,7 +9,7 @@
 #/Micromegas/det/setField 500 gauss
 #E=100keV
 /Micromegas/det/setField 81.5 gauss
-		
+
 /Micromegas/det/setCupThick 7 mm
 
 #equal to first colim gap
@@ -40,7 +40,7 @@
 /Micromegas/det/update
 
 #gamma, e-, e+, mu-, mu+, pi-, pi+, kaon-, kaon+, anti_proton, proton
-/Micromegas/gun/PerticleType e- 
+/Micromegas/gun/PerticleType e-
 
 # settings for aproximate parameters of collimators
 #/Micromegas/gun/ParticlePosition -50 0 -60.0
@@ -67,7 +67,10 @@
 #/Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
 #/Micromegas/gun/ParticleMomentum 5.0 5.0 -999
 
-/Micromegas/RootFile micromegas_Run.root
+/Leetech/RootFile RunsResults/Run_0004/LeetechRun
 /Micromegas/printModulo 100000
 
 /run/beamOn 100000
+
+
+

@@ -1,9 +1,13 @@
 .*
 !.gitignore
 
-nbproject/
 screenshots/
+RunsResults/
+
 *.root
 *.zip
 *.heprep
 *.properties
+*.log
+
+*.pyc

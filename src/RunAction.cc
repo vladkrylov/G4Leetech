@@ -57,7 +57,7 @@ bool autoSeed = true;
   char str[64];
   sprintf(str, "%03d", rank);
   TString fname(str);
-  TString resName = fname+_RootFile;
+  TString resName = _RootFile + fname + ".root";
   //LB 09.02.2011
   //hfile = new TFile(_RootFile.Data(), "RECREATE", "Simulation", 1);
   hfile = new TFile(resName.Data(), "RECREATE", "Simulation", 1);

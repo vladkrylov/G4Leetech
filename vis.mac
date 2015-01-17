@@ -25,7 +25,7 @@
 /Micromegas/det/setField 81.5 gauss
 #/Micromegas/det/setField 163 gauss
 		
-/Micromegas/det/setCupThick 7 mm
+/Micromegas/det/setCupThick 1 mm
 
 #equal to first colim gap
 #/Micromegas/det/setApertureRaduis 1 cm
@@ -65,16 +65,16 @@
 #/Micromegas/gun/ParticleMomentum 1 1 -999
 
 # settings for don't use window 20mkm
-/Micromegas/gun/ParticlePosition -48.5 0 -40.0
-/Micromegas/gun/ParticleDirection 0.0 0.0 1.0
-/Micromegas/gun/ParticleDirectionRMS 0 0 0
-/Micromegas/gun/ParticleMomentum 0.365 0.365 -999
+#/Micromegas/gun/ParticlePosition -48.5 0 -40.0
+#/Micromegas/gun/ParticleDirection 0.0 0.0 1.0
+#/Micromegas/gun/ParticleDirectionRMS 0 0 0
+#/Micromegas/gun/ParticleMomentum 0.365 0.365 -999
 
 # FIGHT settings
-#/Micromegas/gun/ParticlePosition -88.8314 0 -161.193
-#/Micromegas/gun/ParticleDirection 39 0.0 92
-#/Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
-#/Micromegas/gun/ParticleMomentum 5.0 5.0 -999
+/Micromegas/gun/ParticlePosition -88.8314 0 -161.193
+/Micromegas/gun/ParticleDirection 39 0.0 92
+/Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
+/Micromegas/gun/ParticleMomentum 5.0 5.0 -999
 
 # DIRECT TO DETECTOR ssettings
 #/Micromegas/gun/ParticlePosition 210 0 -161.193
@@ -82,10 +82,7 @@
 #/Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
 #/Micromegas/gun/ParticleMomentum 5.0 5.0 -999
 
-/Micromegas/RootFile micromegas_Vis.root
+/Leetech/RootFile micromegas_Vis.root
 /Micromegas/printModulo 100000
 
-#/run/beamOn 1000000
 /run/beamOn 100
-#/run/beamOn 8000000
-#/run/beamOn 3000
