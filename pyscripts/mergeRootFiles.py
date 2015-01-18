@@ -3,86 +3,92 @@
 import os
 import re
 import sys
+import inspect
+from subprocess import call
 
-try:
-    from ROOT import gROOT
-except:
-    print """
-Merging of ROOT files cannot be performed.
-
-PyRoot libraries were not found. 
-Check if you have installed them and added their path to PYTHONPATH enviromental variable.
-
-For more instructions see here:
-https://root.cern.ch/drupal/content/how-use-use-python-pyroot-interpreter 
-"""
-else:
-    from ROOT import TFile, TTree, TList
-            
-    def Merge(filenames_base, path_to_files):
-        if isinstance(path_to_files, basestring) and os.path.exists(path_to_files):
-            out_filename = "Result.root"
-            tree_name = "T"
-            
-            merge_filenames = [fname for fname in os.listdir(path_to_files) 
-                                    if re.match(".*%s.*\.root$" % filenames_base, fname)]
-            if len(merge_filenames) > 0:
-                print "Merging %d files:" % len(merge_filenames)
-                for fn in merge_filenames:
-                    print "\t%s" % fn
-                print "into %s/%s" % (path_to_files, out_filename)
-                 
-                first_file = TFile("%s/%s" % (path_to_files, merge_filenames[0]),'read')
-                first_tree = first_file.Get(tree_name)
-                first_tree.SetBranchStatus('*',1)
-                 
-                out_file = TFile("%s/%s" % (path_to_files, out_filename), "RECREATE")
-                out_tree = first_tree.CloneTree()
-                 
-                for fname in merge_filenames[1:]:
-                    f = TFile("%s/%s" % (path_to_files, fname), 'read')
-                    t = f.Get(tree_name)
-                    t.SetBranchStatus('*',1)
-                    out_tree.CopyEntries(t)
-                
-                out_file.cd()
-                out_tree.Write()
-                out_file.Close()
-            else:
-                print "No root files were found to merge after the run..."
-        else:
-            print "mergeRootFiles: wrong path to output ROOT files provided."
-            
-    def findBaseName(path_to_files):
-        if not os.path.exists(path_to_files):
-            return []
-        all_files = [fname for fname in os.listdir(path_to_files) 
-                               if os.path.isfile(("%s/%s") % (path_to_files, fname))]
-        base_names = []
-        for fname in all_files:
-            m = re.match(r"(\d*)([a-zA-Z]+)(\d*)(\.root$)", fname)
-            if m:
-                base_names.append(m.group(2))
+def modify_root_merge_script(path_to_rootfiles, rootfiles_list, result_file):
+    # assume that MergeRootFiles.cxx is in the same directory as this file
+    current_path = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+    merge_name = "%s/MergeRootFiles.cxx" % current_path
+    merge_tmpname = "%s.tmp" % merge_name
+    
+    # make a copy of the script
+    call(['cp', merge_name, merge_tmpname])
+    with open(merge_name, 'r') as merge_cxx:
+        content = merge_cxx.read()
         
-        repeated_basenames = [name for name in base_names if base_names.count(name) > 1]
-        if len(repeated_basenames) == 0:
-            print "No .root files found to merge."
-            return None
-        else:
-            return repeated_basenames[0]
-     
-    if __name__ == "__main__":
-        if len(sys.argv) > 1:
-            path_to_files = sys.argv[1]
-            if not os.path.exists(path_to_files) and not os.path.exists("%s/%s" % (os.getcwd(), path_to_files)):
-                print "%s: no such directory found." % sys.argv[1]
-                path_to_files = None
-        else:
-            path_to_files = os.getcwd()
+    m = re.match(r"(.*const int numberOfFiles = )(\d+)(;.*)(.*mergeFilenames\[numberOfFiles\] = \{\n)(.*)(\};.*)(.*TFile resultFile\()(.*)(, \"RECREATE\"\);.*)", content, re.DOTALL)
+    if m:
+        with open(merge_tmpname, 'w') as tmp_file:
+            tmp_file.write(m.group(1))
+            tmp_file.write(str(len(rootfiles_list)))
+            tmp_file.write(m.group(3))
+            tmp_file.write(m.group(4))
+            tmp_file.write(',\n'.join(['\"%s/%s\"' % (path_to_rootfiles, s) for s in rootfiles_list]))
+            tmp_file.write(m.group(6))
+            tmp_file.write(m.group(7))
+            tmp_file.write("\"%s/%s\"" % (path_to_rootfiles, result_file))
+            tmp_file.write(m.group(9))
+            
+        # replace the script with rewritten file
+        call(['mv', merge_tmpname, merge_name])
+        return merge_name
+    else:
+        print "Cannot modify %s file. Please add the definition of mergeFilenames = {...}" % merge_name
+        return None
+    
+def merge(filenames_base, path_to_mergefiles):
+    if isinstance(path_to_mergefiles, basestring) and os.path.exists(path_to_mergefiles):
+        out_filename = "Result.root"
+        tree_name = "T"
         
-        if path_to_files:
-            base_name = findBaseName(path_to_files)
-            if base_name:
-                Merge(base_name, path_to_files)
+        merge_filenames = [fname for fname in os.listdir(path_to_mergefiles) 
+                                 if re.match(".*%s.*\.root$" % filenames_base, fname)]
+        if len(merge_filenames) > 0:
+            print "Merging %d files:" % len(merge_filenames)
+            for fn in merge_filenames:
+                print "\t%s" % fn
+            print "into %s/%s" % (path_to_mergefiles, out_filename)
+            
+            root_script_name = modify_root_merge_script(path_to_mergefiles, merge_filenames, out_filename)
+            if root_script_name:
+                # call the script
+                call(['root', '-l', root_script_name])
+        else:
+            print "No .root files were found to merge after the run..."
+    else:
+        print "mergeRootFiles: wrong path to output ROOT files provided."
+        
+def find_base_name(path_to_mergefiles):
+    if not os.path.exists(path_to_mergefiles):
+        return []
+    all_files = [fname for fname in os.listdir(path_to_mergefiles) 
+                           if os.path.isfile(("%s/%s") % (path_to_mergefiles, fname))]
+    base_names = []
+    for fname in all_files:
+        m = re.match(r"(\d*)([a-zA-Z]+)(\d*)(\.root$)", fname)
+        if m:
+            base_names.append(m.group(2))
+    
+    repeated_basenames = [name for name in base_names if base_names.count(name) > 1]
+    if len(repeated_basenames) == 0:
+        print "No .root files found to merge."
+        return None
+    else:
+        return repeated_basenames[0]
+ 
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        path_to_mergefiles = os.path.abspath("%s/%s" % (os.getcwd(), sys.argv[1]))
+        if not os.path.exists(path_to_mergefiles):
+            print "%s: no such directory found." % sys.argv[1]
+            path_to_mergefiles = None
+    else:
+        path_to_mergefiles = os.getcwd()
+    
+    if path_to_mergefiles:
+        base_name = find_base_name(path_to_mergefiles)
+        if base_name:
+            merge(base_name, path_to_mergefiles)
             
             

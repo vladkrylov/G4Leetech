@@ -46,7 +46,7 @@ def writeRunMac(project_dir, output_dirname):
             print line.rstrip()
             
     if not written:
-        with open("%s/run.mac" % project_dir, "a") as run_mac:
+        with open("%s/run.mac" % project_dir, 'a') as run_mac:
             run_mac.write("/Leetech/RootFile %s/LeetechRun" % output_dirname)
             
             

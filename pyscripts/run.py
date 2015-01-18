@@ -9,9 +9,9 @@ from linecache import getlines
 from time import sleep
 
 try:
-	from mergeRootFiles import Merge
+	from mergeRootFiles import merge
 except ImportError:
-	Merge = None
+	merge = None
 
 # set up some parameters and default options
 G4_work_dir = os.environ['G4WORKDIR']
@@ -24,9 +24,10 @@ favorite_editor = "vim"
 command_list = ['mpirun']
 out_user_dir_name = None
 readme_enable = True
+email_results = False
 
 # check for user provided options
-opts, args = getopt.getopt(sys.argv[1:], 'n:o:', ["remote", "noreadme"])
+opts, args = getopt.getopt(sys.argv[1:], 'n:o:', ["remote", "noreadme", "email="])
 for o, a in opts:
 	if o == '-n':
 		number_of_processes = a
@@ -36,6 +37,9 @@ for o, a in opts:
 		out_user_dir_name = a
 	elif o == '--noreadme':
 		readme_enable = False
+# 	elif o == 'email':
+# 		email_results = True
+# 		email = a
 		
 arg_list = ['-np', str(number_of_processes), MPexe, '%s/run.mac' % project_dir]
 command_list.extend(arg_list)
@@ -58,11 +62,11 @@ p = call(command_list)
 print output_dir
 
 # merge output root files produced by MPI processes to one
-if Merge:
+if merge:
 	# determine the basename of output root files 
 	with open("%s/run.mac" % project_dir, 'r') as run_mac:
 		for l in run_mac.readlines():
 			m = re.match(r"(/Leetech/RootFile) (.+)", l)
 			if m:
 				basename = m.groups()[-1].split('/')[-1]
-	Merge(basename, output_dir) 
+	merge(basename, output_dir) 
