@@ -84,7 +84,7 @@
 #/Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
 #/Micromegas/gun/ParticleMomentum 5.0 5.0 -999
 
-/Leetech/RootFile micromegas_Vis.root
+/Leetech/RootFile LeetechVis.root
 /Micromegas/printModulo 100000
 
 /run/beamOn 100

@@ -2,8 +2,16 @@
 import getopt
 import sys
 import os
+import re
 from subprocess import call
 from output_structure import setOutDirName
+from linecache import getlines
+from time import sleep
+
+try:
+	from mergeRootFiles import Merge
+except ImportError:
+	Merge = None
 
 # set up some parameters and default options
 G4_work_dir = os.environ['G4WORKDIR']
@@ -38,18 +46,23 @@ output_dir = setOutDirName(project_dir, out_user_dir_name)
 call(['cp', "%s/run.mac" % project_dir, "%s/run.mac" % output_dir])
 
 # open the readme file for careful user if enabled
-if readme_enable:
-	readme = "%s/README.md" % output_dir
+readme = "%s/README.md" % output_dir
+if readme_enable and not os.path.exists(readme):
 	with open(readme, "w") as readme_file:
 		readme_file.write("Add the description of current simulation run here.")
 	call([favorite_editor, readme])
 	
 # run the simulation
-call(command_list)
+p = call(command_list)
 # print command_list
 
-
-
-
-
-
+# sleep(5)
+# merge output root files produced by MPI processes to one
+if Merge:
+	# determine the basename of output root files 
+	with open("%s/run.mac" % project_dir, 'r') as run_mac:
+		for l in run_mac.readlines():
+			m = re.match(r"(/Leetech/RootFile) (.+)", l)
+			if m:
+				basename = m.groups()[-1].split('/')[-1]
+	Merge(basename, output_dir) 
