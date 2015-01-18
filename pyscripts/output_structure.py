@@ -4,7 +4,7 @@ import os
 
 # setting up the output directory
 def setOutDirName(project_dir, out_user_dir_name=None):
-    parent_out_dirname = "%s/RunsResults" % project_dir
+    parent_out_dirname = os.path.abspath("%s/../LeetechRuns" % project_dir)
     if not os.path.exists(parent_out_dirname):
         try:
             os.mkdir(parent_out_dirname)
@@ -40,13 +40,13 @@ def writeRunMac(project_dir, output_dirname):
     relative_out_path = "/".join(output_dirname.split("/")[-2:])
     for line in fileinput.input("%s/run.mac" % project_dir, inplace=True):
         if re.match(r'/Leetech/RootFile +', line):
-            print ("%s %s" % (line.split()[0], "%s/LeetechRun" % relative_out_path)).rstrip()
+            print ("%s %s" % (line.split()[0], "%s/LeetechRun" % output_dirname)).rstrip()
             written = True
         else:
             print line.rstrip()
             
     if not written:
         with open("%s/run.mac" % project_dir, "a") as run_mac:
-            run_mac.write("/Leetech/RootFile %s/LeetechRun" % relative_out_path)
+            run_mac.write("/Leetech/RootFile %s/LeetechRun" % output_dirname)
             
             

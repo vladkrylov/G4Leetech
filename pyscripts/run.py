@@ -55,8 +55,8 @@ if readme_enable and not os.path.exists(readme):
 # run the simulation
 p = call(command_list)
 # print command_list
+print output_dir
 
-# sleep(5)
 # merge output root files produced by MPI processes to one
 if Merge:
 	# determine the basename of output root files 
