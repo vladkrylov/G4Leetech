@@ -24,7 +24,7 @@ favorite_editor = "vim"
 command_list = ['mpirun']
 out_user_dir_name = None
 readme_enable = True
-email_results = False
+send_results = False
 
 # check for user provided options
 opts, args = getopt.getopt(sys.argv[1:], 'n:o:', ["remote", "noreadme", "email="])
@@ -37,9 +37,9 @@ for o, a in opts:
 		out_user_dir_name = a
 	elif o == '--noreadme':
 		readme_enable = False
-# 	elif o == 'email':
-# 		email_results = True
-# 		email = a
+	elif o == '--email':
+		send_results = True
+		email = a
 		
 arg_list = ['-np', str(number_of_processes), MPexe, '%s/run.mac' % project_dir]
 command_list.extend(arg_list)
@@ -59,7 +59,7 @@ if readme_enable and not os.path.exists(readme):
 # run the simulation
 p = call(command_list)
 # print command_list
-print output_dir
+# print output_dir
 
 # merge output root files produced by MPI processes to one
 if merge:
@@ -69,4 +69,14 @@ if merge:
 			m = re.match(r"(/Leetech/RootFile) (.+)", l)
 			if m:
 				basename = m.groups()[-1].split('/')[-1]
-	merge(basename, output_dir) 
+	merge(basename, output_dir)
+
+if send_results:
+	tar_folder = output_dir.split('/')[-1]
+	tar_name = "%s.tar.gz" % tar_folder
+	os.chdir('/'.join(output_dir.split('/')[:-1]))
+	call(['tar', '-czvf', tar_name, tar_folder])
+# echo "Text" | mail -s "pc-instrument2 Geant4 run report" -a 3.5MeV_1mm_Al_target.tar.gz vladkrilov9@gmail.com
+	call(["echo \"See run results attached\" | ", "mail", '-s', "%s results" % tar_folder, '-a ', tar_name, email])
+	
+	
