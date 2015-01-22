@@ -72,11 +72,15 @@ if merge:
 	merge(basename, output_dir)
 
 if send_results:
-	tar_folder = output_dir.split('/')[-1]
-	tar_name = "%s.tar.gz" % tar_folder
-	os.chdir('/'.join(output_dir.split('/')[:-1]))
-	call(['tar', '-czvf', tar_name, tar_folder])
-# echo "Text" | mail -s "pc-instrument2 Geant4 run report" -a 3.5MeV_1mm_Al_target.tar.gz vladkrilov9@gmail.com
-	call(["echo \"See run results attached\" | ", "mail", '-s', "%s results" % tar_folder, '-a ', tar_name, email])
+	from output_structure import which
+	if which("mail"):
+		tar_folder = output_dir.split('/')[-1]
+		tar_name = "%s.tar.gz" % tar_folder
+		os.chdir('/'.join(output_dir.split('/')[:-1]))
+		call(['tar', '-czvf', tar_name, tar_folder])
+	# echo "Text" | mail -s "pc-instrument2 Geant4 run report" -a 3.5MeV_1mm_Al_target.tar.gz vladkrilov9@gmail.com
+		call(["echo \"See run results attached\" | ", "mail", '-s', "%s results" % tar_folder, '-a ', tar_name, email])
+	else:
+		print "Cannot send the email: mail command is not available."
 	
 	
