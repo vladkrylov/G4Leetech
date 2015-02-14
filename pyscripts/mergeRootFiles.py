@@ -16,7 +16,8 @@ def modify_root_merge_script(path_to_rootfiles, rootfiles_list, result_file):
     call(['cp', merge_name, merge_tmpname])
     with open(merge_name, 'r') as merge_cxx:
         content = merge_cxx.read()
-        
+    
+    # FIXME    
     m = re.match(r"(.*const int numberOfFiles = )(\d+)(;.*)(.*mergeFilenames\[numberOfFiles\] = \{\n)(.*)(\};.*)(.*TFile resultFile\()(.*)(, \"RECREATE\"\);.*)", content, re.DOTALL)
     if m:
         with open(merge_tmpname, 'w') as tmp_file:
@@ -58,7 +59,7 @@ def merge(filenames_base, path_to_mergefiles):
             print "No .root files were found to merge after the run..."
     else:
         print "mergeRootFiles: wrong path to output ROOT files provided."
-        
+       
 def find_base_name(path_to_mergefiles):
     if not os.path.exists(path_to_mergefiles):
         return []

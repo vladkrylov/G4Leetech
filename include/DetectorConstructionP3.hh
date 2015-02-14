@@ -54,7 +54,6 @@ void SetRotationAddDistCmd(G4double valMy);
  G4VPhysicalVolume* ConstructGeom9();
  G4VPhysicalVolume* ConstructGeom10();
  G4VPhysicalVolume* ConstructGeom11();
- G4VPhysicalVolume* ConstructGeom12();
 
 private:
  void ConstructMagnet(double refX,double refY, double refZ, double gapSize);

@@ -168,6 +168,10 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 		Detector->SetApertureInRadius(ApertureRadiusCmd->GetNewDoubleValue(newValue));}
 	  if( command == GeomIDCmd){
 		Detector->SetGeomID(GeomIDCmd->GetNewIntValue(newValue));}
+	  if( command == RotationDegCmd){
+		Detector->SetRotationDeg(RotationDegCmd->GetNewDoubleValue(newValue));}
+	  if( command == RotationAddDistCmd){
+		Detector->SetRotationAddDistCmd(RotationAddDistCmd->GetNewDoubleValue(newValue));}
 	
 	  if( command == maxStepCmd){
 		Detector->SetMaxStep(maxStepCmd->GetNewDoubleValue(newValue));}

@@ -13,7 +13,7 @@
 /vis/scene/endOfEventAction accumulate 10000000
 #/vis/scene/endOfEventAction refresh
 
-/Micromegas/det/SetGeomID 10
+/Micromegas/det/SetGeomID 12
 
 #P=1MeV
 #/Micromegas/det/setField 223 gauss

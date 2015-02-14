@@ -8,6 +8,7 @@
 
 class G4Box;
 class G4Tubs;
+class G4UnionSolid;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
@@ -45,6 +46,9 @@ void SetDet1OutRad(G4double valMy);
 void SetDet1InRad(G4double valMy);
 void SetDet1X(G4double valMy);
 
+void SetRotationDeg(G4double valMy);
+void SetRotationAddDistCmd(G4double valMy);
+
   void OffMagField();
 
   G4VPhysicalVolume* Construct(); //construct geometry (if changet)
@@ -56,7 +60,7 @@ void SetDet1X(G4double valMy);
   G4Material *GetMaterial(int t);
     
 private:
-	// Define materials    
+	// Define materials
 	G4Material*        alMy;
 	G4Material*        steelMy;
 	G4Material*        airMy;
@@ -136,6 +140,7 @@ private:
 private:
   
   void DefineMaterials();		//define materials)
+  void ConstructMagnet(double refX,double refY, double refZ, double gapSize, double thicknessOfChamber);
   //void ComputeCalorParameters();
   
   G4int _geomID;			//number of geometry
@@ -145,19 +150,22 @@ private:
   G4double _apertureLenght;		//length of first calimator
 
   	G4double       _maxStep;
-	G4double       _maxLength;
-	G4double       _maxTime;
+  	G4double       _maxLength;
+  	G4double       _maxTime;
 	G4double       _minEkin;
 	G4double       _mionRang;
+
 
 	G4double _Det1InRad;
 	G4double _Det1OutRad;
 	G4double _Det1X;
+	G4double _RotationDeg;
 	G4double _RotAddDist;
   // old geometry
   //_geomID = 999;
   //LB 05.05.2012 geometry with two sencative vlumes
   //_geomID = 3;
+  G4VPhysicalVolume* ConstructGeom12();
   G4VPhysicalVolume* ConstructGeom3();	//ConstructGeom3 :) - FullGeom
   G4VPhysicalVolume* ConstructGeom2();	//ConstructGeom2 :) - Two Calimators Geom
   G4VPhysicalVolume* ConstructGeom1();	//ConstructGeom2 :) - One Calimator Geom
@@ -218,6 +226,13 @@ inline void DetectorConstruction::SetDet1OutRad(G4double valMy){
 
 inline void DetectorConstruction::SetDet1X(G4double valMy){
   _Det1X = valMy;
+}
+
+inline void DetectorConstruction::SetRotationDeg(G4double valMy){
+  _RotationDeg = valMy;
+}
+inline void DetectorConstruction::SetRotationAddDistCmd(G4double valMy){
+	_RotAddDist = valMy;
 }
 #endif
 
