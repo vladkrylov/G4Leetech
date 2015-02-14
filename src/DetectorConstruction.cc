@@ -1,6 +1,4 @@
 #include "DetectorConstruction.hh"
-#include "DetectorConstructionP2.hh"
-#include "DetectorConstructionP3.hh"
 #include "DetectorMessenger.hh"
 
 #include "G4Material.hh"
@@ -74,17 +72,13 @@ DetectorConstruction::DetectorConstruction()
   magField = new MagneticField();
 
   // create commands for interactive definition of the calorimeter
-  geom4 = new DetectorConstructionP2(this, magField);
-  geom7 = new DetectorConstructionP3(this, magField);
-  detectorMessenger = new DetectorMessenger(this, geom4, geom7);
+  detectorMessenger = new DetectorMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::~DetectorConstruction()
 { 
-  delete geom4;
-  delete geom7;
   delete stepLimit;
   delete detectorMessenger;
 }
@@ -491,33 +485,34 @@ G4VPhysicalVolume* DetectorConstruction::ConstructGeom12(){
   //
 
   G4Box *solidChamber1 = new G4Box("Chamber1",chamberX/2, chamberY/2, chamberZ/2);
-  G4Box *solidAdditionalBox = new G4Box("ChamberAdd",AdditionalBoxX/2, AdditionalBoxY/2, AdditionalBoxZ/2);
-  G4RotationMatrix*RMZero=new G4RotationMatrix(0,0,0);
-  G4Transform3D transform11(*RMZero, zTransAddBox11);
-  G4Transform3D transform12(*RMZero, zTransAddBox12);
-  G4UnionSolid* solidChamber2 = new G4UnionSolid("Chamber", solidChamber1, solidAdditionalBox, transform11);
-  G4UnionSolid* solidChamber = new G4UnionSolid("Chamber", solidChamber2, solidAdditionalBox, transform12);
+//  G4Box *solidAdditionalBox = new G4Box("ChamberAdd",AdditionalBoxX/2, AdditionalBoxY/2, AdditionalBoxZ/2);
+//  G4RotationMatrix*RMZero=new G4RotationMatrix(0,0,0);
+//  G4Transform3D transform11(*RMZero, zTransAddBox11);
+//  G4Transform3D transform12(*RMZero, zTransAddBox12);
+//  G4UnionSolid* solidChamber2 = new G4UnionSolid("Chamber", solidChamber1, solidAdditionalBox, transform11);
+//  G4UnionSolid* solidChamber = new G4UnionSolid("Chamber", solidChamber2, solidAdditionalBox, transform12);
 
-  G4LogicalVolume *logicChamber = new G4LogicalVolume(solidChamber, GetMaterial(1), "Chamber");
+//  G4LogicalVolume *logicChamber = new G4LogicalVolume(solidChamber, GetMaterial(1), "Chamber");
+  G4LogicalVolume *logicChamber = new G4LogicalVolume(solidChamber1, GetMaterial(1), "Chamber");
   G4PVPlacement *physiChamber = new G4PVPlacement(0, G4ThreeVector(chamber_xc,chamber_yc,chamber_zc), logicChamber, "Chamber",	 logicWorld, false, 0);
 
   //
   //	InnerBox
   //
-
   G4Box *solidInnerBox = new G4Box("InnerBox",innerBoxX/2, innerBoxY/2, innerBoxZ/2);
-  G4Box *solidAdditionalInnerBox = new G4Box("InnerAdd",AdditionalInnerBoxX/2, AdditionalInnerBoxY/2, AdditionalInnerBoxZ/2);
-  G4Box *solidNeck = new G4Box("Neck",NeckX/2, NeckY/2, NeckZ/2);
-  G4Transform3D transform21(*RMZero, zTransInnerBox21);
-  G4Transform3D transform22(*RMZero, zTransInnerBox22);
-  G4Transform3D transNeck1(*RMZero, zNeck1);
-  G4Transform3D transNeck2(*RMZero, zNeck2);
-  G4UnionSolid* solidInnerBoxUNeck = new G4UnionSolid("Chamber", solidInnerBox, solidNeck, transNeck1);
-  G4UnionSolid* solidInnerBoxUNeck2 = new G4UnionSolid("Chamber", solidInnerBoxUNeck, solidNeck, transNeck2);
-  G4UnionSolid* solidInnerBoxUNeck2UAddBox = new G4UnionSolid("Chamber", solidInnerBoxUNeck2, solidAdditionalInnerBox, transform21);
-  G4UnionSolid* solidInnerBoxUNeck2UAddBox2 = new G4UnionSolid("Chamber", solidInnerBoxUNeck2UAddBox, solidAdditionalInnerBox, transform22);
-
-  G4LogicalVolume *logicInnerBox = new G4LogicalVolume(solidInnerBoxUNeck2UAddBox2, GetMaterial(5),"InnerBox");
+//  G4Box *solidAdditionalInnerBox = new G4Box("InnerAdd",AdditionalInnerBoxX/2, AdditionalInnerBoxY/2, AdditionalInnerBoxZ/2);
+//  G4Box *solidNeck = new G4Box("Neck",NeckX/2, NeckY/2, NeckZ/2);
+//  G4Transform3D transform21(*RMZero, zTransInnerBox21);
+//  G4Transform3D transform22(*RMZero, zTransInnerBox22);
+//  G4Transform3D transNeck1(*RMZero, zNeck1);
+//  G4Transform3D transNeck2(*RMZero, zNeck2);
+//  G4UnionSolid* solidInnerBoxUNeck = new G4UnionSolid("Chamber", solidInnerBox, solidNeck, transNeck1);
+//  G4UnionSolid* solidInnerBoxUNeck2 = new G4UnionSolid("Chamber", solidInnerBoxUNeck, solidNeck, transNeck2);
+//  G4UnionSolid* solidInnerBoxUNeck2UAddBox = new G4UnionSolid("Chamber", solidInnerBoxUNeck2, solidAdditionalInnerBox, transform21);
+//  G4UnionSolid* solidInnerBoxUNeck2UAddBox2 = new G4UnionSolid("Chamber", solidInnerBoxUNeck2UAddBox, solidAdditionalInnerBox, transform22);
+//
+//  G4LogicalVolume *logicInnerBox = new G4LogicalVolume(solidInnerBoxUNeck2UAddBox2, GetMaterial(5),"InnerBox");
+  G4LogicalVolume *logicInnerBox = new G4LogicalVolume(solidInnerBox, GetMaterial(5),"InnerBox");
   G4PVPlacement *physiInnerBox = new G4PVPlacement(0, G4ThreeVector(innerBox_xc,innerBox_yc,innerBox_zc), logicInnerBox, "InnerBox", logicChamber,	 false,	 0);
 
   //
@@ -530,187 +525,177 @@ G4VPhysicalVolume* DetectorConstruction::ConstructGeom12(){
   //
   //	Colimator 11
   //
-  int ColimMat = 2;
-  G4Box *solidColim11 = new G4Box("Kolimator11",colimatorX/2, colimatorY/2, colimatorZ/2);
-  G4LogicalVolume *logicColim11 = new G4LogicalVolume(solidColim11, GetMaterial(ColimMat), "Kolimator11");
-  G4PVPlacement *physiColim11 = new G4PVPlacement(0,	G4ThreeVector(colimator_xc11,colimator_yc11,colimator_zc11), logicColim11,"Kolimator11", logicInnerBox,  false, 0);
-  //
-  //	Colimator 12
-  //
-  G4Box *solidColim12 = new G4Box("Kolimator12",colimatorX/2, colimatorY/2, colimatorZ/2);
-  G4LogicalVolume *logicColim12 = new G4LogicalVolume(solidColim12, GetMaterial(ColimMat),"Kolimator12");
-  G4PVPlacement *physiColim12 = new G4PVPlacement(0, G4ThreeVector(colimator_xc12,colimator_yc12,colimator_zc12), logicColim12,"Kolimator12", logicInnerBox, false, 0);
-  //
-  //	Colimator 21
-  //
-  G4Box *solidColim21 = new G4Box("Kolimator21",colimatorY/2, colimatorX/2, colimatorZ/2);
-  G4LogicalVolume *logicColim21 = new G4LogicalVolume(solidColim21, GetMaterial(ColimMat), "Kolimator21");
-  G4PVPlacement *physiColim21 = new G4PVPlacement(0, G4ThreeVector(colimator_xc21,colimator_yc21,colimator_zc21), logicColim21, "Kolimator21", logicInnerBox, false, 0);
-  //
-  //	Colimator 22
-  //
-  G4Box *solidColim22 = new G4Box("Kolimator22",colimatorY/2, colimatorX/2, colimatorZ/2);
-  G4LogicalVolume *logicColim22 = new G4LogicalVolume(solidColim22, GetMaterial(ColimMat), "Kolimator12");
-  G4PVPlacement *physiColim22 = new G4PVPlacement(0, G4ThreeVector(colimator_xc22,colimator_yc22,colimator_zc22),  logicColim22, "Kolimator22", logicInnerBox, false, 0);
-
-  if(ColimGeom)
-  {
-	  //
-	  //	Colimator 31
-	  //
-	  G4Box *solidColim31 = new G4Box("Kolimator31",colimatorX/2, colimatorY/2, colimatorZ/2);
-	  G4LogicalVolume *logicColim31 = new G4LogicalVolume(solidColim31, GetMaterial(ColimMat),  "Kolimator31");
-	  G4PVPlacement *physiColim31 = new G4PVPlacement(0, G4ThreeVector(colimator_xc31,colimator_yc31,colimator_zc31),  logicColim11, "Kolimator31", logicInnerBox, false, 0);
-	  //
-	  //	Colimator 32
-	  //
-	  G4Box *solidColim32 = new G4Box("Kolimator32",colimatorX/2, colimatorY/2, colimatorZ/2);
-	  G4LogicalVolume *logicColim32 = new G4LogicalVolume(solidColim32, GetMaterial(ColimMat), "Kolimator32");
-	  G4PVPlacement *physiColim32 = new G4PVPlacement(0, G4ThreeVector(colimator_xc32,colimator_yc32,colimator_zc32), logicColim32, "Kolimator32",	 logicInnerBox, false, 0);
-	  //
-	  //	Colimator 41
-	  //
-	  G4Box *solidColim41 = new G4Box("Kolimator41",colimatorY/2, colimatorX/2, colimatorZ/2);
-	  G4LogicalVolume *logicColim41 = new G4LogicalVolume(solidColim41, GetMaterial(ColimMat), "Kolimator41");
-	  G4PVPlacement *physiColim41 = new G4PVPlacement(0, G4ThreeVector(colimator_xc41,colimator_yc41,colimator_zc41), logicColim41, "Kolimator41",logicInnerBox, false, 0);
-	  //
-	  //	Colimator 42
-	  //
-	  G4Box *solidColim42 = new G4Box("Kolimator42",colimatorY/2, colimatorX/2, colimatorZ/2);
-	  G4LogicalVolume *logicColim42 = new G4LogicalVolume(solidColim42, GetMaterial(ColimMat), "Kolimator42");
-	  G4PVPlacement *physiColim42 = new G4PVPlacement(0, G4ThreeVector(colimator_xc42,colimator_yc42,colimator_zc42), logicColim42,"Kolimator42", logicInnerBox, false,0);
-  }
-  /**/
-  else
-  {
-	  //
-	  //	Colimator 31
-	  //
-	  G4Box *solidColim31 = new G4Box("Kolimator31",colimatorX/2, colimatorY/2, colimatorZthin/2);
-	  G4LogicalVolume *logicColim31 = new G4LogicalVolume(solidColim31,GetMaterial(ColimMat),  "Kolimator31");
-	  G4PVPlacement *physiColim31 = new G4PVPlacement(0, G4ThreeVector(colimator_xc31,colimator_yc31,colimator_zc31thin),  logicColim31, "Kolimator31", logicInnerBox, false, 0);
-	  //
-	  //	Colimator 32
-	  //
-	  G4Box *solidColim32 = new G4Box("Kolimator32",colimatorX/2, colimatorY/2, colimatorZthin/2);
-	  G4LogicalVolume *logicColim32 = new G4LogicalVolume(solidColim32,GetMaterial(ColimMat), "Kolimator32");
-	  G4PVPlacement *physiColim32 = new G4PVPlacement(0, G4ThreeVector(colimator_xc32,colimator_yc32,colimator_zc32thin), logicColim32, "Kolimator32",	 logicInnerBox, false, 0);
-	  //
-	  //	Colimator 41
-	  //
-	  G4Box *solidColim41 = new G4Box("Kolimator41",colimatorY/2, colimatorX/2, colimatorZthin/2);
-	  G4LogicalVolume *logicColim41 = new G4LogicalVolume(solidColim41,GetMaterial(ColimMat), "Kolimator41");
-	  G4PVPlacement *physiColim41 = new G4PVPlacement(0, G4ThreeVector(colimator_xc41,colimator_yc41,colimator_zc41thin), logicColim41, "Kolimator41",logicInnerBox, false, 0);
-	  //
-	  //	Colimator 42
-	  //
-	  G4Box *solidColim42 = new G4Box("Kolimator42",colimatorY/2, colimatorX/2, colimatorZthin/2);
-	  G4LogicalVolume *logicColim42 = new G4LogicalVolume(solidColim42,GetMaterial(ColimMat), "Kolimator42");
-	  G4PVPlacement *physiColim42 = new G4PVPlacement(0, G4ThreeVector(colimator_xc42,colimator_yc42,colimator_zc42thin), logicColim42,"Kolimator42", logicInnerBox, false,0);
-
-	  //
-	  //	Colimator 51
-	  //
-	  G4Box *solidColim51 = new G4Box("Kolimator51",colimatorX/2, colimatorY/2, colimatorZthin/2);
-	  G4LogicalVolume *logicColim51 = new G4LogicalVolume(solidColim51,GetMaterial(ColimMat),  "Kolimator51");
-	  G4PVPlacement *physiColim51 = new G4PVPlacement(0, G4ThreeVector(colimator_xc51,colimator_yc51,colimator_zc51thin),  logicColim51, "Kolimat51", logicInnerBox, false, 0);
-	  //
-	  //	Colimator 52
-	  //
-	  G4Box *solidColim52 = new G4Box("Kolimator52",colimatorX/2, colimatorY/2, colimatorZthin/2);
-	  G4LogicalVolume *logicColim52 = new G4LogicalVolume(solidColim52,GetMaterial(ColimMat), "Kolimator52");
-	  G4PVPlacement *physiColim52 = new G4PVPlacement(0, G4ThreeVector(colimator_xc52,colimator_yc52,colimator_zc52thin), logicColim52, "Kolimator52",	 logicInnerBox, false, 0);
-	  //
-	  //	Colimator 61
-	  //
-	  G4Box *solidColim61 = new G4Box("Kolimator61",colimatorY/2, colimatorX/2, colimatorZthin/2);
-	  G4LogicalVolume *logicColim61 = new G4LogicalVolume(solidColim61,GetMaterial(ColimMat), "Kolimator61");
-	  G4PVPlacement *physiColim61 = new G4PVPlacement(0, G4ThreeVector(colimator_xc61,colimator_yc61,colimator_zc61thin), logicColim61, "Kolimator61",logicInnerBox, false, 0);
-	  //
-	  //	Colimator 62
-	  //
-	  G4Box *solidColim62 = new G4Box("Kolimator62",colimatorY/2, colimatorX/2, colimatorZthin/2);
-	  G4LogicalVolume *logicColim62 = new G4LogicalVolume(solidColim62,GetMaterial(ColimMat), "Kolimator62");
-	  G4PVPlacement *physiColim62 = new G4PVPlacement(0, G4ThreeVector(colimator_xc62,colimator_yc62,colimator_zc62thin), logicColim62,"Kolimator62", logicInnerBox, false,0);
-  }
+//  int ColimMat = 2;
+//  G4Box *solidColim11 = new G4Box("Kolimator11",colimatorX/2, colimatorY/2, colimatorZ/2);
+//  G4LogicalVolume *logicColim11 = new G4LogicalVolume(solidColim11, GetMaterial(ColimMat), "Kolimator11");
+//  G4PVPlacement *physiColim11 = new G4PVPlacement(0,	G4ThreeVector(colimator_xc11,colimator_yc11,colimator_zc11), logicColim11,"Kolimator11", logicInnerBox,  false, 0);
+//  //
+//  //	Colimator 12
+//  //
+//  G4Box *solidColim12 = new G4Box("Kolimator12",colimatorX/2, colimatorY/2, colimatorZ/2);
+//  G4LogicalVolume *logicColim12 = new G4LogicalVolume(solidColim12, GetMaterial(ColimMat),"Kolimator12");
+//  G4PVPlacement *physiColim12 = new G4PVPlacement(0, G4ThreeVector(colimator_xc12,colimator_yc12,colimator_zc12), logicColim12,"Kolimator12", logicInnerBox, false, 0);
+//  //
+//  //	Colimator 21
+//  //
+//  G4Box *solidColim21 = new G4Box("Kolimator21",colimatorY/2, colimatorX/2, colimatorZ/2);
+//  G4LogicalVolume *logicColim21 = new G4LogicalVolume(solidColim21, GetMaterial(ColimMat), "Kolimator21");
+//  G4PVPlacement *physiColim21 = new G4PVPlacement(0, G4ThreeVector(colimator_xc21,colimator_yc21,colimator_zc21), logicColim21, "Kolimator21", logicInnerBox, false, 0);
+//  //
+//  //	Colimator 22
+//  //
+//  G4Box *solidColim22 = new G4Box("Kolimator22",colimatorY/2, colimatorX/2, colimatorZ/2);
+//  G4LogicalVolume *logicColim22 = new G4LogicalVolume(solidColim22, GetMaterial(ColimMat), "Kolimator12");
+//  G4PVPlacement *physiColim22 = new G4PVPlacement(0, G4ThreeVector(colimator_xc22,colimator_yc22,colimator_zc22),  logicColim22, "Kolimator22", logicInnerBox, false, 0);
+//
+//  if(ColimGeom)
+//  {
+//	  //
+//	  //	Colimator 31
+//	  //
+//	  G4Box *solidColim31 = new G4Box("Kolimator31",colimatorX/2, colimatorY/2, colimatorZ/2);
+//	  G4LogicalVolume *logicColim31 = new G4LogicalVolume(solidColim31, GetMaterial(ColimMat),  "Kolimator31");
+//	  G4PVPlacement *physiColim31 = new G4PVPlacement(0, G4ThreeVector(colimator_xc31,colimator_yc31,colimator_zc31),  logicColim11, "Kolimator31", logicInnerBox, false, 0);
+//	  //
+//	  //	Colimator 32
+//	  //
+//	  G4Box *solidColim32 = new G4Box("Kolimator32",colimatorX/2, colimatorY/2, colimatorZ/2);
+//	  G4LogicalVolume *logicColim32 = new G4LogicalVolume(solidColim32, GetMaterial(ColimMat), "Kolimator32");
+//	  G4PVPlacement *physiColim32 = new G4PVPlacement(0, G4ThreeVector(colimator_xc32,colimator_yc32,colimator_zc32), logicColim32, "Kolimator32",	 logicInnerBox, false, 0);
+//	  //
+//	  //	Colimator 41
+//	  //
+//	  G4Box *solidColim41 = new G4Box("Kolimator41",colimatorY/2, colimatorX/2, colimatorZ/2);
+//	  G4LogicalVolume *logicColim41 = new G4LogicalVolume(solidColim41, GetMaterial(ColimMat), "Kolimator41");
+//	  G4PVPlacement *physiColim41 = new G4PVPlacement(0, G4ThreeVector(colimator_xc41,colimator_yc41,colimator_zc41), logicColim41, "Kolimator41",logicInnerBox, false, 0);
+//	  //
+//	  //	Colimator 42
+//	  //
+//	  G4Box *solidColim42 = new G4Box("Kolimator42",colimatorY/2, colimatorX/2, colimatorZ/2);
+//	  G4LogicalVolume *logicColim42 = new G4LogicalVolume(solidColim42, GetMaterial(ColimMat), "Kolimator42");
+//	  G4PVPlacement *physiColim42 = new G4PVPlacement(0, G4ThreeVector(colimator_xc42,colimator_yc42,colimator_zc42), logicColim42,"Kolimator42", logicInnerBox, false,0);
+//  }
+//  /**/
+//  else
+//  {
+//	  //
+//	  //	Colimator 31
+//	  //
+//	  G4Box *solidColim31 = new G4Box("Kolimator31",colimatorX/2, colimatorY/2, colimatorZthin/2);
+//	  G4LogicalVolume *logicColim31 = new G4LogicalVolume(solidColim31,GetMaterial(ColimMat),  "Kolimator31");
+//	  G4PVPlacement *physiColim31 = new G4PVPlacement(0, G4ThreeVector(colimator_xc31,colimator_yc31,colimator_zc31thin),  logicColim31, "Kolimator31", logicInnerBox, false, 0);
+//	  //
+//	  //	Colimator 32
+//	  //
+//	  G4Box *solidColim32 = new G4Box("Kolimator32",colimatorX/2, colimatorY/2, colimatorZthin/2);
+//	  G4LogicalVolume *logicColim32 = new G4LogicalVolume(solidColim32,GetMaterial(ColimMat), "Kolimator32");
+//	  G4PVPlacement *physiColim32 = new G4PVPlacement(0, G4ThreeVector(colimator_xc32,colimator_yc32,colimator_zc32thin), logicColim32, "Kolimator32",	 logicInnerBox, false, 0);
+//	  //
+//	  //	Colimator 41
+//	  //
+//	  G4Box *solidColim41 = new G4Box("Kolimator41",colimatorY/2, colimatorX/2, colimatorZthin/2);
+//	  G4LogicalVolume *logicColim41 = new G4LogicalVolume(solidColim41,GetMaterial(ColimMat), "Kolimator41");
+//	  G4PVPlacement *physiColim41 = new G4PVPlacement(0, G4ThreeVector(colimator_xc41,colimator_yc41,colimator_zc41thin), logicColim41, "Kolimator41",logicInnerBox, false, 0);
+//	  //
+//	  //	Colimator 42
+//	  //
+//	  G4Box *solidColim42 = new G4Box("Kolimator42",colimatorY/2, colimatorX/2, colimatorZthin/2);
+//	  G4LogicalVolume *logicColim42 = new G4LogicalVolume(solidColim42,GetMaterial(ColimMat), "Kolimator42");
+//	  G4PVPlacement *physiColim42 = new G4PVPlacement(0, G4ThreeVector(colimator_xc42,colimator_yc42,colimator_zc42thin), logicColim42,"Kolimator42", logicInnerBox, false,0);
+//
+//	  //
+//	  //	Colimator 51
+//	  //
+//	  G4Box *solidColim51 = new G4Box("Kolimator51",colimatorX/2, colimatorY/2, colimatorZthin/2);
+//	  G4LogicalVolume *logicColim51 = new G4LogicalVolume(solidColim51,GetMaterial(ColimMat),  "Kolimator51");
+//	  G4PVPlacement *physiColim51 = new G4PVPlacement(0, G4ThreeVector(colimator_xc51,colimator_yc51,colimator_zc51thin),  logicColim51, "Kolimat51", logicInnerBox, false, 0);
+//	  //
+//	  //	Colimator 52
+//	  //
+//	  G4Box *solidColim52 = new G4Box("Kolimator52",colimatorX/2, colimatorY/2, colimatorZthin/2);
+//	  G4LogicalVolume *logicColim52 = new G4LogicalVolume(solidColim52,GetMaterial(ColimMat), "Kolimator52");
+//	  G4PVPlacement *physiColim52 = new G4PVPlacement(0, G4ThreeVector(colimator_xc52,colimator_yc52,colimator_zc52thin), logicColim52, "Kolimator52",	 logicInnerBox, false, 0);
+//	  //
+//	  //	Colimator 61
+//	  //
+//	  G4Box *solidColim61 = new G4Box("Kolimator61",colimatorY/2, colimatorX/2, colimatorZthin/2);
+//	  G4LogicalVolume *logicColim61 = new G4LogicalVolume(solidColim61,GetMaterial(ColimMat), "Kolimator61");
+//	  G4PVPlacement *physiColim61 = new G4PVPlacement(0, G4ThreeVector(colimator_xc61,colimator_yc61,colimator_zc61thin), logicColim61, "Kolimator61",logicInnerBox, false, 0);
+//	  //
+//	  //	Colimator 62
+//	  //
+//	  G4Box *solidColim62 = new G4Box("Kolimator62",colimatorY/2, colimatorX/2, colimatorZthin/2);
+//	  G4LogicalVolume *logicColim62 = new G4LogicalVolume(solidColim62,GetMaterial(ColimMat), "Kolimator62");
+//	  G4PVPlacement *physiColim62 = new G4PVPlacement(0, G4ThreeVector(colimator_xc62,colimator_yc62,colimator_zc62thin), logicColim62,"Kolimator62", logicInnerBox, false,0);
+//  }
 
   //
   //Detector
   //
-  solidSenDet1 = new G4Tubs("SenDet1", 0, detectorRad, detectorThick, 0, 360.0*deg);
-  logicSenDet1 = new G4LogicalVolume(solidSenDet1,
-				     //beamVacuum,
-						GetMaterial(6),
-				     "SenDet1");
-  physiSenDet1 = new G4PVPlacement(0,	//rotation
-				   G4ThreeVector(detector_xc,detector_yc,detector_zc), //at (0,0,0)
-				   logicSenDet1,	//its logical volume
-				   "SenDet1",		//its name
-				   logicWorld,	     	//its mother  volume
-				   false,      		//no boolean operation
-				   0);			//copy number
+//  solidSenDet1 = new G4Tubs("SenDet1", 0, detectorRad, detectorThick, 0, 360.0*deg);
+//  logicSenDet1 = new G4LogicalVolume(solidSenDet1,
+//				     //beamVacuum,
+//						GetMaterial(6),
+//				     "SenDet1");
+//  physiSenDet1 = new G4PVPlacement(0,	//rotation
+//				   G4ThreeVector(detector_xc,detector_yc,detector_zc), //at (0,0,0)
+//				   logicSenDet1,	//its logical volume
+//				   "SenDet1",		//its name
+//				   logicWorld,	     	//its mother  volume
+//				   false,      		//no boolean operation
+//				   0);			//copy number
 
-//  solidShieldBarrier = new G4Box("ShieldBarrier",ShieldBarrierX/2, ShieldBarrierY/2, ShieldBarrierZ/2);
-//  logicShieldBarrier = new G4LogicalVolume(solidShieldBarrier,GetMaterial(7), "ShieldBarrier");
-//  physiShieldBarrier = new G4PVPlacement(0, G4ThreeVector(ShieldBarrier_xc,ShieldBarrier_yc,ShieldBarrier_zc),
-//		  logicShieldBarrier, "ShieldBarrier",logicWorld, false, 0);
-
-  	G4Box *solidShieldBarrier1 = new G4Box("ShieldBarrier1",ShieldBarrierX/2, ShieldBarrierY/2, ShieldBarrierZ/2);
-    G4LogicalVolume *logicShieldBarrier1 = new G4LogicalVolume(solidShieldBarrier1,GetMaterial(7), "ShieldBarrier1");
-    G4PVPlacement *physiShieldBarrier1 = new G4PVPlacement(0, G4ThreeVector(ShieldBarrier_xc1,ShieldBarrier_yc,ShieldBarrier_zc),
-  		  logicShieldBarrier1, "ShieldBarrier1",logicWorld, false, 0);
-
-    G4Box *solidShieldBarrier2 = new G4Box("ShieldBarrier2",ShieldBarrierX/2, ShieldBarrierY/2, ShieldBarrierZ/2);
-    G4LogicalVolume *logicShieldBarrier2 = new G4LogicalVolume(solidShieldBarrier2,GetMaterial(7), "ShieldBarrier2");
-    G4PVPlacement *physiShieldBarrier2 = new G4PVPlacement(0, G4ThreeVector(ShieldBarrier_xc2,ShieldBarrier_yc,ShieldBarrier_zc),
-  		  logicShieldBarrier2, "ShieldBarrier2",logicWorld, false, 0);
-
-
-//  solidInnerTopShield = new G4Box("InnerTopShield",InnerTopShieldX/2, InnerTopShieldY/2, InnerTopShieldZ/2);
-//  logicInnerTopShield = new G4LogicalVolume(solidInnerTopShield,GetMaterial(7), "InnerTopShield");
-//  physiInnerTopShield = new G4PVPlacement(0, G4ThreeVector(InnerTopShield_xc,InnerTopShield_yc,InnerTopShield_zc),
-//		  logicInnerTopShield, "InnerTopShield",logicFieldBox, false, 0);
-
-  G4Box *solidInnerBotShield1 = new G4Box("InnerBotShield1",InnerBotShield1X/2, InnerBotShield1Y/2, InnerBotShield1Z/2);
-  G4LogicalVolume *logicInnerBotShield1 = new G4LogicalVolume(solidInnerBotShield1,GetMaterial(7), "InnerBotShield1");
-  G4RotationMatrix*RM11=new G4RotationMatrix;
-  RM11->rotateY(0*deg);
-  G4PVPlacement *physiInnerBotShield1 = new G4PVPlacement(RM11,
-		  G4ThreeVector(InnerBotShield1_xc,InnerBotShield1_yc,InnerBotShield1_zc),
-		  logicInnerBotShield1, "InnerBotShield1",logicFieldBox, false, 0);
-
-  G4Box *solidInnerBotShield2 = new G4Box("InnerBotShield2",InnerBotShield2X/2, InnerBotShield2Y/2, InnerBotShield2Z/2);
-  G4LogicalVolume *logicInnerBotShield2 = new G4LogicalVolume(solidInnerBotShield2,GetMaterial(7), "InnerBotShield2");
-  G4RotationMatrix*RM12=new G4RotationMatrix;
-  RM12->rotateY(0*deg);
-  G4PVPlacement *physiInnerBotShield2 = new G4PVPlacement(RM12,
-		  G4ThreeVector(InnerBotShield2_xc,InnerBotShield2_yc,InnerBotShield2_zc),
-		  logicInnerBotShield2, "InnerBotShield2",logicFieldBox, false, 0);
-
-  G4Box *solidInnerShield3 = new G4Box("InnerShield3",InnerShield3X/2, InnerShield3Y/2, InnerShield3Z/2);
-  G4LogicalVolume *logicInnerShield3 = new G4LogicalVolume(solidInnerShield3,GetMaterial(7), "InnerShield3");
-  G4RotationMatrix*RM13=new G4RotationMatrix;
-  RM13->rotateY(0*deg);
-  G4PVPlacement *physiInnerShield3 = new G4PVPlacement(RM13,
-		  G4ThreeVector(InnerShield3_xc,InnerShield3_yc,InnerShield3_zc),
-		  logicInnerShield3, "InnerShield3",logicFieldBox, false, 0);
-
-
-  G4Box *solidInnerShield4 = new G4Box("InnerShield4",InnerShield4X/2, InnerShield4Y/2, InnerShield4Z/2);
-  G4LogicalVolume *logicInnerShield4 = new G4LogicalVolume(solidInnerShield4,GetMaterial(7), "InnerShield4");
-  G4RotationMatrix*RM14=new G4RotationMatrix;
-  RM14->rotateY(-45*deg);
-  G4PVPlacement *physiInnerShield4 = new G4PVPlacement(RM14,
-		  G4ThreeVector(InnerShield4_xc,InnerShield4_yc,InnerShield4_zc),
-		  logicInnerShield4, "InnerShield4",logicFieldBox, false, 0);
-
-  G4Box *solidInnerShield5 = new G4Box("InnerShield5",InnerShield5X/2, InnerShield5Y/2, InnerShield5Z/2);
-  G4LogicalVolume *logicInnerShield5 = new G4LogicalVolume(solidInnerShield5,GetMaterial(7), "InnerShield5");
-  G4RotationMatrix*RM15=new G4RotationMatrix;
-  RM15->rotateY(45*deg);
-  G4PVPlacement *physiInnerShield5 = new G4PVPlacement(RM15,
-		  G4ThreeVector(InnerShield5_xc,InnerShield5_yc,InnerShield5_zc),
-		  logicInnerShield5, "InnerShield5",logicFieldBox, false, 0);
+//  	G4Box *solidShieldBarrier1 = new G4Box("ShieldBarrier1",ShieldBarrierX/2, ShieldBarrierY/2, ShieldBarrierZ/2);
+//    G4LogicalVolume *logicShieldBarrier1 = new G4LogicalVolume(solidShieldBarrier1,GetMaterial(7), "ShieldBarrier1");
+//    G4PVPlacement *physiShieldBarrier1 = new G4PVPlacement(0, G4ThreeVector(ShieldBarrier_xc1,ShieldBarrier_yc,ShieldBarrier_zc),
+//  		  logicShieldBarrier1, "ShieldBarrier1",logicWorld, false, 0);
+//
+//    G4Box *solidShieldBarrier2 = new G4Box("ShieldBarrier2",ShieldBarrierX/2, ShieldBarrierY/2, ShieldBarrierZ/2);
+//    G4LogicalVolume *logicShieldBarrier2 = new G4LogicalVolume(solidShieldBarrier2,GetMaterial(7), "ShieldBarrier2");
+//    G4PVPlacement *physiShieldBarrier2 = new G4PVPlacement(0, G4ThreeVector(ShieldBarrier_xc2,ShieldBarrier_yc,ShieldBarrier_zc),
+//  		  logicShieldBarrier2, "ShieldBarrier2",logicWorld, false, 0);
+//
+//
+//  G4Box *solidInnerBotShield1 = new G4Box("InnerBotShield1",InnerBotShield1X/2, InnerBotShield1Y/2, InnerBotShield1Z/2);
+//  G4LogicalVolume *logicInnerBotShield1 = new G4LogicalVolume(solidInnerBotShield1,GetMaterial(7), "InnerBotShield1");
+//  G4RotationMatrix*RM11=new G4RotationMatrix;
+//  RM11->rotateY(0*deg);
+//  G4PVPlacement *physiInnerBotShield1 = new G4PVPlacement(RM11,
+//		  G4ThreeVector(InnerBotShield1_xc,InnerBotShield1_yc,InnerBotShield1_zc),
+//		  logicInnerBotShield1, "InnerBotShield1",logicFieldBox, false, 0);
+//
+//  G4Box *solidInnerBotShield2 = new G4Box("InnerBotShield2",InnerBotShield2X/2, InnerBotShield2Y/2, InnerBotShield2Z/2);
+//  G4LogicalVolume *logicInnerBotShield2 = new G4LogicalVolume(solidInnerBotShield2,GetMaterial(7), "InnerBotShield2");
+//  G4RotationMatrix*RM12=new G4RotationMatrix;
+//  RM12->rotateY(0*deg);
+//  G4PVPlacement *physiInnerBotShield2 = new G4PVPlacement(RM12,
+//		  G4ThreeVector(InnerBotShield2_xc,InnerBotShield2_yc,InnerBotShield2_zc),
+//		  logicInnerBotShield2, "InnerBotShield2",logicFieldBox, false, 0);
+//
+//  G4Box *solidInnerShield3 = new G4Box("InnerShield3",InnerShield3X/2, InnerShield3Y/2, InnerShield3Z/2);
+//  G4LogicalVolume *logicInnerShield3 = new G4LogicalVolume(solidInnerShield3,GetMaterial(7), "InnerShield3");
+//  G4RotationMatrix*RM13=new G4RotationMatrix;
+//  RM13->rotateY(0*deg);
+//  G4PVPlacement *physiInnerShield3 = new G4PVPlacement(RM13,
+//		  G4ThreeVector(InnerShield3_xc,InnerShield3_yc,InnerShield3_zc),
+//		  logicInnerShield3, "InnerShield3",logicFieldBox, false, 0);
+//
+//
+//  G4Box *solidInnerShield4 = new G4Box("InnerShield4",InnerShield4X/2, InnerShield4Y/2, InnerShield4Z/2);
+//  G4LogicalVolume *logicInnerShield4 = new G4LogicalVolume(solidInnerShield4,GetMaterial(7), "InnerShield4");
+//  G4RotationMatrix*RM14=new G4RotationMatrix;
+//  RM14->rotateY(-45*deg);
+//  G4PVPlacement *physiInnerShield4 = new G4PVPlacement(RM14,
+//		  G4ThreeVector(InnerShield4_xc,InnerShield4_yc,InnerShield4_zc),
+//		  logicInnerShield4, "InnerShield4",logicFieldBox, false, 0);
+//
+//  G4Box *solidInnerShield5 = new G4Box("InnerShield5",InnerShield5X/2, InnerShield5Y/2, InnerShield5Z/2);
+//  G4LogicalVolume *logicInnerShield5 = new G4LogicalVolume(solidInnerShield5,GetMaterial(7), "InnerShield5");
+//  G4RotationMatrix*RM15=new G4RotationMatrix;
+//  RM15->rotateY(45*deg);
+//  G4PVPlacement *physiInnerShield5 = new G4PVPlacement(RM15,
+//		  G4ThreeVector(InnerShield5_xc,InnerShield5_yc,InnerShield5_zc),
+//		  logicInnerShield5, "InnerShield5",logicFieldBox, false, 0);
 
   ConstructMagnet(520*mm, 50*mm, chamberZ, gapSize, ThicknesOfChamber);
   //
@@ -718,26 +703,26 @@ G4VPhysicalVolume* DetectorConstruction::ConstructGeom12(){
   //
 
 
-  G4VisAttributes* pipeVisAtt = new G4VisAttributes(G4Colour(0.5,0.0,0.6));
-  logicBeamPipe->SetVisAttributes(pipeVisAtt);
-
-  G4VisAttributes* pipeVVisAtt = new G4VisAttributes(G4Colour(0.4,0.3,0.0));
-  logicBeamPipeV->SetVisAttributes(pipeVVisAtt);
-
-  G4VisAttributes* cupVisAtt = new G4VisAttributes(G4Colour(0.0,0.0,1.0));
-  logicCup->SetVisAttributes(cupVisAtt);
-
-  G4VisAttributes* chamberVisAtt = new G4VisAttributes(G4Colour(0.0,0.0,1.0));
-  logicChamber->SetVisAttributes(chamberVisAtt);
-
-  G4VisAttributes* innerVisAtt = new G4VisAttributes(G4Colour(0.0,1.0,1.0));
-  logicInnerBox->SetVisAttributes(innerVisAtt);
-
-  G4VisAttributes* fieldVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
-  logicFieldBox->SetVisAttributes(fieldVisAtt);
-
-  G4VisAttributes* detVisAtt = new G4VisAttributes(G4Colour(0.0,0.0,1.0));
-  logicSenDet1->SetVisAttributes(detVisAtt);
+//  G4VisAttributes* pipeVisAtt = new G4VisAttributes(G4Colour(0.5,0.0,0.6));
+//  logicBeamPipe->SetVisAttributes(pipeVisAtt);
+//
+//  G4VisAttributes* pipeVVisAtt = new G4VisAttributes(G4Colour(0.4,0.3,0.0));
+//  logicBeamPipeV->SetVisAttributes(pipeVVisAtt);
+//
+//  G4VisAttributes* cupVisAtt = new G4VisAttributes(G4Colour(0.0,0.0,1.0));
+//  logicCup->SetVisAttributes(cupVisAtt);
+//
+//  G4VisAttributes* chamberVisAtt = new G4VisAttributes(G4Colour(0.0,0.0,1.0));
+//  logicChamber->SetVisAttributes(chamberVisAtt);
+//
+//  G4VisAttributes* innerVisAtt = new G4VisAttributes(G4Colour(0.0,1.0,1.0));
+//  logicInnerBox->SetVisAttributes(innerVisAtt);
+//
+//  G4VisAttributes* fieldVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+//  logicFieldBox->SetVisAttributes(fieldVisAtt);
+//
+//  G4VisAttributes* detVisAtt = new G4VisAttributes(G4Colour(0.0,0.0,1.0));
+//  logicSenDet1->SetVisAttributes(detVisAtt);
 
   G4double maxStep   = _maxStep;
   G4double maxLength = _maxLength;
@@ -758,12 +743,12 @@ G4cout<<"maxTime = "<<std::setw(14)<<_maxTime<<std::endl;
 G4cout<<"minEkin = "<<std::setw(14)<<_minEkin<<std::endl;
 G4cout<<"mionRangHERE = "<<std::setw(14)<<_mionRang<<std::endl<<std::endl;
 
-  stepLimit = new G4UserLimits(maxStep,maxLength,maxTime,minEkin,mionRang);
-  logicWorld->SetUserLimits(stepLimit);
-  logicCup->SetUserLimits(stepLimit);
-  logicChamber->SetUserLimits(stepLimit);
-  logicInnerBox->SetUserLimits(stepLimit);
-  logicFieldBox->SetUserLimits(stepLimit);
+//  stepLimit = new G4UserLimits(maxStep,maxLength,maxTime,minEkin,mionRang);
+//  logicWorld->SetUserLimits(stepLimit);
+//  logicCup->SetUserLimits(stepLimit);
+//  logicChamber->SetUserLimits(stepLimit);
+//  logicInnerBox->SetUserLimits(stepLimit);
+//  logicFieldBox->SetUserLimits(stepLimit);
 
   logicWorld->SetVisAttributes(G4VisAttributes::Invisible);
 
@@ -2013,7 +1998,6 @@ G4Material *DetectorConstruction::GetMaterial(G4int t)
   }
 
 }
-
 
 void DetectorConstruction::ConstructMagnet(double refX, double refY, double refZ, double gapSize, double thicknessOfChamber)
 {

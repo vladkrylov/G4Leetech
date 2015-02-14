@@ -15,7 +15,7 @@ class G4UIcmdWithoutParameter;
 class DetectorMessenger: public G4UImessenger
 {
   public:
-    DetectorMessenger(DetectorConstruction*,DetectorConstructionP2 *, DetectorConstructionP3 * );
+    DetectorMessenger(DetectorConstruction *Det);
    ~DetectorMessenger();
     
     void SetNewValue(G4UIcommand*, G4String);
@@ -25,8 +25,6 @@ class DetectorMessenger: public G4UImessenger
     
   private:
     DetectorConstruction* Detector;
-    DetectorConstructionP2* DetectorP2;
-    DetectorConstructionP3* DetectorP3;
     
     G4UIdirectory*             MicromegasDir;
     G4UIdirectory*             detDir;

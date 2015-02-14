@@ -1,8 +1,6 @@
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
 
-#include "DetectorConstructionP2.hh"
-#include "DetectorConstructionP3.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 
@@ -17,8 +15,6 @@ class DetectorMessenger;
 
 class MagneticField;
 class G4UserLimits;
-class DetectorConstructionP2;
-class DetectorConstructionP3;
 //class DetectorConstructionP2;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -134,11 +130,8 @@ private:
 
   
   DetectorMessenger* detectorMessenger;  //pointer to the Messenger
-  DetectorConstructionP2 *geom4;
-  DetectorConstructionP3 *geom7;
 
 private:
-  
   void DefineMaterials();		//define materials)
   void ConstructMagnet(double refX,double refY, double refZ, double gapSize, double thicknessOfChamber);
   //void ComputeCalorParameters();
