@@ -599,6 +599,16 @@ G4VPhysicalVolume* DetectorConstruction::ConstructGeom12(){
 		  	  	  	  	  	  	  	  	  	  	  	  	  	    -(2*neckSolid->GetZHalfLength() + 2*collimOutNeckMain->GetZHalfLength() + colBoxMain->GetZHalfLength())),
 		  	  	  	  	  	  	  	  	  	  logicColBox, "ColBoxes", logicWorld, false, 0);
 
+  /* construct target */
+  G4Tubs *target = new G4Tubs("Target", 0, radNeckRing, cupLenght/2, 0, 360*deg);
+  G4LogicalVolume *logicTarget = new G4LogicalVolume(target, GetMaterial(1), "Target");
+  G4PVPlacement *phyTarget = new G4PVPlacement(0, G4ThreeVector(-electronsRadius,0,
+  		  	  	  	  	  	  	  	  	  	  	  	  	  	    -(2*neckSolid->GetZHalfLength()
+																  + 2*collimOutNeckMain->GetZHalfLength()
+																  + 2*colBoxMain->GetZHalfLength()
+																  + 2*collimInNeckMain->GetZHalfLength()
+																  + target->GetZHalfLength())),
+		  	  	  	  	  	  	  	  	  	  logicTarget, "Target", logicWorld, false, 0);
 
 
   /*   Create solid part of collimators box    */
@@ -790,9 +800,9 @@ G4VPhysicalVolume* DetectorConstruction::ConstructGeom12(){
 //
 //  G4VisAttributes* pipeVVisAtt = new G4VisAttributes(G4Colour(0.4,0.3,0.0));
 //  logicBeamPipeV->SetVisAttributes(pipeVVisAtt);
-//
-//  G4VisAttributes* cupVisAtt = new G4VisAttributes(G4Colour(0.0,0.0,1.0));
-//  logicCup->SetVisAttributes(cupVisAtt);
+
+  G4VisAttributes* cupVisAtt = new G4VisAttributes(G4Colour(0.0,0.0,1.0));
+  logicTarget->SetVisAttributes(cupVisAtt);
 //
 //  G4VisAttributes* chamberVisAtt = new G4VisAttributes(G4Colour(0.0,0.0,1.0));
 //  logicChamber->SetVisAttributes(chamberVisAtt);
@@ -802,6 +812,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructGeom12(){
 //
   G4VisAttributes* fieldVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
   logicFieldBox->SetVisAttributes(fieldVisAtt);
+
 //
 //  G4VisAttributes* detVisAtt = new G4VisAttributes(G4Colour(0.0,0.0,1.0));
 //  logicSenDet1->SetVisAttributes(detVisAtt);
