@@ -496,7 +496,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructGeom12(){
   G4double radNeckRing = 3*cm;
   G4double lengthNeckRing = 0.5*cm;
 
-  G4double neckHoleSide = 2*cm;
+  G4double neckHoleSide = 3*cm;
   G4double lengthNeckHole = lengthNeck + ThicknesOfChamber;
 
   G4Tubs *neckSolid = new G4Tubs("Neck", 0, radNeck, lengthNeck/2, 0, 360.0*deg);
