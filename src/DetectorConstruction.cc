@@ -488,28 +488,36 @@ G4VPhysicalVolume* DetectorConstruction::ConstructGeom12(){
   //
   //	Chamber
   //
-  G4double radNeck = 2.5*cm;
-  G4double lengthNeck = 8.*cm;
+  G4Box *solidChamberMain = new G4Box("Chamber1",chamberX/2, chamberY/2, chamberZ/2);
 
-  G4double neckHoleSide = 3*cm;
+  G4double radNeck = 2.5*cm;
+  G4double lengthNeck = 8*cm;
+
+  G4double radNeckOuter = 3*cm;
+  G4double lengthNeckOuter = 0.5*cm;
+
+  G4double neckHoleSide = 2*cm;
   G4double lengthNeckHole = lengthNeck + ThicknesOfChamber;
 
   G4Tubs *neckSolid = new G4Tubs("Neck", 0, radNeck, lengthNeck/2, 0, 360.0*deg);
-  G4Box  *neckHole  = new G4Box("NeckHole", neckHoleSide/2, neckHoleSide/2, lengthNeckHole/2);
-  G4Transform3D transformNeckHole(RMZero, G4ThreeVector(0,0,ThicknesOfChamber/2));
-  G4SubtractionSolid* neck = new G4SubtractionSolid("Neck", neckSolid, neckHole, transformNeckHole);
 
-  G4Box *solidChamberMain = new G4Box("Chamber1",chamberX/2, chamberY/2, chamberZ/2);
+  G4Tubs *neckOuterRing = new G4Tubs("Neck", radNeck, radNeckOuter, lengthNeckOuter/2, 0, 360.0*deg);
+  G4Transform3D transNeckOuterRing(RMZero, G4ThreeVector(0,0,-(lengthNeck-lengthNeckOuter)/2));
+  G4UnionSolid* neckWithOuterRing  = new G4UnionSolid("Chamber", neckSolid, neckOuterRing, transNeckOuterRing);
+
+  G4Box  *neckHole  = new G4Box("NeckHole", neckHoleSide/2, neckHoleSide/2, lengthNeckHole/2);
+  G4Transform3D transNeckHole(RMZero, G4ThreeVector(0,0,ThicknesOfChamber/2));
+  G4SubtractionSolid* neck = new G4SubtractionSolid("Neck", neckWithOuterRing, neckHole, transNeckHole);
 
 //  G4Box *solidAdditionalBox = new G4Box("ChamberAdd",AdditionalBoxX/2, AdditionalBoxY/2, AdditionalBoxZ/2);
 
-  G4Transform3D transformEntranceNeck(RMZero, G4ThreeVector(-electronsRadius,0,-lengthNeck/2-chamberZ/2));
-  G4Transform3D transformExit1Neck(RMZero, G4ThreeVector(electronsRadius,0,-lengthNeck/2-chamberZ/2));
-  G4Transform3D transformExit2Neck(RMZero, G4ThreeVector(0,0,-lengthNeck/2-chamberZ/2));
+  G4Transform3D transEntranceNeck(RMZero, G4ThreeVector(-electronsRadius,0,-lengthNeck/2-chamberZ/2));
+  G4Transform3D transExit1Neck(RMZero, G4ThreeVector(electronsRadius,0,-lengthNeck/2-chamberZ/2));
+  G4Transform3D transExit2Neck(RMZero, G4ThreeVector(0,0,-lengthNeck/2-chamberZ/2));
 
-  G4UnionSolid* solidChamberEntranceNeck = new G4UnionSolid("Chamber", solidChamberMain, neck, transformEntranceNeck);
-  G4UnionSolid* solidChamberEnEx1Necks = new G4UnionSolid("Chamber", solidChamberEntranceNeck, neck, transformExit1Neck);
-  G4UnionSolid* solidChamberEnEx1Ex2Necks = new G4UnionSolid("Chamber", solidChamberEnEx1Necks, neck, transformExit2Neck);
+  G4UnionSolid* solidChamberEntranceNeck  = new G4UnionSolid("Chamber", solidChamberMain, neck, transEntranceNeck);
+  G4UnionSolid* solidChamberEnEx1Necks    = new G4UnionSolid("Chamber", solidChamberEntranceNeck, neck, transExit1Neck);
+  G4UnionSolid* solidChamberEnEx1Ex2Necks = new G4UnionSolid("Chamber", solidChamberEnEx1Necks, neck, transExit2Neck);
 
   G4LogicalVolume *logicChamber = new G4LogicalVolume(solidChamberEnEx1Ex2Necks, GetMaterial(1), "Chamber");
   G4PVPlacement *physiChamber = new G4PVPlacement(0, G4ThreeVector(chamber_xc,chamber_yc,chamber_zc), logicChamber, "Chamber",	 logicWorld, false, 0);
@@ -520,15 +528,15 @@ G4VPhysicalVolume* DetectorConstruction::ConstructGeom12(){
   G4Box *innerMainBox = new G4Box("InnerBox",innerBoxX/2, innerBoxY/2, innerBoxZ/2);
 //  G4Box *solidAdditionalInnerBox = new G4Box("InnerAdd",AdditionalInnerBoxX/2, AdditionalInnerBoxY/2, AdditionalInnerBoxZ/2);
 
-  G4Transform3D transNeckEntrance(RMZero, G4ThreeVector(-electronsRadius,0,-(chamberZ+lengthNeckHole)/2+ThicknesOfChamber));
-//  G4Transform3D transNeckExit1(RMZero, G4ThreeVector(electronsRadius,0,-(chamberZ+lengthNeckHole)/2+ThicknesOfChamber));
-//  G4Transform3D transNeckExit2(RMZero, G4ThreeVector(0,0,-(chamberZ+lengthNeckHole)/2+ThicknesOfChamber));
+  G4Transform3D transEntranceNeckHole(RMZero, G4ThreeVector(-electronsRadius,0,-(chamberZ+lengthNeckHole)/2+ThicknesOfChamber));
+  G4Transform3D transExit1NeckHole(RMZero, G4ThreeVector(electronsRadius,0,-(chamberZ+lengthNeckHole)/2+ThicknesOfChamber));
+  G4Transform3D transExit2NeckHole(RMZero, G4ThreeVector(0,0,-(chamberZ+lengthNeckHole)/2+ThicknesOfChamber));
 
-  G4UnionSolid* innerMainEntranceBox = new G4UnionSolid("InnerBox", innerMainBox, neckHole, transNeckEntrance);
-//  G4UnionSolid* innerMainEnEx1Box    = new G4UnionSolid("InnerBox", innerMainEntranceBox, neckHole, transNeckEntrance);
-//  G4UnionSolid* innerMainEnEx1Ex2Box = new G4UnionSolid("InnerBox", innerMainEnEx1Box, neckHole, transNeckEntrance);
+  G4UnionSolid *innerMainEntranceBox = new G4UnionSolid("InnerBox", innerMainBox, neckHole, transEntranceNeckHole);
+  G4UnionSolid *innerMainEnEx1Box    = new G4UnionSolid("InnerBox", innerMainEntranceBox, neckHole, transExit1NeckHole);
+  G4UnionSolid *innerMainEnEx1Ex2Box = new G4UnionSolid("InnerBox", innerMainEnEx1Box, neckHole, transExit2NeckHole);
 
-  G4LogicalVolume *logicInnerBox = new G4LogicalVolume(innerMainEntranceBox, GetMaterial(5),"InnerBox");
+  G4LogicalVolume *logicInnerBox = new G4LogicalVolume(innerMainEnEx1Ex2Box, GetMaterial(5),"InnerBox");
   G4PVPlacement *physiInnerBox = new G4PVPlacement(0, G4ThreeVector(innerBox_xc,innerBox_yc,innerBox_zc), logicInnerBox, "InnerBox", logicChamber,	 false,	 0);
 
   //
@@ -539,7 +547,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructGeom12(){
   G4PVPlacement *physiFieldBox = new G4PVPlacement(0, G4ThreeVector(fieldBox_xc,fieldBox_yc,fieldBox_zc), logicFieldBox,"FieldBox", logicInnerBox,	 false,	 0);
 
   //
-  //	Colimator 11
+  //	Collimator 11
   //
 //  int ColimMat = 2;
 //  G4Box *solidColim11 = new G4Box("Kolimator11",colimatorX/2, colimatorY/2, colimatorZ/2);
