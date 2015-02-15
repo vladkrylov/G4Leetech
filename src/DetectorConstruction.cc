@@ -588,12 +588,16 @@ G4VPhysicalVolume* DetectorConstruction::ConstructGeom12(){
 
   G4Transform3D transInNeckToColBox(RMZero, G4ThreeVector(0,0,
 		  	  	  	  	  	  	  	  	  -(colBoxMain->GetZHalfLength() + collimInNeckMain->GetZHalfLength())));
-  G4UnionSolid *collimBoxOutNecks = new G4UnionSolid("CollimInNeck", collimBoxOutNeck, collimInNeck, transInNeckToColBox);
+  G4UnionSolid *collimBoxOutNecks = new G4UnionSolid("ColBox", collimBoxOutNeck, collimInNeck, transInNeckToColBox);
 
-  G4LogicalVolume *logicColBox = new G4LogicalVolume(collimBoxOutNecks, GetMaterial(1),"ColBox");
+  /* construct the same exit1 collimator box */
+  G4Transform3D trans1stEntranceColBox(RMZero, G4ThreeVector(2*electronsRadius,0,0));
+  G4UnionSolid *twoColBoxes = new G4UnionSolid("ColBoxes", collimBoxOutNecks, collimBoxOutNecks, trans1stEntranceColBox);
+
+  G4LogicalVolume *logicColBox = new G4LogicalVolume(twoColBoxes, GetMaterial(1),"ColBoxes");
   G4PVPlacement *phyColBox = new G4PVPlacement(0, G4ThreeVector(-electronsRadius,0,
 		  	  	  	  	  	  	  	  	  	  	  	  	  	    -(2*neckSolid->GetZHalfLength() + 2*collimOutNeckMain->GetZHalfLength() + colBoxMain->GetZHalfLength())),
-		  	  	  	  	  	  	  	  	  	  logicColBox, "ColBox", logicWorld, false, 0);
+		  	  	  	  	  	  	  	  	  	  logicColBox, "ColBoxes", logicWorld, false, 0);
 
 
 
