@@ -27,7 +27,7 @@
 #P=3.5MeV -> 778 G
 /Micromegas/det/setField 785 gauss
 		
-/Micromegas/det/setCupThick 0.000001 mm
+/Micromegas/det/setCupThick 2 mm
 
 #equal to first colim gap
 #/Micromegas/det/setApertureRaduis 1 cm
@@ -44,7 +44,7 @@
 #distance from the edge to beginning of the collimator system
 /Micromegas/det/setDet1X 20 mm
 
-/Micromegas/det/setRotationDeg 337 deg
+/Micromegas/det/setRotationDeg 23 deg
 #/Micromegas/det/setRotationAddDist 6.5 cm
 /Micromegas/det/setRotationAddDist 65 cm
 
@@ -59,15 +59,8 @@
 #gamma, e-, e+, mu-, mu+, pi-, pi+, kaon-, kaon+, anti_proton, proton
 /Micromegas/gun/PerticleType e- 
 
-# settings for aproximate parameters of collimators
-#/Micromegas/gun/ParticlePosition -50 0 -60.0
-#/Micromegas/gun/ParticleDirection 0.0 0.0 1.0
-#/Micromegas/gun/ParticleDirectionRMS 0.1 0.1 0
-#/Micromegas/gun/ParticleMomentum 0.5 1.5 -999
-#/Micromegas/gun/ParticleMomentum 1 1 -999
-
 # settings for don't use window 20mkm
-/Micromegas/gun/ParticlePosition -150.0 0 -450.0
+/Micromegas/gun/ParticlePosition -150.0 0 -200.0
 /Micromegas/gun/ParticleDirection 0.0 0.0 1.0
 /Micromegas/gun/ParticleDirectionRMS 0 0 0
 /Micromegas/gun/ParticleMomentum 3.5 3.5 -999
