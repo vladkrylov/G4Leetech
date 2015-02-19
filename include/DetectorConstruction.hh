@@ -3,6 +3,8 @@
 
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
+#include "G4ThreeVector.hh"
+
 
 class G4Box;
 class G4Tubs;
@@ -31,6 +33,7 @@ public:
   void SetCupLenght(G4double valMy);	//set length of absorber
   void SetApertureInRadius(G4double valMy);//radius of the first calimator
   void SetApertureLenght(G4double valMy); //length of the first calimator
+  G4ThreeVector getBeamPipeCenter();
 
 void SetMaxStep(G4double valMy);
 void SetMaxLength(G4double valMy);

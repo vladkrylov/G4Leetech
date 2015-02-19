@@ -66,12 +66,11 @@
 /Micromegas/gun/ParticleMomentum 3.5 3.5 -999
 
 # FIGHT settings
-#/Micromegas/gun/ParticlePosition -88.8314 0 -161.193
 #/Micromegas/gun/ParticleDirection 39 0.0 92
 #/Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
-#/Micromegas/gun/ParticleMomentum 5.0 5.0 -999
+#/Micromegas/gun/ParticleMomentum 3.5 3.5 -999
 
-# DIRECT TO DETECTOR ssettings
+# DIRECT TO DETECTOR settings
 #/Micromegas/gun/ParticlePosition 210 0 -161.193
 #/Micromegas/gun/ParticleDirection 39 0.0 92
 #/Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
@@ -80,4 +79,4 @@
 /Leetech/RootFile LeetechVis
 /Micromegas/printModulo 100000
 
-/run/beamOn 100
+/run/beamOn 1000

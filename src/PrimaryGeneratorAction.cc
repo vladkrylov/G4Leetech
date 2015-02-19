@@ -58,13 +58,16 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(){
   G4ParticleDefinition* particle = particleTable->FindParticle("e-");
   particleGun->SetParticleDefinition(particle);
   particleGun->SetParticleMomentumDirection(G4ThreeVector(_xDir,_yDir,_zDir));
-  particleGun->SetParticleEnergy(8.0*MeV);
-  particleGun->SetParticlePosition(G4ThreeVector( _xInit, _yInit, _zInit));
+  particleGun->SetParticleEnergy(5.0*MeV);
+//  particleGun->SetParticlePosition(G4ThreeVector( _xInit, _yInit, _zInit));
+
 
 //	randomization with seed
-  rndMy = new TRandom3(321421);  
+//  from ROOT documentation:
+//  If seed is 0, the seed is automatically computed via a TUUID object.
+//  In this case the seed is guaranteed to be unique in space and time.
+  rndMy = new TRandom3(0);
   G4cout<<"PrimaryGeneratorAction::PrimaryGeneratorAction"<<G4endl;
-
 }
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction(){
@@ -90,7 +93,11 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
   //G4ParticleDefinition* particle = particleTable->FindParticle(particleName.Data());
   G4ParticleDefinition* particle = particleTable->FindParticle(_particleName.Data());
   particleGun->SetParticleDefinition(particle);
-  particleGun->SetParticlePosition(G4ThreeVector( _xInit, _yInit, _zInit));
+
+  G4double beamSigma = 3*mm;
+//  particleGun->SetParticlePosition(G4ThreeVector( _xInit, _yInit, _zInit));
+  particleGun->SetParticlePosition(Detector->getBeamPipeCenter());
+//								   + G4ThreeVector(rndMy->Gaus(0, beamSigma), 0, 0));
   GenerateParticleDir();
   if(_xDir==0&&_yDir==0&&_zDir==0)particleGun->SetParticleMomentumDirection(G4RandomDirection());
   else particleGun->SetParticleMomentumDirection(G4ThreeVector( _xDir, _yDir, _zDir));

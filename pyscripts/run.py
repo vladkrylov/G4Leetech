@@ -62,14 +62,14 @@ p = call(command_list)
 # print output_dir
 
 # merge output root files produced by MPI processes to one
-if merge:
-	# determine the basename of output root files 
-	with open("%s/run.mac" % project_dir, 'r') as run_mac:
-		for l in run_mac.readlines():
-			m = re.match(r"(/Leetech/RootFile) (.+)", l)
-			if m:
-				basename = m.groups()[-1].split('/')[-1]
-	merge(basename, output_dir)
+# if merge:
+# 	# determine the basename of output root files 
+# 	with open("%s/run.mac" % project_dir, 'r') as run_mac:
+# 		for l in run_mac.readlines():
+# 			m = re.match(r"(/Leetech/RootFile) (.+)", l)
+# 			if m:
+# 				basename = m.groups()[-1].split('/')[-1]
+# 	merge(basename, output_dir)
 
 if send_results:
 	from output_structure import which
