@@ -1,7 +1,12 @@
 #!/bin/bash
 
-# Will not work! Root script renamed and parameter added
-# NEEDFIX
-mpirun -np 4 ../bin/Linux-g++/leetechparallel run.mac
-root -l UniteRoots.cxx
-mv United.root new_G12.root
+# set momentum of primary electrons
+P_primaries=5.0
+./../pyscripts/change_parameter.py /Micromegas/gun/ParticleMomentum "$P_primaries $P_primaries -999"
+
+# cycle through magnetic field values
+for B_field in {222..888..22}
+  do
+    ./../pyscripts/change_parameter.py /Micromegas/det/setField "$B_field gauss"
+    ./../pyscripts/run.py -n 24 --noreadme -o "../LeetechRuns/B_field_csan_$P_primaries MeV B=$B_field G"
+  done
