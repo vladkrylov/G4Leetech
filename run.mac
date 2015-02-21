@@ -10,7 +10,7 @@
 #E=100keV
 #/Micromegas/det/setField 81.5 gauss
 #P=3.5MeV -> 778 G
-/Micromegas/det/setField 222 gauss
+/Micromegas/det/setField 3 gauss
 
 /Micromegas/det/setCupThick 2 mm
 
@@ -65,7 +65,7 @@
 # FIGHT settings
 /Micromegas/gun/ParticleDirection 39 0.0 92
 /Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
-/Micromegas/gun/ParticleMomentum 5.0 5.0 -999
+/Micromegas/gun/ParticleMomentum 3.5 3.5 -999
 
 # DIRECT TO DETECTOR ssettings
 #/Micromegas/gun/ParticlePosition 210 0 -161.193
