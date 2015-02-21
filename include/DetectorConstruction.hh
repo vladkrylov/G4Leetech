@@ -48,6 +48,12 @@ void SetDet1X(G4double valMy);
 void SetRotationDeg(G4double valMy);
 void SetRotationAddDistCmd(G4double valMy);
 
+void SetCollimatorGapEntranceX(G4double valMy);
+void SetCollimatorGapEntranceY(G4double valMy);
+void SetCollimatorGapExit1X(G4double valMy);
+void SetCollimatorGapExit1Y(G4double valMy);
+
+
   void OffMagField();
 
   G4VPhysicalVolume* Construct(); //construct geometry (if changet)
@@ -157,6 +163,12 @@ private:
 	G4double _Det1X;
 	G4double _RotationDeg;
 	G4double _RotAddDist;
+
+	G4double collEntranceGapX;
+	G4double collEntranceGapY;
+	G4double collExit1GapX;
+  	G4double collExit1GapY;
+
   // old geometry
   //_geomID = 999;
   //LB 05.05.2012 geometry with two sencative vlumes
@@ -227,8 +239,26 @@ inline void DetectorConstruction::SetDet1X(G4double valMy){
 inline void DetectorConstruction::SetRotationDeg(G4double valMy){
   _RotationDeg = valMy;
 }
+
 inline void DetectorConstruction::SetRotationAddDistCmd(G4double valMy){
 	_RotAddDist = valMy;
 }
-#endif
+
+inline void DetectorConstruction::SetCollimatorGapEntranceX(G4double valMy){
+	collEntranceGapX = valMy;
+}
+
+inline void DetectorConstruction::SetCollimatorGapEntranceY(G4double valMy){
+	collEntranceGapY = valMy;
+}
+
+inline void DetectorConstruction::SetCollimatorGapExit1X(G4double valMy){
+	collExit1GapX = valMy;
+}
+
+inline void DetectorConstruction::SetCollimatorGapExit1Y(G4double valMy){
+	collExit1GapY = valMy;
+}
+
+#endif // DetectorConstruction_h
 

@@ -262,9 +262,9 @@ G4VPhysicalVolume* DetectorConstruction::ConstructGeom12(){
   //distance between system of cordiantes of beampipe and chamber
   G4double fromOriginToOrigin 	=	AdditionalBoxZ+2*cm;
 
-  G4double ShieldBarrierX       =       0.07*m;
-  G4double ShieldBarrierY       =       0.4*m;
-  G4double ShieldBarrierZ       =       0.3*m;
+  G4double ShieldBarrierX       =       16*cm;
+  G4double ShieldBarrierY       =       40*cm;
+  G4double ShieldBarrierZ       =       30*cm;
 
   G4double InnerTopShieldX      =       20*mm;
   G4double InnerTopShieldY      =       fieldBoxY-gapSize;
@@ -469,7 +469,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructGeom12(){
   G4Box *solidChamberMain = new G4Box("Chamber1",chamberX/2, chamberY/2, chamberZ/2);
 
   G4double radNeck = 1.4*cm;
-  G4double lengthNeck = 8*cm;
+  G4double lengthNeck = 3*cm;
 
   G4double radNeckRing = 2*cm;
   G4double lengthNeckRing = 0.4*cm;
@@ -594,11 +594,10 @@ G4VPhysicalVolume* DetectorConstruction::ConstructGeom12(){
   G4double baseWidth = 10*mm;
   G4double baseHoleSize = 2.5*cm;
 
-  G4double collEntranceGapX = 1.5*cm;
-  G4double collEntranceGapY = 1*cm;
-
-  G4double collExit1GapX = 1*cm;
-  G4double collExit1GapY = 2*cm;
+//  collEntranceGapX = 1.5*cm;
+//  collEntranceGapY = 1*cm;
+//  collExit1GapX = 1*cm;
+//  collExit1GapY = 2*cm;
 
   G4Box *colBasePlateMain = new G4Box("ColBasePlate", baseSide/2, baseSide/2, baseWidth/2);
   G4Box *baseHole = new G4Box("BaseHole", baseHoleSize/2, baseHoleSize/2, baseWidth/2);
@@ -726,6 +725,17 @@ G4VPhysicalVolume* DetectorConstruction::ConstructGeom12(){
   logicBeamPipeV = new G4LogicalVolume(solidBeamPipeV, GetMaterial(6),"BeamPipeV");
   physiBeamPipeV = new G4PVPlacement(RM1, beamPipeCenter, logicBeamPipeV,"BeamPipeV",logicWorld, false, 0);
 
+  //
+  // Detector shielding
+  //
+
+  G4Box *solidShieldBarrier1 = new G4Box("ShieldBarrier1",ShieldBarrierX/2, ShieldBarrierY/2, ShieldBarrierZ/2);
+  G4LogicalVolume *logicShieldBarrier1 = new G4LogicalVolume(solidShieldBarrier1,GetMaterial(7), "ShieldBarrier1");
+
+  G4ThreeVector detShieldCenter(0, 0, -solidShieldBarrier1->GetZHalfLength()
+		                              - 2*neckSolid->GetZHalfLength());
+  G4VPhysicalVolume *physiShieldBarrier1 = new G4PVPlacement(0, detShieldCenter,
+		  	  	  	 logicShieldBarrier1, "ShieldBarrier1",logicWorld, false, 0);
 
   //
   // Exit window
@@ -757,22 +767,12 @@ G4VPhysicalVolume* DetectorConstruction::ConstructGeom12(){
 				   false,      		//no boolean operation
 				   0);			//copy number
 
-//  	G4Box *solidShieldBarrier1 = new G4Box("ShieldBarrier1",ShieldBarrierX/2, ShieldBarrierY/2, ShieldBarrierZ/2);
-//    G4LogicalVolume *logicShieldBarrier1 = new G4LogicalVolume(solidShieldBarrier1,GetMaterial(7), "ShieldBarrier1");
-//    G4PVPlacement *physiShieldBarrier1 = new G4PVPlacement(0, G4ThreeVector(ShieldBarrier_xc1,ShieldBarrier_yc,ShieldBarrier_zc),
-//  		  logicShieldBarrier1, "ShieldBarrier1",logicWorld, false, 0);
-//
-//    G4Box *solidShieldBarrier2 = new G4Box("ShieldBarrier2",ShieldBarrierX/2, ShieldBarrierY/2, ShieldBarrierZ/2);
-//    G4LogicalVolume *logicShieldBarrier2 = new G4LogicalVolume(solidShieldBarrier2,GetMaterial(7), "ShieldBarrier2");
-//    G4PVPlacement *physiShieldBarrier2 = new G4PVPlacement(0, G4ThreeVector(ShieldBarrier_xc2,ShieldBarrier_yc,ShieldBarrier_zc),
-//  		  logicShieldBarrier2, "ShieldBarrier2",logicWorld, false, 0);
-
 
   G4Box *solidInnerBotShield1 = new G4Box("InnerBotShield1",InnerBotShield1X/2, InnerBotShield1Y/2, InnerBotShield1Z/2);
   G4LogicalVolume *logicInnerBotShield1 = new G4LogicalVolume(solidInnerBotShield1,GetMaterial(7), "InnerBotShield1");
   G4RotationMatrix*RM11=new G4RotationMatrix;
   RM11->rotateY(0*deg);
-  G4PVPlacement *physiInnerBotShield1 = new G4PVPlacement(RM11,
+  G4VPhysicalVolume *physiInnerBotShield1 = new G4PVPlacement(RM11,
 		  G4ThreeVector(InnerBotShield1_xc,InnerBotShield1_yc,InnerBotShield1_zc),
 		  logicInnerBotShield1, "InnerBotShield1",logicFieldBox, false, 0);
 
@@ -780,7 +780,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructGeom12(){
   G4LogicalVolume *logicInnerBotShield2 = new G4LogicalVolume(solidInnerBotShield2,GetMaterial(7), "InnerBotShield2");
   G4RotationMatrix*RM12=new G4RotationMatrix;
   RM12->rotateY(0*deg);
-  G4PVPlacement *physiInnerBotShield2 = new G4PVPlacement(RM12,
+  G4VPhysicalVolume *physiInnerBotShield2 = new G4PVPlacement(RM12,
 		  G4ThreeVector(InnerBotShield2_xc,InnerBotShield2_yc,InnerBotShield2_zc),
 		  logicInnerBotShield2, "InnerBotShield2",logicFieldBox, false, 0);
 
@@ -788,7 +788,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructGeom12(){
   G4LogicalVolume *logicInnerShield3 = new G4LogicalVolume(solidInnerShield3,GetMaterial(7), "InnerShield3");
   G4RotationMatrix*RM13=new G4RotationMatrix;
   RM13->rotateY(0*deg);
-  G4PVPlacement *physiInnerShield3 = new G4PVPlacement(RM13,
+  G4VPhysicalVolume *physiInnerShield3 = new G4PVPlacement(RM13,
 		  G4ThreeVector(InnerShield3_xc,InnerShield3_yc,InnerShield3_zc),
 		  logicInnerShield3, "InnerShield3",logicFieldBox, false, 0);
 
@@ -797,7 +797,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructGeom12(){
   G4LogicalVolume *logicInnerShield4 = new G4LogicalVolume(solidInnerShield4,GetMaterial(7), "InnerShield4");
   G4RotationMatrix*RM14=new G4RotationMatrix;
   RM14->rotateY(-45*deg);
-  G4PVPlacement *physiInnerShield4 = new G4PVPlacement(RM14,
+  G4VPhysicalVolume *physiInnerShield4 = new G4PVPlacement(RM14,
 		  G4ThreeVector(InnerShield4_xc,InnerShield4_yc,InnerShield4_zc),
 		  logicInnerShield4, "InnerShield4",logicFieldBox, false, 0);
 
@@ -805,7 +805,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructGeom12(){
   G4LogicalVolume *logicInnerShield5 = new G4LogicalVolume(solidInnerShield5,GetMaterial(7), "InnerShield5");
   G4RotationMatrix*RM15=new G4RotationMatrix;
   RM15->rotateY(45*deg);
-  G4PVPlacement *physiInnerShield5 = new G4PVPlacement(RM15,
+  G4VPhysicalVolume *physiInnerShield5 = new G4PVPlacement(RM15,
 		  G4ThreeVector(InnerShield5_xc,InnerShield5_yc,InnerShield5_zc),
 		  logicInnerShield5, "InnerShield5",logicFieldBox, false, 0);
 

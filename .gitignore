@@ -3,6 +3,7 @@
 
 screenshots/
 RunsResults/
+nohup*
 
 *.root
 *.zip

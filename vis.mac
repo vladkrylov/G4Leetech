@@ -29,6 +29,11 @@
 		
 /Micromegas/det/setCupThick 2 mm
 
+/Leetech/det/SetCollimatorEntranceGapX 20 mm
+/Leetech/det/SetCollimatorEntranceGapY 20 mm
+/Leetech/det/SetCollimatorExit1GapX 20 mm
+/Leetech/det/SetCollimatorExit1GapY 20 mm
+
 #equal to first colim gap
 #/Micromegas/det/setApertureRaduis 1 cm
 /Micromegas/det/setApertureRaduis 2 cm
@@ -60,15 +65,15 @@
 /Micromegas/gun/PerticleType e- 
 
 # settings for don't use window 20mkm
-/Micromegas/gun/ParticlePosition -150.0 0 -200.0
-/Micromegas/gun/ParticleDirection 0.0 0.0 1.0
-/Micromegas/gun/ParticleDirectionRMS 0 0 0
-/Micromegas/gun/ParticleMomentum 3.5 3.5 -999
+#/Micromegas/gun/ParticlePosition -150.0 0 -200.0
+#/Micromegas/gun/ParticleDirection 0.0 0.0 1.0
+#/Micromegas/gun/ParticleDirectionRMS 0 0 0
+#/Micromegas/gun/ParticleMomentum 3.5 3.5 -999
 
 # FIGHT settings
-#/Micromegas/gun/ParticleDirection 39 0.0 92
-#/Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
-#/Micromegas/gun/ParticleMomentum 3.5 3.5 -999
+/Micromegas/gun/ParticleDirection 39 0.0 92
+/Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
+/Micromegas/gun/ParticleMomentum 3.5 3.5 -999
 
 # DIRECT TO DETECTOR settings
 #/Micromegas/gun/ParticlePosition 210 0 -161.193
@@ -79,4 +84,4 @@
 /Leetech/RootFile LeetechVis
 /Micromegas/printModulo 100000
 
-/run/beamOn 1000
+/run/beamOn 10
