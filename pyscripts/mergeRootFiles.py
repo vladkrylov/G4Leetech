@@ -60,6 +60,9 @@ def merge(filenames_base, path_to_mergefiles):
     else:
         print "mergeRootFiles: wrong path to output ROOT files provided."
        
+def no_dir_found(dir_name):
+    raise Exception("%s: no such directory found." % dir_name)
+    
 def find_base_name(path_to_mergefiles):
     if not os.path.exists(path_to_mergefiles):
         return []
@@ -80,14 +83,33 @@ def find_base_name(path_to_mergefiles):
  
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        path_to_mergefiles = os.path.abspath("%s/%s" % (os.getcwd(), sys.argv[1]))
+#         path_to_mergefiles = os.path.abspath("%s/%s" % (os.getcwd(), sys.argv[1]))
+        merge_dirs = []
+        path_to_mergefiles = os.path.abspath(sys.argv[1])
         if not os.path.exists(path_to_mergefiles):
-            print "%s: no such directory found." % sys.argv[1]
-            path_to_mergefiles = None
+            # maybe regular expression has been specified instead of full path
+            # try to interpret it
+            dirs = sys.argv[1].split('/')
+            pre_path = '/' + '/'.join(dirs[1:-1])
+            if not os.path.exists(pre_path):
+                no_dir_found(path_to_mergefiles)
+                
+            pat = re.compile(dirs[-1].replace("*",".*"))
+            print pat.pattern
+            merge_dirs = [dname for dname in os.listdir(pre_path) 
+                           if os.path.isdir(("%s/%s") % (pre_path, dname))
+                           and pat.match(dname)]
+    # if no argument specified set the current dir as a merge dir
     else:
         path_to_mergefiles = os.getcwd()
     
-    if path_to_mergefiles:
+    if merge_dirs:
+        for d in merge_dirs:
+            full_merge_path = "%s/%s" % (pre_path, d)
+            base_name = find_base_name(full_merge_path)
+            if base_name:
+                merge(base_name, full_merge_path)
+    elif path_to_mergefiles:
         base_name = find_base_name(path_to_mergefiles)
         if base_name:
             merge(base_name, path_to_mergefiles)
