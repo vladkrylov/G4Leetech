@@ -1,32 +1,12 @@
 void MergeRootFiles()
 {
     const char *TreeName = "T";
-    const int numberOfFiles = 24;
+    const int numberOfFiles = 4;
     char* mergeFilenames[numberOfFiles] = {
-"/home/vlad/5g4work/LeetechRuns/B_field_csan_Target=2mm_5.0 MeV_B=310 G/LeetechRun010.root",
-"/home/vlad/5g4work/LeetechRuns/B_field_csan_Target=2mm_5.0 MeV_B=310 G/LeetechRun015.root",
-"/home/vlad/5g4work/LeetechRuns/B_field_csan_Target=2mm_5.0 MeV_B=310 G/LeetechRun023.root",
-"/home/vlad/5g4work/LeetechRuns/B_field_csan_Target=2mm_5.0 MeV_B=310 G/LeetechRun003.root",
-"/home/vlad/5g4work/LeetechRuns/B_field_csan_Target=2mm_5.0 MeV_B=310 G/LeetechRun022.root",
-"/home/vlad/5g4work/LeetechRuns/B_field_csan_Target=2mm_5.0 MeV_B=310 G/LeetechRun020.root",
-"/home/vlad/5g4work/LeetechRuns/B_field_csan_Target=2mm_5.0 MeV_B=310 G/LeetechRun014.root",
-"/home/vlad/5g4work/LeetechRuns/B_field_csan_Target=2mm_5.0 MeV_B=310 G/LeetechRun011.root",
-"/home/vlad/5g4work/LeetechRuns/B_field_csan_Target=2mm_5.0 MeV_B=310 G/LeetechRun012.root",
-"/home/vlad/5g4work/LeetechRuns/B_field_csan_Target=2mm_5.0 MeV_B=310 G/LeetechRun005.root",
-"/home/vlad/5g4work/LeetechRuns/B_field_csan_Target=2mm_5.0 MeV_B=310 G/LeetechRun013.root",
-"/home/vlad/5g4work/LeetechRuns/B_field_csan_Target=2mm_5.0 MeV_B=310 G/LeetechRun018.root",
-"/home/vlad/5g4work/LeetechRuns/B_field_csan_Target=2mm_5.0 MeV_B=310 G/LeetechRun009.root",
-"/home/vlad/5g4work/LeetechRuns/B_field_csan_Target=2mm_5.0 MeV_B=310 G/LeetechRun001.root",
-"/home/vlad/5g4work/LeetechRuns/B_field_csan_Target=2mm_5.0 MeV_B=310 G/LeetechRun004.root",
-"/home/vlad/5g4work/LeetechRuns/B_field_csan_Target=2mm_5.0 MeV_B=310 G/LeetechRun002.root",
-"/home/vlad/5g4work/LeetechRuns/B_field_csan_Target=2mm_5.0 MeV_B=310 G/LeetechRun017.root",
-"/home/vlad/5g4work/LeetechRuns/B_field_csan_Target=2mm_5.0 MeV_B=310 G/LeetechRun000.root",
-"/home/vlad/5g4work/LeetechRuns/B_field_csan_Target=2mm_5.0 MeV_B=310 G/LeetechRun008.root",
-"/home/vlad/5g4work/LeetechRuns/B_field_csan_Target=2mm_5.0 MeV_B=310 G/LeetechRun019.root",
-"/home/vlad/5g4work/LeetechRuns/B_field_csan_Target=2mm_5.0 MeV_B=310 G/LeetechRun006.root",
-"/home/vlad/5g4work/LeetechRuns/B_field_csan_Target=2mm_5.0 MeV_B=310 G/LeetechRun021.root",
-"/home/vlad/5g4work/LeetechRuns/B_field_csan_Target=2mm_5.0 MeV_B=310 G/LeetechRun016.root",
-"/home/vlad/5g4work/LeetechRuns/B_field_csan_Target=2mm_5.0 MeV_B=310 G/LeetechRun007.root"};
+"/home/vlad/5g4work/LeetechParallel/ResultsAndAnalysis/B_scan_d=8mm_E=3.5MeV_2mm/B_field_csan_d=8mm_E=3.5 MeV_B=300 G/LeetechRun003.root",
+"/home/vlad/5g4work/LeetechParallel/ResultsAndAnalysis/B_scan_d=8mm_E=3.5MeV_2mm/B_field_csan_d=8mm_E=3.5 MeV_B=300 G/LeetechRun001.root",
+"/home/vlad/5g4work/LeetechParallel/ResultsAndAnalysis/B_scan_d=8mm_E=3.5MeV_2mm/B_field_csan_d=8mm_E=3.5 MeV_B=300 G/LeetechRun002.root",
+"/home/vlad/5g4work/LeetechParallel/ResultsAndAnalysis/B_scan_d=8mm_E=3.5MeV_2mm/B_field_csan_d=8mm_E=3.5 MeV_B=300 G/LeetechRun000.root"};
 
     TFile **f = new TFile*[numberOfFiles];
     TTree **t = new TTree*[numberOfFiles];
@@ -38,7 +18,7 @@ void MergeRootFiles()
     	treeList.Add(t[i]);
 	}
 
-    TFile resultFile("/home/vlad/5g4work/LeetechRuns/B_field_csan_Target=2mm_5.0 MeV_B=310 G/Result.root", "RECREATE");
+    TFile resultFile("/home/vlad/5g4work/LeetechParallel/ResultsAndAnalysis/B_scan_d=8mm_E=3.5MeV_2mm/B_field_csan_d=8mm_E=3.5 MeV_B=300 G/Result.root", "RECREATE");
 
     TTree::MergeTrees(&treeList);
     resultFile.Write();

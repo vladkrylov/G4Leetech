@@ -2,7 +2,7 @@
 !.gitignore
 
 screenshots/
-RunsResults/
+ResultsAndAnalysis/
 nohup*
 
 *.root
