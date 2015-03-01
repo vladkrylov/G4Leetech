@@ -1,13 +1,14 @@
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
 
-#include "DetectorConstructionP2.hh"
-#include "DetectorConstructionP3.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
+#include "G4ThreeVector.hh"
+
 
 class G4Box;
 class G4Tubs;
+class G4UnionSolid;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
@@ -16,8 +17,6 @@ class DetectorMessenger;
 
 class MagneticField;
 class G4UserLimits;
-class DetectorConstructionP2;
-class DetectorConstructionP3;
 //class DetectorConstructionP2;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -34,6 +33,7 @@ public:
   void SetCupLenght(G4double valMy);	//set length of absorber
   void SetApertureInRadius(G4double valMy);//radius of the first calimator
   void SetApertureLenght(G4double valMy); //length of the first calimator
+  G4ThreeVector getBeamPipeCenter();
 
 void SetMaxStep(G4double valMy);
 void SetMaxLength(G4double valMy);
@@ -44,6 +44,15 @@ void SetMionRang(G4double valMy);
 void SetDet1OutRad(G4double valMy);
 void SetDet1InRad(G4double valMy);
 void SetDet1X(G4double valMy);
+
+void SetRotationDeg(G4double valMy);
+void SetRotationAddDistCmd(G4double valMy);
+
+void SetCollimatorGapEntranceX(G4double valMy);
+void SetCollimatorGapEntranceY(G4double valMy);
+void SetCollimatorGapExit1X(G4double valMy);
+void SetCollimatorGapExit1Y(G4double valMy);
+
 
   void OffMagField();
 
@@ -56,7 +65,7 @@ void SetDet1X(G4double valMy);
   G4Material *GetMaterial(int t);
     
 private:
-	// Define materials    
+	// Define materials
 	G4Material*        alMy;
 	G4Material*        steelMy;
 	G4Material*        airMy;
@@ -130,12 +139,10 @@ private:
 
   
   DetectorMessenger* detectorMessenger;  //pointer to the Messenger
-  DetectorConstructionP2 *geom4;
-  DetectorConstructionP3 *geom7;
 
 private:
-  
   void DefineMaterials();		//define materials)
+  void ConstructMagnet(double refX,double refY, double refZ, double gapSize, double thicknessOfChamber);
   //void ComputeCalorParameters();
   
   G4int _geomID;			//number of geometry
@@ -145,19 +152,28 @@ private:
   G4double _apertureLenght;		//length of first calimator
 
   	G4double       _maxStep;
-	G4double       _maxLength;
-	G4double       _maxTime;
+  	G4double       _maxLength;
+  	G4double       _maxTime;
 	G4double       _minEkin;
 	G4double       _mionRang;
+
 
 	G4double _Det1InRad;
 	G4double _Det1OutRad;
 	G4double _Det1X;
+	G4double _RotationDeg;
 	G4double _RotAddDist;
+
+	G4double collEntranceGapX;
+	G4double collEntranceGapY;
+	G4double collExit1GapX;
+  	G4double collExit1GapY;
+
   // old geometry
   //_geomID = 999;
   //LB 05.05.2012 geometry with two sencative vlumes
   //_geomID = 3;
+  G4VPhysicalVolume* ConstructGeom12();
   G4VPhysicalVolume* ConstructGeom3();	//ConstructGeom3 :) - FullGeom
   G4VPhysicalVolume* ConstructGeom2();	//ConstructGeom2 :) - Two Calimators Geom
   G4VPhysicalVolume* ConstructGeom1();	//ConstructGeom2 :) - One Calimator Geom
@@ -219,5 +235,30 @@ inline void DetectorConstruction::SetDet1OutRad(G4double valMy){
 inline void DetectorConstruction::SetDet1X(G4double valMy){
   _Det1X = valMy;
 }
-#endif
+
+inline void DetectorConstruction::SetRotationDeg(G4double valMy){
+  _RotationDeg = valMy;
+}
+
+inline void DetectorConstruction::SetRotationAddDistCmd(G4double valMy){
+	_RotAddDist = valMy;
+}
+
+inline void DetectorConstruction::SetCollimatorGapEntranceX(G4double valMy){
+	collEntranceGapX = valMy;
+}
+
+inline void DetectorConstruction::SetCollimatorGapEntranceY(G4double valMy){
+	collEntranceGapY = valMy;
+}
+
+inline void DetectorConstruction::SetCollimatorGapExit1X(G4double valMy){
+	collExit1GapX = valMy;
+}
+
+inline void DetectorConstruction::SetCollimatorGapExit1Y(G4double valMy){
+	collExit1GapY = valMy;
+}
+
+#endif // DetectorConstruction_h
 

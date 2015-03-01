@@ -15,7 +15,7 @@ class G4UIcmdWithoutParameter;
 class DetectorMessenger: public G4UImessenger
 {
   public:
-    DetectorMessenger(DetectorConstruction*,DetectorConstructionP2 *, DetectorConstructionP3 * );
+    DetectorMessenger(DetectorConstruction *Det);
    ~DetectorMessenger();
     
     void SetNewValue(G4UIcommand*, G4String);
@@ -25,11 +25,10 @@ class DetectorMessenger: public G4UImessenger
     
   private:
     DetectorConstruction* Detector;
-    DetectorConstructionP2* DetectorP2;
-    DetectorConstructionP3* DetectorP3;
     
     G4UIdirectory*             MicromegasDir;
     G4UIdirectory*             detDir;
+    G4UIdirectory*             detDirNew;
 
     G4UIcmdWithADoubleAndUnit  *MagFieldCmd;
     G4UIcmdWithADoubleAndUnit  *CupThickCmd;
@@ -50,6 +49,13 @@ class DetectorMessenger: public G4UImessenger
 
 	G4UIcmdWithADoubleAndUnit       *RotationDegCmd;
 	G4UIcmdWithADoubleAndUnit       *RotationAddDistCmd;
+
+	G4UIcmdWithADoubleAndUnit       *EntranceCollGapXCmd;
+	G4UIcmdWithADoubleAndUnit       *EntranceCollGapYCmd;
+	G4UIcmdWithADoubleAndUnit       *Exit1CollGapXCmd;
+	G4UIcmdWithADoubleAndUnit       *Exit1CollGapYCmd;
+
+	G4UIcmdWithADoubleAndUnit* CreateCommand(const char *name, const char *comment);
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

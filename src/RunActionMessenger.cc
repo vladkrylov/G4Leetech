@@ -12,7 +12,7 @@ RunActionMessenger::RunActionMessenger(RunAction* run)
 :Run(run)
 {
  
-  RootFileCmd = new G4UIcmdWithAString("/Micromegas/RootFile",this);
+  RootFileCmd = new G4UIcmdWithAString("/Leetech/RootFile",this);
   RootFileCmd->SetGuidance("Output root file");
   RootFileCmd->SetParameterName("RootFile", false);
   RootFileCmd->AvailableForStates(G4State_PreInit,G4State_Idle);

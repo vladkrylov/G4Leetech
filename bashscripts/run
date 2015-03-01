@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# set momentum of primary electrons
+P_primaries=5.0
+./../pyscripts/change_parameter.py /Micromegas/gun/ParticleMomentum "$P_primaries $P_primaries -999"
+
+# cycle through magnetic field values
+for B_field in {948..980..22}
+  do
+    ./../pyscripts/change_parameter.py /Micromegas/det/setField "$B_field gauss"
+    ./../pyscripts/run.py -n 4 --noreadme -o "../LeetechRuns/B_field_csan_Target=2mm_$P_primaries MeV_B=$B_field G"
+  done

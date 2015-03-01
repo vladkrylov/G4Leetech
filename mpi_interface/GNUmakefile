@@ -1,5 +1,4 @@
 # $Id: GNUmakefile,v 1.1 2007-11-16 13:32:56 kmura Exp $
-# $Name: not supported by cvs2svn $
 # ===========================================================
 #   Makefile for building MPI interface
 # ===========================================================
@@ -39,8 +38,6 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/interfaces/basic/include \
             -I$(G4BASE)/intercoms/include \
             -I$(G4BASE)/graphics_reps/include
-
-CPPFLAGS += -I/home/vlad/Program_Files/openmpi-1.4.2/build/include
 
 include $(G4INSTALL)/config/common.gmk
 

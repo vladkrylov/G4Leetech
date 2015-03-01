@@ -7,9 +7,8 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-DetectorMessenger::DetectorMessenger(
-				     DetectorConstruction* Det, DetectorConstructionP2* DetP2, DetectorConstructionP3* DetP3)
- :Detector(Det),DetectorP2(DetP2),DetectorP3(DetP3)
+DetectorMessenger::DetectorMessenger(DetectorConstruction* Det)
+ :Detector(Det)
 { 
 	number_of_geom = true;
   MicromegasDir = new G4UIdirectory("/Micromegas/");
@@ -17,6 +16,9 @@ DetectorMessenger::DetectorMessenger(
   
   detDir = new G4UIdirectory("/Micromegas/det/");
   detDir->SetGuidance("detector control");
+
+  detDirNew = new G4UIdirectory("/Leetech/det/");
+  detDirNew->SetGuidance("detector control");
 
   MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/Micromegas/det/setField",this);  
   MagFieldCmd->SetGuidance("Define magnetic field.");
@@ -127,6 +129,11 @@ DetectorMessenger::DetectorMessenger(
   RotationAddDistCmd->SetRange("Size>=0.");
   RotationAddDistCmd->SetUnitCategory("Length");
   RotationAddDistCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  EntranceCollGapXCmd = CreateCommand("/Leetech/det/SetCollimatorEntranceGapX", "Set collimator gap along X axis at the entrance");
+  EntranceCollGapYCmd = CreateCommand("/Leetech/det/SetCollimatorEntranceGapY", "Set collimator gap along Y axis at the entrance");
+  Exit1CollGapXCmd = CreateCommand("/Leetech/det/SetCollimatorExit1GapX", "Set collimator gap along X axis at the exit 1");
+  Exit1CollGapYCmd = CreateCommand("/Leetech/det/SetCollimatorExit1GapY", "Set collimator gap along Y axis at the exit 1");
 }
 DetectorMessenger::~DetectorMessenger()
 {
@@ -137,19 +144,25 @@ DetectorMessenger::~DetectorMessenger()
   delete MagFieldCmd;
   delete GeomIDCmd;
   delete detDir;
+  delete detDirNew;
   delete MicromegasDir;
 
-	delete maxStepCmd;
-	delete maxLengthCmd;
-	delete maxTimeCmd;
-	delete minEkinCmd;
-	delete mionRangCmd;
+  delete maxStepCmd;
+  delete maxLengthCmd;
+  delete maxTimeCmd;
+  delete minEkinCmd;
+  delete mionRangCmd;
 
-	delete Det1InRadCmd;
-	delete Det1OutRadCmd;
-	delete Det1XCmd;
-	delete RotationDegCmd;
-	delete RotationAddDistCmd;
+  delete Det1InRadCmd;
+  delete Det1OutRadCmd;
+  delete Det1XCmd;
+  delete RotationDegCmd;
+  delete RotationAddDistCmd;
+
+  delete EntranceCollGapXCmd;
+  delete EntranceCollGapYCmd;
+  delete Exit1CollGapXCmd;
+  delete Exit1CollGapYCmd;
 }
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
@@ -168,6 +181,10 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 		Detector->SetApertureInRadius(ApertureRadiusCmd->GetNewDoubleValue(newValue));}
 	  if( command == GeomIDCmd){
 		Detector->SetGeomID(GeomIDCmd->GetNewIntValue(newValue));}
+	  if( command == RotationDegCmd){
+		Detector->SetRotationDeg(RotationDegCmd->GetNewDoubleValue(newValue));}
+	  if( command == RotationAddDistCmd){
+		Detector->SetRotationAddDistCmd(RotationAddDistCmd->GetNewDoubleValue(newValue));}
 	
 	  if( command == maxStepCmd){
 		Detector->SetMaxStep(maxStepCmd->GetNewDoubleValue(newValue));}
@@ -180,91 +197,35 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 	  if( command == mionRangCmd){
 		Detector->SetMionRang(mionRangCmd->GetNewDoubleValue(newValue));}
 	
-		if( command == Det1InRadCmd){
+	  if( command == Det1InRadCmd){
 		Detector->SetDet1InRad(Det1InRadCmd->GetNewDoubleValue(newValue));}
-		if( command == Det1OutRadCmd){
+	  if( command == Det1OutRadCmd){
 		Detector->SetDet1OutRad(Det1OutRadCmd->GetNewDoubleValue(newValue));}
-		if( command == Det1XCmd){
+	  if( command == Det1XCmd){
 		Detector->SetDet1X(Det1XCmd->GetNewDoubleValue(newValue));}
-	}
 
-	if(number_of_geom)
-		{
-//	  if( command == UpdateCmd ){
-	//    Detector->UpdateGeometry();}
-	  if( command == MagFieldCmd ){ 
-		DetectorP2->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));}
-	  if( command == CupThickCmd ){
-		DetectorP2->SetCupLenght(CupThickCmd->GetNewDoubleValue(newValue));}
-	  if( command == ApertureThickCmd ){
-		DetectorP2->SetApertureLenght(ApertureThickCmd->GetNewDoubleValue(newValue));}
-	  if( command == ApertureRadiusCmd ){
-		DetectorP2->SetApertureInRadius(ApertureRadiusCmd->GetNewDoubleValue(newValue));}
-	  if( command == GeomIDCmd){
-		DetectorP2->SetGeomID(GeomIDCmd->GetNewIntValue(newValue));}
-	
-	  if( command == maxStepCmd){
-		DetectorP2->SetMaxStep(maxStepCmd->GetNewDoubleValue(newValue));}
-	  if( command == maxLengthCmd){
-		DetectorP2->SetMaxLength(maxLengthCmd->GetNewDoubleValue(newValue));}
-	  if( command == maxTimeCmd){
-		DetectorP2->SetMaxTime(maxTimeCmd->GetNewDoubleValue(newValue));}
-	  if( command == minEkinCmd){
-		DetectorP2->SetMinEkin(minEkinCmd->GetNewDoubleValue(newValue));}
-	  if( command == mionRangCmd){
-		DetectorP2->SetMionRang(mionRangCmd->GetNewDoubleValue(newValue));}
-	
-		if( command == Det1InRadCmd){
-		DetectorP2->SetDet1InRad(Det1InRadCmd->GetNewDoubleValue(newValue));}
-		if( command == Det1OutRadCmd){
-		DetectorP2->SetDet1OutRad(Det1OutRadCmd->GetNewDoubleValue(newValue));}
-		if( command == Det1XCmd){
-		DetectorP2->SetDet1X(Det1XCmd->GetNewDoubleValue(newValue));}
-		if( command == RotationDegCmd){
-		DetectorP2->SetRotationDeg(RotationDegCmd->GetNewDoubleValue(newValue));}
-		if( command == RotationAddDistCmd){
-		DetectorP2->SetRotationAddDistCmd(RotationAddDistCmd->GetNewDoubleValue(newValue));}
-	}
-	
-		if(number_of_geom)
-		{
-//	  if( command == UpdateCmd ){
-	//    Detector->UpdateGeometry();}
-	  if( command == MagFieldCmd ){ 
-		DetectorP3->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));}
-	  if( command == CupThickCmd ){
-		DetectorP3->SetCupLenght(CupThickCmd->GetNewDoubleValue(newValue));}
-	  if( command == ApertureThickCmd ){
-		DetectorP3->SetApertureLenght(ApertureThickCmd->GetNewDoubleValue(newValue));}
-	  if( command == ApertureRadiusCmd ){
-		DetectorP3->SetApertureInRadius(ApertureRadiusCmd->GetNewDoubleValue(newValue));}
-	  if( command == GeomIDCmd){
-		DetectorP3->SetGeomID(GeomIDCmd->GetNewIntValue(newValue));}
-	
-	  if( command == maxStepCmd){
-		DetectorP3->SetMaxStep(maxStepCmd->GetNewDoubleValue(newValue));}
-	  if( command == maxLengthCmd){
-		DetectorP3->SetMaxLength(maxLengthCmd->GetNewDoubleValue(newValue));}
-	  if( command == maxTimeCmd){
-		DetectorP3->SetMaxTime(maxTimeCmd->GetNewDoubleValue(newValue));}
-	  if( command == minEkinCmd){
-		DetectorP3->SetMinEkin(minEkinCmd->GetNewDoubleValue(newValue));}
-	  if( command == mionRangCmd){
-		DetectorP3->SetMionRang(mionRangCmd->GetNewDoubleValue(newValue));}
-	
-		if( command == Det1InRadCmd){
-		DetectorP3->SetDet1InRad(Det1InRadCmd->GetNewDoubleValue(newValue));}
-		if( command == Det1OutRadCmd){
-		DetectorP3->SetDet1OutRad(Det1OutRadCmd->GetNewDoubleValue(newValue));}
-		if( command == Det1XCmd){
-		DetectorP3->SetDet1X(Det1XCmd->GetNewDoubleValue(newValue));}
-		if( command == RotationDegCmd){
-		DetectorP3->SetRotationDeg(RotationDegCmd->GetNewDoubleValue(newValue));}
-		if( command == RotationAddDistCmd){
-		DetectorP3->SetRotationAddDistCmd(RotationAddDistCmd->GetNewDoubleValue(newValue));}
+	  if( command == EntranceCollGapXCmd){
+		Detector->SetCollimatorGapEntranceX(EntranceCollGapXCmd->GetNewDoubleValue(newValue));}
+	  if( command == EntranceCollGapYCmd){
+		Detector->SetCollimatorGapEntranceY(EntranceCollGapYCmd->GetNewDoubleValue(newValue));}
+	  if( command == Exit1CollGapXCmd){
+		Detector->SetCollimatorGapExit1X(Exit1CollGapXCmd->GetNewDoubleValue(newValue));}
+	  if( command == Exit1CollGapYCmd){
+		Detector->SetCollimatorGapExit1Y(Exit1CollGapYCmd->GetNewDoubleValue(newValue));}
 	}
 
 
+}
+
+G4UIcmdWithADoubleAndUnit* DetectorMessenger::CreateCommand(const char *name, const char *comment)
+{
+	G4UIcmdWithADoubleAndUnit* command = new G4UIcmdWithADoubleAndUnit(name,this);
+	command->SetGuidance(comment);
+	command->SetParameterName("Size",false);
+	command->SetRange("Size>=0.");
+	command->SetUnitCategory("Length");
+	command->AvailableForStates(G4State_PreInit,G4State_Idle);
+	return command;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,9 +1,14 @@
-.cproject
-.project
+.*
+!.gitignore
 
-nbproject/
 screenshots/
+ResultsAndAnalysis/
+nohup*
 
+*.root
 *.zip
 *.heprep
 *.properties
+*.log
+
+*.pyc
