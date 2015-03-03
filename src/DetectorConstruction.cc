@@ -211,11 +211,11 @@ G4VPhysicalVolume* DetectorConstruction::ConstructGeom12(){
   G4double cupLenght          	= 	_cupLenght;
 
 
-  G4double chamberX		= 	40*cm+ThicknesOfChamber*2;
+  G4double chamberX		= 	52*cm+ThicknesOfChamber*2;
   G4double chamberY		= 	4*cm+ThicknesOfChamber*2;
-  G4double chamberZ		= 	20*cm+ThicknesOfChamber*2;
+  G4double chamberZ		= 	25*cm+ThicknesOfChamber*2;
 
-  G4double electronsRadius = 15*cm;
+  G4double electronsRadius = 20.3*cm;
 
   G4double beamCorectionX	=	-electronsRadius - (beamPipeLenght/2+gapSize)*sin(rotAngle);
   G4double beamCorectionZ	=	(beamPipeLenght/2+gapSize)*(1-cos(rotAngle));
@@ -272,13 +272,13 @@ G4VPhysicalVolume* DetectorConstruction::ConstructGeom12(){
 
   G4double InnerBotShield1X      =       InnerTopShieldX;
   G4double InnerBotShield1Y      =       InnerTopShieldY;
-  G4double InnerBotShield1Z      =       110*mm;
+  G4double InnerBotShield1Z      =       140*mm;
 
   G4double InnerBotShield2X      =       InnerTopShieldX;
   G4double InnerBotShield2Y      =       InnerTopShieldY;
   G4double InnerBotShield2Z      =       60*mm;
 
-  G4double InnerShield3X      =       	140*mm;
+  G4double InnerShield3X      =       	180*mm;
   G4double InnerShield3Y      =       	InnerTopShieldY;
   G4double InnerShield3Z      =       	InnerTopShieldX;
 
@@ -297,11 +297,11 @@ G4VPhysicalVolume* DetectorConstruction::ConstructGeom12(){
   G4double InnerTopShield_yc    =       0;
   G4double InnerTopShield_zc    =       fieldBoxZ/2-gapSize-InnerTopShieldZ/2;
 
-  G4double InnerBotShield1_xc    =       70*mm;
+  G4double InnerBotShield1_xc    =       90*mm;
   G4double InnerBotShield1_yc    =       0;
   G4double InnerBotShield1_zc    =       -fieldBoxZ/2+gapSize+InnerBotShield1Z/2;
 
-  G4double InnerBotShield2_xc    =       -70*mm;
+  G4double InnerBotShield2_xc    =       -90*mm;
   G4double InnerBotShield2_yc    =       0;
   G4double InnerBotShield2_zc    =       -fieldBoxZ/2+gapSize+InnerBotShield2Z/2;
 
@@ -309,11 +309,11 @@ G4VPhysicalVolume* DetectorConstruction::ConstructGeom12(){
   G4double InnerShield3_yc 	    =       0;
   G4double InnerShield3_zc   	=       -fieldBoxZ/2+gapSize+InnerBotShield1Z - InnerShield3Z/2;
 
-  G4double InnerShield4_xc	    =       120*mm;
+  G4double InnerShield4_xc	    =       180*mm;
   G4double InnerShield4_yc 	    =       0;
   G4double InnerShield4_zc   	=       62*mm;
 
-  G4double InnerShield5_xc	    =       -120*mm;
+  G4double InnerShield5_xc	    =       -180*mm;
   G4double InnerShield5_yc 	    =       0;
   G4double InnerShield5_zc   	=       62*mm;
 

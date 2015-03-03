@@ -24,8 +24,7 @@
 #E=100keV
 #/Micromegas/det/setField 81.5 gauss
 #/Micromegas/det/setField 163 gauss
-#P=3.5MeV -> 778 G
-/Micromegas/det/setField 785 gauss
+/Micromegas/det/setField 575 gauss
 		
 /Micromegas/det/setCupThick 2 mm
 
@@ -65,7 +64,7 @@
 /Micromegas/gun/PerticleType e- 
 
 # settings for don't use window 20mkm
-#/Micromegas/gun/ParticlePosition -150.0 0 -200.0
+#/Micromegas/gun/ParticlePosition -203.0 0 -200.0
 #/Micromegas/gun/ParticleDirection 0.0 0.0 1.0
 #/Micromegas/gun/ParticleDirectionRMS 0 0 0
 #/Micromegas/gun/ParticleMomentum 3.5 3.5 -999
