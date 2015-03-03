@@ -12,5 +12,5 @@ target=4
 for B_field in {0..20..500}
   do
     ./../pyscripts/change_parameter.py /Micromegas/det/setField "$B_field gauss"
-    ./../pyscripts/run.py -n 4 --noreadme -o "../LeetechRuns/B_field_scan_Target=2mm_$P_primaries MeV_B=$B_field G"
+    ./../pyscripts/run.py -n 4 --remote --noreadme -o "../LeetechRuns/B_field_scan_Target=4mm_$P_primaries MeV_B=$B_field G"
   done
