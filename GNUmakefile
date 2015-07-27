@@ -17,13 +17,8 @@ LDLIBS1 += -lG4UImpi
 CPPFLAGS +=-I$(MPI_interface)/include
 EXTRALIBS = $(shell root-config --glibs)
 
-ifdef ROOTSYS
-  CPPFLAGS += -I$(shell $(ROOTSYS)/bin/root-config --incdir)
-  LDLIBS   += $(shell $(ROOTSYS)/bin/root-config --libs)
-else
-  CPPFLAGS += -I$(shell root-config --incdir)
-  LDLIBS   += $(shell root-config --libs)
-endif
+CPPFLAGS += -I$(shell root-config --incdir)
+LDLIBS   += $(shell root-config --libs)
 
 visclean:
 	rm -f g4*.prim g4*.eps g4*.wrl
