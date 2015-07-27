@@ -11,7 +11,6 @@
 
 #include "RunAction.hh"
 #include "RunActionMessenger.hh"
-#include "HitDataStructure.hh"
 
 RunAction::RunAction()
 {

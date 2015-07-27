@@ -3,14 +3,15 @@
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
+#include "TString.h"
+
+#include "HitDataStructure.hh"
 
 class TTree;
 class TFile;
 class TString;
 class G4Run;
 class RunActionMessenger;
-
-struct HitData;
 
 class RunAction : public G4UserRunAction
 {

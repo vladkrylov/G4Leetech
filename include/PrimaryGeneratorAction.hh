@@ -3,13 +3,13 @@
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
+#include "TString.h"
 
 class G4ParticleGun;
 class G4Event;
 class DetectorConstruction;
 class PrimaryGeneratorMessenger;
 class TRandom3;
-class TString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

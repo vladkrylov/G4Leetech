@@ -141,6 +141,7 @@ G4double PrimaryGeneratorAction::GenerateEkin()
 	} else if (_pMin == _pMax) {
 		pp = _pMin;
 	} else {
+		// FIXME add assert statement
 		G4cout  <<" ---> ERROR: _pMin > _pMax "<<G4endl
 				<<"             _pMin = "<<_pMin<<G4endl
 				<<"             _pMax = "<<_pMax<<G4endl;
