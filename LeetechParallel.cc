@@ -22,28 +22,11 @@
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4MPImanager.hh"
-#include "G4MPIsession.hh"
-
 #include "Randomize.hh"
 #include "time.h"
 
 int main(int argc,char** argv)
 {
-  // At first, G4MPImanager/G4MPIsession should be created.
-  G4MPImanager* g4MPI= new G4MPImanager(argc,argv);
-
-  // MPI session (G4MPIsession) instead of G4UIterminal
-  G4MPIsession* session= g4MPI-> GetMPIsession();
-
-  
-  // LAM/MPI users can use G4tcsh.
-  //G4String prompt= "[40;01;33m";
-  //prompt+= "G4MPI";
-  //prompt+= "[40;31m(%s)[40;36m[%/][00;30m:";
-  //session-> SetPrompt(prompt);
-  
   // Choose the Random engine
   //
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
@@ -93,7 +76,7 @@ int main(int argc,char** argv)
     {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-//      UImanager->ApplyCommand(command+fileName);
+      UImanager->ApplyCommand(command+fileName);
     }
   else
     {  // interactive mode : define UI session
@@ -113,11 +96,6 @@ int main(int argc,char** argv)
   // Free the store: user actions, physics_list and detector_description are
   //                 owned and deleted by the run manager, so they should not
   //                 be deleted in the main() program !
-  
-   	 session-> SessionStart();
-
-  // Finally, terminate the program
-  delete g4MPI;
   
 #ifdef G4VIS_USE
   delete visManager;
