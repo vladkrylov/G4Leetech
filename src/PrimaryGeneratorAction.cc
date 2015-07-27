@@ -19,7 +19,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 {
 	G4int n_particle = 1;
 	particleGun  = new G4ParticleGun(n_particle);		//create particleGun witch will run 1 particle per once
-	Detector = (DetectorConstruction*)G4RunManager::GetRunManager()->GetUserDetectorConstruction();  //define detector???
+	Detector = (DetectorConstruction*)G4RunManager::GetRunManager()->GetUserDetectorConstruction();
 	//create a messenger for this class
 	gunMessenger = new PrimaryGeneratorMessenger(this);
 
