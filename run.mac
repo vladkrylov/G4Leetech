@@ -10,11 +10,11 @@
 #E=100keV
 #/Micromegas/det/setField 81.5 gauss
 #P=3.5MeV -> 778 G
-/Micromegas/det/setField 970 gauss
+/Micromegas/det/setField 575 gauss
 
-/Micromegas/det/setCupThick 2 mm
+/Micromegas/det/setCupThick 100 um
 
-/Leetech/det/SetCollimatorEntranceGapX 10 mm
+/Leetech/det/SetCollimatorEntranceGapX 20 mm
 /Leetech/det/SetCollimatorEntranceGapY 20 mm
 /Leetech/det/SetCollimatorExit1GapX 20 mm
 /Leetech/det/SetCollimatorExit1GapY 20 mm
@@ -65,7 +65,7 @@
 # FIGHT settings
 /Micromegas/gun/ParticleDirection 39 0.0 92
 /Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
-/Micromegas/gun/ParticleMomentum 5.0 5.0 -999
+/Micromegas/gun/ParticleMomentum 3.5 3.5 -999
 
 # DIRECT TO DETECTOR ssettings
 #/Micromegas/gun/ParticlePosition 210 0 -161.193
@@ -73,10 +73,10 @@
 #/Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
 #/Micromegas/gun/ParticleMomentum 5.0 5.0 -999
 
-/Leetech/RootFile /home/vlad/5g4work/LeetechRuns/../LeetechRuns/B_field_csan_Target=2mm_5.0 MeV_B=970 G/LeetechRun
+/Leetech/RootFile /home/vlad/5g4work/LeetechParallel/Test
 /Micromegas/printModulo 100000
 
-/run/beamOn 100000000
+/run/beamOn 100000
 
 
 
