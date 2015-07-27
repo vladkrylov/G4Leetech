@@ -76,7 +76,7 @@
 /Leetech/RootFile /home/vlad/5g4work/LeetechParallel/Test
 /Micromegas/printModulo 100000
 
-/run/beamOn 100000
+/run/beamOn 1000000
 
 
 
