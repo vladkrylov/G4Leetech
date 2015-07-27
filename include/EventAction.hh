@@ -14,22 +14,20 @@ public:
   EventAction();
   virtual ~EventAction();
 
-  void  BeginOfEventAction(const G4Event*);
-  void    EndOfEventAction(const G4Event*);
+  void BeginOfEventAction(const G4Event*);
+  void EndOfEventAction(const G4Event*);
   
-  void    KeepCurrent();
-                         
-  void SetPrintModulo(G4int    val)  {printModulo = val;};
+  void KeepCurrent();
+  void SetPrintModulo(G4int val)  {printModulo = val;};
 
   G4int _evtNb;
     
 private:
-   RunAction*  runAct;
-                        
-   G4int     printModulo;
-   bool      Flag_to_kill;
-                             
+   RunAction* runAct;
    EventActionMessenger*  eventMessenger;
+                        
+   G4int printModulo;
+   bool Flag_to_kill;
 };
 
 #endif

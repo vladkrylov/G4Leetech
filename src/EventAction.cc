@@ -1,34 +1,32 @@
-#include "EventAction.hh"
-
-#include "RunAction.hh"
-#include "EventActionMessenger.hh"
+#include <iomanip>
 
 #include "G4RunManager.hh"
 #include "G4Event.hh"
 #include "G4UnitsTable.hh"
-
-//my
-#include "SteppingAction.hh"
-#include "TrackingAction.hh"
 #include "G4VisManager.hh"
 #include "G4Trajectory.hh"
 #include "G4UImanager.hh"
 #include "G4TrackingManager.hh"
 
-
 #include "Randomize.hh"
-#include <iomanip>
+
+#include "EventAction.hh"
+#include "RunAction.hh"
+#include "EventActionMessenger.hh"
+#include "SteppingAction.hh"
+#include "TrackingAction.hh"
+
 
 EventAction::EventAction()
 {
-  runAct = (RunAction*)G4RunManager::GetRunManager()->GetUserRunAction();
-  eventMessenger = new EventActionMessenger(this);
-  printModulo = 1000;
+	runAct = (RunAction*)G4RunManager::GetRunManager()->GetUserRunAction();
+	eventMessenger = new EventActionMessenger(this);
+	printModulo = 1000;
 }
 
 EventAction::~EventAction()
 {
-  delete eventMessenger;
+	delete eventMessenger;
 }
 
 
@@ -37,14 +35,13 @@ void EventAction::BeginOfEventAction(const G4Event* evt){
     /// TO SELECT WHAW EXACLY YOU WANT GO TP TrackingAction::PostUserTrackingAction
     //Flag_to_kill=true;
     /// IF YOU WANT SAVE ALL
-    Flag_to_kill=false;
+    Flag_to_kill = false;
     
     _evtNb = evt->GetEventID();
-  if (_evtNb%printModulo == 0) 
-  { 
-    G4cout << "\n---> Begin of event: " << _evtNb << G4endl;
-    //CLHEP::HepRandom::showEngineStatus();
-  }
+	if (_evtNb % printModulo == 0) {
+		G4cout << "\n---> Begin of event: " << _evtNb << G4endl;
+		//CLHEP::HepRandom::showEngineStatus();
+	}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,8 +58,7 @@ void EventAction::EndOfEventAction(const G4Event* evt)
         //G4EventManager::GetEventManager()->KeepTheCurrentEvent();
 
     //if (G4VVisManager::GetConcreteInstance())
-    if (Flag_to_kill)
-    {
+    if (Flag_to_kill) {
     	//UI->ApplyCommand("/tracking/storeTrajectory 1");
         
         G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
@@ -98,8 +94,7 @@ void EventAction::EndOfEventAction(const G4Event* evt)
              //UI->ApplyCommand("/tracking/storeTrajectory 0");
 
     //if(Flag_to_kill)trajectoryContainer->clearAndDestroy();
-        if(Flag_to_kill)
-        {
+        if(Flag_to_kill) {
             //fpEventManager->AbortCurrentEvent();
             trajectoryContainer->clearAndDestroy();
             //track_action->GetTrackingManager()->EventAborted();

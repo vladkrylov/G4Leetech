@@ -14,28 +14,27 @@ class G4UIcmdWithoutParameter;
 
 class DetectorMessenger: public G4UImessenger
 {
-  public:
-    DetectorMessenger(DetectorConstruction *Det);
-   ~DetectorMessenger();
+public:
+	DetectorMessenger(DetectorConstruction *Det);
+	~DetectorMessenger();
     
     void SetNewValue(G4UIcommand*, G4String);
-
-		  bool number_of_geom;	//true - for geom 1,2,3
-											//false for 4...
+	bool number_of_geom;	//true - for geom 1,2,3
+							//false for 4...
     
-  private:
+private:
     DetectorConstruction* Detector;
     
     G4UIdirectory*             MicromegasDir;
     G4UIdirectory*             detDir;
     G4UIdirectory*             detDirNew;
 
-    G4UIcmdWithADoubleAndUnit  *MagFieldCmd;
-    G4UIcmdWithADoubleAndUnit  *CupThickCmd;
-    G4UIcmdWithADoubleAndUnit  *ApertureThickCmd;
-    G4UIcmdWithADoubleAndUnit  *ApertureRadiusCmd;
-    G4UIcmdWithAnInteger       *GeomIDCmd;
-    G4UIcmdWithoutParameter    *UpdateCmd;
+    G4UIcmdWithADoubleAndUnit  		*MagFieldCmd;
+    G4UIcmdWithADoubleAndUnit  		*CupThickCmd;
+    G4UIcmdWithADoubleAndUnit  		*ApertureThickCmd;
+    G4UIcmdWithADoubleAndUnit  		*ApertureRadiusCmd;
+    G4UIcmdWithAnInteger       		*GeomIDCmd;
+    G4UIcmdWithoutParameter    		*UpdateCmd;
 
 	G4UIcmdWithADoubleAndUnit       *maxStepCmd;
 	G4UIcmdWithADoubleAndUnit       *maxLengthCmd;
