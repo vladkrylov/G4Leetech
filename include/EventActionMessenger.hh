@@ -10,14 +10,14 @@ class G4UIcmdWithAnInteger;
 class EventActionMessenger: public G4UImessenger
 {
 public:
-  EventActionMessenger(EventAction*);
-  virtual ~EventActionMessenger();
-    
-  void SetNewValue(G4UIcommand*, G4String);
+	EventActionMessenger(EventAction*);
+	virtual ~EventActionMessenger();
+
+	void SetNewValue(G4UIcommand*, G4String);
     
 private:
-  EventAction*          eventAction;
-  G4UIcmdWithAnInteger* PrintCmd;    
+	EventAction* eventAction;
+	G4UIcmdWithAnInteger* PrintCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
