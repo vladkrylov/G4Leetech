@@ -1,42 +1,40 @@
-#include "RunAction.hh"
-
-#include "G4Run.hh"
-#include "RunActionMessenger.hh"
-#include "G4RunManager.hh"
-#include "G4UnitsTable.hh"
-
-#include "TString.h"
-
-#include "Randomize.hh"
 #include <ctime>
 
-//root
+#include "G4Run.hh"
+#include "G4RunManager.hh"
+#include "G4UnitsTable.hh"
+#include "Randomize.hh"
+
+#include "TString.h"
 #include "TTree.h"
 #include "TFile.h"
 
+#include "RunAction.hh"
+#include "RunActionMessenger.hh"
+#include "HitDataStructure.hh"
+
 RunAction::RunAction()
 {
-  runMessenger = new RunActionMessenger(this);
-  _RootFile = "micromegas.root";
-  
-  systime = time(NULL);
+	runMessenger = new RunActionMessenger(this);
+	_RootFile = "leetech.root";
+
+	systime = time(NULL);
 }
 
 
 RunAction::~RunAction()
 {
-  delete runMessenger;
+	delete runMessenger;
 }
 
 
 void RunAction::BeginOfRunAction(const G4Run* aRun){ 
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+	G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 
-  //inform the runManager to save random number seed
-  //G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  //G4RunManager::GetRunManager()->SetRandomNumberStoreDir("random/");
-bool autoSeed = true;
-    if (autoSeed) {
+	//inform the runManager to save random number seed
+	//G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+	//G4RunManager::GetRunManager()->SetRandomNumberStoreDir("random/");
+
      // automatic (time-based) random seeds for each run
      G4cout << "*******************" << G4endl;
      G4cout << "*** AUTOSEED ON ***" << G4endl;
@@ -47,9 +45,6 @@ bool autoSeed = true;
      seeds[1] = (long) systime*G4UniformRand();
      CLHEP::HepRandom::setTheSeeds(seeds);
      CLHEP::HepRandom::showEngineStatus();
-  } else {
-     CLHEP::HepRandom::showEngineStatus();
-  }
   
   
 //  char str[64];
@@ -81,24 +76,24 @@ bool autoSeed = true;
 	tree->Branch("PX",       &HitInfo.PX,      "PX/D");
 	tree->Branch("PY",       &HitInfo.PY,      "PY/D");
 	tree->Branch("PZ",       &HitInfo.PZ,      "PZ/D");
-	tree->Branch("Ptot",	   &HitInfo.P ,      "P/D");
+	tree->Branch("Ptot",	 &HitInfo.P ,      "P/D");
 	tree->Branch("Theta",    &HitInfo.Theta,   "Theta/D");
 
 }
 
 void RunAction::EndOfRunAction(const G4Run* aRun)
 {
-  G4cout << "Eand of " << aRun->GetRunID() << "run Acrion." << G4endl;
-  
-  hfile = tree->GetCurrentFile();
-  hfile->Write();
-  tree->Print();
+	G4cout << "End of " << aRun->GetRunID() << "run Acrion." << G4endl;
 
-  delete tree;
-  delete hfile;
+	hfile = tree->GetCurrentFile();
+	hfile->Write();
+	tree->Print();
+
+	delete tree;
+	delete hfile;
 }
 
 void RunAction::SetRootFile(G4String newValue){
-  _RootFile = newValue;
+	_RootFile = newValue;
 }
 
