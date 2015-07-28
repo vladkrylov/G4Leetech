@@ -429,7 +429,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructGeom12(){
 
   G4FieldManager* fieldMgr
       = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-  G4cout<<"DetectorConstruction::ConstructGeom3 _MagFieldVal "<<_MagFieldVal<<G4endl;
+  G4cout<<"DetectorConstruction::ConstructGeom12 _MagFieldVal "<<_MagFieldVal<<G4endl;
   magField->setBfieldY(_MagFieldVal);
   magField->setFieldBox1(fieldBox_xc + chamber_xc, fieldBox_yc + chamber_yc, fieldBox_zc + chamber_zc,
 			 fieldBoxX, fieldBoxY, fieldBoxZ);
@@ -1496,7 +1496,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructGeom2(){
 
   G4FieldManager* fieldMgr
       = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-  G4cout<<"DetectorConstruction::ConstructGeom3 _MagFieldVal "<<_MagFieldVal<<G4endl;
+  G4cout<<"DetectorConstruction::ConstructGeom2 _MagFieldVal "<<_MagFieldVal<<G4endl;
   magField->setBfieldY(_MagFieldVal);
   magField->setFieldBox1(fieldBox_L_xc, fieldBox_L_yc, fieldBox_L_zc, 
 			 fieldBox_X, fieldBox_Y, fieldBox_Z);

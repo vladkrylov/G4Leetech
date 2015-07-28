@@ -61,7 +61,7 @@ int main(int argc,char** argv)
      // UImanager->ApplyCommand("/control/execute vis.mac");
 #endif
       if (ui->IsGUI())
-	//UImanager->ApplyCommand("/control/execute gui.mac");
+	  //UImanager->ApplyCommand("/control/execute gui.mac");
       ui->SessionStart();
       delete ui;
 #endif
@@ -71,7 +71,6 @@ int main(int argc,char** argv)
   // Free the store: user actions, physics_list and detector_description are
   //                 owned and deleted by the run manager, so they should not
   //                 be deleted in the main() program !
-  
 #ifdef G4VIS_USE
 	delete visManager;
 #endif
