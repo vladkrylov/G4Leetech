@@ -12,7 +12,6 @@ all: lib bin
 include $(G4INSTALL)/config/binmake.gmk
 
 EXTRALIBS = $(shell root-config --glibs)
-
 CPPFLAGS += -I$(shell root-config --incdir)
 LDLIBS   += $(shell root-config --libs)
 

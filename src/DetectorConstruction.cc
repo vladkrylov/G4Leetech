@@ -22,7 +22,6 @@
 #include "G4ChordFinder.hh"
 #include "G4UserLimits.hh"
 
-//#include "TROOT.h"
 #include "TMath.h"
 
 #include "DetectorConstruction.hh"
@@ -109,7 +108,8 @@ void DetectorConstruction::ConstructSDandField()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::DefineMaterials(){ 
+void DetectorConstruction::DefineMaterials()
+{
   //This function illustrates the possible ways to define materials
   
   G4String symbol;             //a=mass of a mole;
