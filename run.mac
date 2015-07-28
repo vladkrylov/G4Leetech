@@ -73,10 +73,10 @@
 #/Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
 #/Micromegas/gun/ParticleMomentum 5.0 5.0 -999
 
-/Leetech/RootFile /home/vlad/5g4work/LeetechParallel/Test
+/Leetech/RootFile Test
 /Micromegas/printModulo 100000
 
-/run/beamOn 1000000
+/run/beamOn 20000000
 
 
 
