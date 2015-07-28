@@ -1,4 +1,4 @@
-name := LeetechParallel
+name := Leetech
 G4TARGET := $(name)
 G4EXLIB := true
 
