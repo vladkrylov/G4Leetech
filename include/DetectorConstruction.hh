@@ -57,6 +57,7 @@ void SetCollimatorGapExit1Y(G4double valMy);
   void OffMagField();
 
   G4VPhysicalVolume* Construct(); //construct geometry (if changet)
+  virtual void ConstructSDandField();
   
   void UpdateGeometry(); //define world volume 
 

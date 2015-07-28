@@ -16,7 +16,6 @@
 #include "SteppingAction.hh"
 #include "TrackingAction.hh"
 
-
 EventAction::EventAction()
 {
 	runAct = (RunAction*)G4RunManager::GetRunManager()->GetUserRunAction();

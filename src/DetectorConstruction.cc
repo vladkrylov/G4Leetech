@@ -102,6 +102,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 }
 
+void DetectorConstruction::ConstructSDandField()
+{
+
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::DefineMaterials(){ 
