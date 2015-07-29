@@ -13,3 +13,4 @@ nohup*
 
 *.pyc
 
+*.out

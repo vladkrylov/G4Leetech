@@ -1,3 +1,6 @@
+/run/numberOfThreads 2
+# Initialize kernel
+/run/initialize
 
 /Micromegas/det/SetGeomID 12
 

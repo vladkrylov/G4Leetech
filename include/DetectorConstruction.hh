@@ -23,47 +23,42 @@ class G4UserLimits;
 class DetectorConstruction : public G4VUserDetectorConstruction //define constructor legacy from User
 {
 public:
-  
-  DetectorConstruction();
-  ~DetectorConstruction();
-  
-public:
-  
-  void SetMagField(G4double valB);	//set value of B - induction of mag field in Gauss
-  void SetCupLenght(G4double valMy);	//set length of absorber
-  void SetApertureInRadius(G4double valMy);//radius of the first calimator
-  void SetApertureLenght(G4double valMy); //length of the first calimator
-  G4ThreeVector getBeamPipeCenter();
+	DetectorConstruction();
+	~DetectorConstruction();
 
-void SetMaxStep(G4double valMy);
-void SetMaxLength(G4double valMy);
-void SetMaxTime(G4double valMy);
-void SetMinEkin(G4double valMy);
-void SetMionRang(G4double valMy);
+	G4VPhysicalVolume* Construct(); //construct geometry (if changet)
+	virtual void ConstructSDandField();
 
-void SetDet1OutRad(G4double valMy);
-void SetDet1InRad(G4double valMy);
-void SetDet1X(G4double valMy);
+	void SetMagField(G4double valB);	//set value of B - induction of mag field in Gauss
+	void SetCupLenght(G4double valMy);	//set length of absorber
+	void SetApertureInRadius(G4double valMy);//radius of the first calimator
+	void SetApertureLenght(G4double valMy); //length of the first calimator
+	G4ThreeVector getBeamPipeCenter();
 
-void SetRotationDeg(G4double valMy);
-void SetRotationAddDistCmd(G4double valMy);
+	void SetMaxStep(G4double valMy);
+	void SetMaxLength(G4double valMy);
+	void SetMaxTime(G4double valMy);
+	void SetMinEkin(G4double valMy);
+	void SetMionRang(G4double valMy);
 
-void SetCollimatorGapEntranceX(G4double valMy);
-void SetCollimatorGapEntranceY(G4double valMy);
-void SetCollimatorGapExit1X(G4double valMy);
-void SetCollimatorGapExit1Y(G4double valMy);
+	void SetDet1OutRad(G4double valMy);
+	void SetDet1InRad(G4double valMy);
+	void SetDet1X(G4double valMy);
+
+	void SetRotationDeg(G4double valMy);
+	void SetRotationAddDistCmd(G4double valMy);
+
+	void SetCollimatorGapEntranceX(G4double valMy);
+	void SetCollimatorGapEntranceY(G4double valMy);
+	void SetCollimatorGapExit1X(G4double valMy);
+	void SetCollimatorGapExit1Y(G4double valMy);
 
 
-  void OffMagField();
+	void OffMagField();
+	void UpdateGeometry(); //define world volume
+	void SetGeomID(G4int gID);//off/on full geomethy
 
-  G4VPhysicalVolume* Construct(); //construct geometry (if changet)
-  virtual void ConstructSDandField();
-  
-  void UpdateGeometry(); //define world volume 
-
-  void SetGeomID(G4int gID);//off/on full geomethy
-
-  G4Material *GetMaterial(int t);
+	G4Material *GetMaterial(int t);
     
 private:
 	// Define materials
@@ -77,80 +72,79 @@ private:
 	G4Material* 	   U;
 	//G4Material        *test;
 
-  G4UserLimits* stepLimit;        // pointer to user step limits
-  
-  MagneticField *magField; 		//create mag fienlg
+	G4UserLimits* stepLimit;        // pointer to user step limits
+
+	MagneticField *magField; 		//create mag fienlg
 
 	//world :)
-  G4Box*             solidWorld;
-  G4LogicalVolume*   logicWorld;
-  G4VPhysicalVolume* physiWorld;
+	G4Box*             solidWorld;
+	G4LogicalVolume*   logicWorld;
+	G4VPhysicalVolume* physiWorld;
 
-  G4Tubs*            solidBeamPipe;
-  G4LogicalVolume*   logicBeamPipe;
-  G4VPhysicalVolume* physiBeamPipe;
-  
-  G4Tubs*            solidBeamPipeV;
-  G4LogicalVolume*   logicBeamPipeV;
-  G4VPhysicalVolume* physiBeamPipeV;
+	G4Tubs*            solidBeamPipe;
+	G4LogicalVolume*   logicBeamPipe;
+	G4VPhysicalVolume* physiBeamPipe;
 
-  G4Tubs*            solidCup;
-  G4LogicalVolume*   logicCup;
-  G4VPhysicalVolume* physiCup;
+	G4Tubs*            solidBeamPipeV;
+	G4LogicalVolume*   logicBeamPipeV;
+	G4VPhysicalVolume* physiBeamPipeV;
 
-  G4Tubs*            solidAperture;
-  G4LogicalVolume*   logicAperture;
-  G4VPhysicalVolume* physiAperture;
+	G4Tubs*            solidCup;
+	G4LogicalVolume*   logicCup;
+	G4VPhysicalVolume* physiCup;
 
-  G4Tubs*            solidSenDet1;
-  G4LogicalVolume*   logicSenDet1;
-  G4VPhysicalVolume* physiSenDet1;
+	G4Tubs*            solidAperture;
+	G4LogicalVolume*   logicAperture;
+	G4VPhysicalVolume* physiAperture;
 
-  G4Tubs*            solidShield1;
-  G4LogicalVolume*   logicShield1;
-  G4VPhysicalVolume* physiShield1;
-  
-  G4Box*             solidSenDet2;
-  G4LogicalVolume*   logicSenDet2;
-  G4VPhysicalVolume* physiSenDet2;
+	G4Tubs*            solidSenDet1;
+	G4LogicalVolume*   logicSenDet1;
+	G4VPhysicalVolume* physiSenDet1;
 
-  G4Box*             solidDipol_L;//left
-  G4LogicalVolume*   logicDipol_L;
-  G4VPhysicalVolume* physiDipol_L;
+	G4Tubs*            solidShield1;
+	G4LogicalVolume*   logicShield1;
+	G4VPhysicalVolume* physiShield1;
 
-  G4Box*             solidDipol_R;//right
-  G4LogicalVolume*   logicDipol_R;
-  G4VPhysicalVolume* physiDipol_R;
+	G4Box*             solidSenDet2;
+	G4LogicalVolume*   logicSenDet2;
+	G4VPhysicalVolume* physiSenDet2;
 
-  G4Box*             solidDipol_T;//top
-  G4LogicalVolume*   logicDipol_T;
-  G4VPhysicalVolume* physiDipol_T;
+	G4Box*             solidDipol_L;//left
+	G4LogicalVolume*   logicDipol_L;
+	G4VPhysicalVolume* physiDipol_L;
 
-  G4Box*             solidDipol_B;//botom
-  G4LogicalVolume*   logicDipol_B;
-  G4VPhysicalVolume* physiDipol_B;
+	G4Box*             solidDipol_R;//right
+	G4LogicalVolume*   logicDipol_R;
+	G4VPhysicalVolume* physiDipol_R;
 
-  G4Box*             solidFieldBox_L;//left
-  G4LogicalVolume*   logicFieldBox_L;
-  G4VPhysicalVolume* physiFieldBox_L;
+	G4Box*             solidDipol_T;//top
+	G4LogicalVolume*   logicDipol_T;
+	G4VPhysicalVolume* physiDipol_T;
 
-  G4Box*             solidFieldBox_R;//right
-  G4LogicalVolume*   logicFieldBox_R;
-  G4VPhysicalVolume* physiFieldBox_R;
+	G4Box*             solidDipol_B;//botom
+	G4LogicalVolume*   logicDipol_B;
+	G4VPhysicalVolume* physiDipol_B;
 
-  
-  DetectorMessenger* detectorMessenger;  //pointer to the Messenger
+	G4Box*             solidFieldBox_L;//left
+	G4LogicalVolume*   logicFieldBox_L;
+	G4VPhysicalVolume* physiFieldBox_L;
 
-private:
-  void DefineMaterials();		//define materials)
-  void ConstructMagnet(double refX,double refY, double refZ, double gapSize, double thicknessOfChamber);
-  //void ComputeCalorParameters();
-  
-  G4int _geomID;			//number of geometry
-  G4double _MagFieldVal;		//amount of B
-  G4double _cupLenght;			//length of the absorber
-  G4double _apertureInRadius;		//radius of first calimator
-  G4double _apertureLenght;		//length of first calimator
+	G4Box*             solidFieldBox_R;//right
+	G4LogicalVolume*   logicFieldBox_R;
+	G4VPhysicalVolume* physiFieldBox_R;
+
+
+	DetectorMessenger* detectorMessenger;  //pointer to the Messenger
+
+	void DefineMaterials();		//define materials)
+	void ConstructMagnet(double refX,double refY, double refZ, double gapSize, double thicknessOfChamber);
+	//void ComputeCalorParameters();
+
+	G4int _geomID;			//number of geometry
+	G4double _MagFieldVal;		//amount of B
+	G4double _cupLenght;			//length of the absorber
+	G4double _apertureInRadius;		//radius of first calimator
+	G4double _apertureLenght;		//length of first calimator
 
   	G4double       _maxStep;
   	G4double       _maxLength;
@@ -170,15 +164,7 @@ private:
 	G4double collExit1GapX;
   	G4double collExit1GapY;
 
-  // old geometry
-  //_geomID = 999;
-  //LB 05.05.2012 geometry with two sencative vlumes
-  //_geomID = 3;
-  G4VPhysicalVolume* ConstructGeom12();
-  G4VPhysicalVolume* ConstructGeom3();	//ConstructGeom3 :) - FullGeom
-  G4VPhysicalVolume* ConstructGeom2();	//ConstructGeom2 :) - Two Calimators Geom
-  G4VPhysicalVolume* ConstructGeom1();	//ConstructGeom2 :) - One Calimator Geom
-
+	G4VPhysicalVolume* ConstructGeom12();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

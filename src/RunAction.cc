@@ -4,6 +4,7 @@
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
 #include "Randomize.hh"
+#include "G4Threading.hh"
 
 #include "TString.h"
 #include "TTree.h"
@@ -27,8 +28,10 @@ RunAction::~RunAction()
 }
 
 
-void RunAction::BeginOfRunAction(const G4Run* aRun){ 
-	G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+void RunAction::BeginOfRunAction(const G4Run* aRun)
+{
+	G4int threadId = G4Threading::G4GetThreadId();
+	G4cout << "### Run " << aRun->GetRunID() << " thread " << threadId << " start." << G4endl;
 
 	//inform the runManager to save random number seed
 	//G4RunManager::GetRunManager()->SetRandomNumberStore(true);
@@ -46,11 +49,11 @@ void RunAction::BeginOfRunAction(const G4Run* aRun){
      CLHEP::HepRandom::showEngineStatus();
   
   
-//  char str[64];
-//  sprintf(str, "%03d", rank);
-//  TString fname(str);
+	char str[64];
+	sprintf(str, "%03d", threadId);
+	TString fname(str);
 //  TString resName = _RootFile + fname + ".root";
-    TString resName = _RootFile + ".root";
+    TString resName = _RootFile + fname + ".root";
 	//LB 09.02.2011
 	//hfile = new TFile(_RootFile.Data(), "RECREATE", "Simulation", 1);
 	hfile = new TFile(resName.Data(), "RECREATE", "Simulation", 1);
