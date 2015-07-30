@@ -27,4 +27,4 @@
 # (if you prefer refreshing each event, comment out next line)
 /vis/scene/endOfEventAction accumulate
 
-/run/beamOn 50
+/run/beamOn 500

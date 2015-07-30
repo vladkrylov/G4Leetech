@@ -24,7 +24,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 
 	// get volume of the current step
-	G4VPhysicalVolume* volume = aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
+	G4VPhysicalVolume* volume = aStep->GetPostStepPoint()->GetPhysicalVolume();
 
 	if(volume->GetName() == "DD") {
 		if(aStep->GetTrack()->GetDefinition()->GetPDGEncoding() == 11) {
