@@ -1,108 +1,120 @@
-#include <iomanip>
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: EventAction.cc 87359 2014-12-01 16:04:27Z gcosmo $
+//
+/// \file EventAction.cc
+/// \brief Implementation of the EventAction class
 
-#include "G4RunManager.hh"
 #include "G4Event.hh"
-#include "G4UnitsTable.hh"
-#include "G4VisManager.hh"
-#include "G4Trajectory.hh"
-#include "G4UImanager.hh"
-#include "G4TrackingManager.hh"
-
-#include "Randomize.hh"
+#include "G4RunManager.hh"
+#include "G4EventManager.hh"
+#include "G4HCofThisEvent.hh"
+#include "G4VHitsCollection.hh"
+#include "G4SDManager.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4ios.hh"
+#include "g4root.hh"
 
 #include "EventAction.hh"
-#include "RunAction.hh"
-#include "EventActionMessenger.hh"
-#include "SteppingAction.hh"
-#include "TrackingAction.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction()
+: G4UserEventAction()
+, fEdepHCID(-1)
 {
-	runAct = (RunAction*)G4RunManager::GetRunManager()->GetUserRunAction();
-	eventMessenger = new EventActionMessenger(this);
-	printModulo = 1000;
-}
-
-EventAction::~EventAction()
-{
-	delete eventMessenger;
-}
-
-
-void EventAction::BeginOfEventAction(const G4Event* evt){  
-    /// IF YOU WANT TO CHOOSE SOME THINGS SPACIAL
-    /// TO SELECT WHAW EXACLY YOU WANT GO TP TrackingAction::PostUserTrackingAction
-    //Flag_to_kill=true;
-    /// IF YOU WANT SAVE ALL
-    Flag_to_kill = false;
-    
-    _evtNb = evt->GetEventID();
-	if (_evtNb % printModulo == 0) {
-		G4cout << "\n---> Begin of event: " << _evtNb << G4endl;
-		//CLHEP::HepRandom::showEngineStatus();
-	}
+  // set printing per each event
+  G4RunManager::GetRunManager()->SetPrintProgress(1);     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::EndOfEventAction(const G4Event* evt)
+EventAction::~EventAction()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void EventAction::BeginOfEventAction(const G4Event*)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void EventAction::EndOfEventAction(const G4Event* event)
 {
-	_evtNb = evt->GetEventID();
-    // extract the trajectories and draw them
+    // Get hist collections IDs
+    if ( fEdepHCID == -1 ) {
+        fEdepHCID
+        = G4SDManager::GetSDMpointer()->GetCollectionID("DD/Edep");
+    }
 
-	SteppingAction *step_action = (SteppingAction*)G4RunManager::GetRunManager()->GetUserSteppingAction();
-	//TrackingAction *track_action = (TrackingAction*)G4RunManager::GetRunManager()->GetUserTrackingAction();        
-        //G4UImanager* UI = G4UImanager::GetUIpointer();          
+    // Get sum values from hits collections
+    //
+    G4double Edep = GetSum(GetHitsCollection(fEdepHCID, event));
 
-        //G4EventManager::GetEventManager()->KeepTheCurrentEvent();
 
-    //if (G4VVisManager::GetConcreteInstance())
-    if (Flag_to_kill) {
-    	//UI->ApplyCommand("/tracking/storeTrajectory 1");
-        
-        G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
-        /*
-        if(0)
-        {
-        //if(step_action->GetRunAction()->HitInfo.IsInDetector==1)
-                //if(step_action->GetRunAction()->HitInfo.TypeID==22)
-                   // if(step_action->GetRunAction()->HitInfo.P>1.1 || step_action->GetRunAction()->HitInfo.P<0.9)
-        
-           // G4cout<<"Type is "<<step_action->GetRunAction()->HitInfo.TypeID<<G4endl;
-            
-            G4int n_trajectories = 0; 
-            if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
-            //G4cout<<"n_trajectories "<<n_trajectories<<G4endl;
-            for (G4int i=0; i < n_trajectories; i++)
-            {
-                //G4cout<<"num tr"<<i<<G4endl;
-              //  G4Trajectory* trj=(G4Trajectory*)((*(evt->GetTrajectoryContainer()))[i]);
-              //  trj->DrawTrajectory(50);
+    // get analysis manager
+    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 
-            }
-        }
-        */
-        //if(step_action->GetRunAction()->HitInfo.IsInDetector==0)
-        //if(aTrack->GetTouchableHandle()->GetVolume()->GetName()=="SenDet1")G4cout<<"HIT!!!\n";
-            //if(step_action->GetRunAction()->HitInfo.TypeID==22)
-            //G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
-            //trajectoryContainer->clearAndDestroy();
-            //fpEventManager->AbortCurrentEvent();
-             //track_action->Kill();
-             //track_action->Live();
-             //UI->ApplyCommand("/tracking/storeTrajectory 0");
+    // fill histograms
+    //
+    //analysisManager->FillH1(1, Edep);
 
-    //if(Flag_to_kill)trajectoryContainer->clearAndDestroy();
-        if(Flag_to_kill) {
-            //fpEventManager->AbortCurrentEvent();
-            trajectoryContainer->clearAndDestroy();
-            //track_action->GetTrackingManager()->EventAborted();
-        }
-   }    
+    // fill ntuple
+    //
+    analysisManager->FillNtupleDColumn(0, Edep);
+    analysisManager->AddNtupleRow();
 }
 
-void EventAction::KeepCurrent()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4THitsMap<G4double>*
+EventAction::GetHitsCollection(G4int hcID,
+                                  const G4Event* event) const
 {
-    //fpEventManager->GetConstCurrentEvent()->GetTrajectoryContainer()->clearAndDestroy();
-    Flag_to_kill=false;
+    G4THitsMap<G4double>* hitsCollection
+    = static_cast<G4THitsMap<G4double>*>(event->GetHCofThisEvent()->GetHC(hcID));
+
+    if ( ! hitsCollection ) {
+        G4ExceptionDescription msg;
+        msg << "Cannot access hitsCollection ID " << hcID;
+        G4Exception("EventAction::GetHitsCollection()",
+                    "MyCode0003", FatalException, msg);
+    }
+
+    return hitsCollection;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double EventAction::GetSum(G4THitsMap<G4double>* hitsMap) const
+{
+    G4double sumValue = 0;
+    std::map<G4int, G4double*>::iterator it;
+    for ( it = hitsMap->GetMap()->begin(); it != hitsMap->GetMap()->end(); it++) {
+        sumValue += *(it->second);
+    }
+    return sumValue;
 }

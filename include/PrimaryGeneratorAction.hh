@@ -1,62 +1,66 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: PrimaryGeneratorAction.hh 76474 2013-11-11 10:36:34Z gcosmo $
+//
+/// \file PrimaryGeneratorAction.hh
+/// \brief Definition of the PrimaryGeneratorAction class
+
 #ifndef PrimaryGeneratorAction_h
 #define PrimaryGeneratorAction_h 1
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
-#include "TString.h"
 
 class G4ParticleGun;
+class G4GenericMessenger;
 class G4Event;
-class DetectorConstruction;
-class PrimaryGeneratorMessenger;
-class TRandom3;
+class G4ParticleDefinition;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Primary generator
+///
+/// A single particle is generated.
+/// User can select 
+/// - the initial momentum and angle
+/// - the momentum and angle spreads
+/// - random selection of a particle type from proton, kaon+, pi+, muon+, e+ 
+
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
 public:
-	PrimaryGeneratorAction();
-	virtual ~PrimaryGeneratorAction();
-
-	void GeneratePrimaries(G4Event*);
-
-	void SetParticleName(G4String valS);
-	void SetParticlePosition(G4double xval, G4double yval, G4double zval);
-	void SetParticleDir(G4double xval, G4double yval, G4double zval);
-	void SetParticleDirRMS(G4double xvalRMS, G4double yvalRMS, G4double zvalRMS);
-	void SetParticleMom(G4double valMin, G4double valMax);
-  
+    PrimaryGeneratorAction();
+    virtual ~PrimaryGeneratorAction();
+    
+    virtual void GeneratePrimaries(G4Event*);
+    
 private:
-	G4ParticleGun*           particleGun;
-	DetectorConstruction*    Detector;
-
-	PrimaryGeneratorMessenger* gunMessenger;
-	TRandom3 *rndMy;
-
-	TString _particleName;
-	G4double _xInit;
-	G4double _yInit;
-	G4double _zInit;
-	G4double _pMin;
-	G4double _pMax;
-	G4double _xDir;
-	G4double _yDir;
-	G4double _zDir;
-	G4double _xDir0;
-	G4double _yDir0;
-	G4double _zDir0;
-	G4double _xDirRMS;
-	G4double _yDirRMS;
-	G4double _zDirRMS;
-
-	G4double GenerateEkin();
-	void GenerateParticleDir();
-	G4double GetEkinFromMom(G4double pp, G4double mm);
+    G4ParticleGun* fParticleGun;
+    G4ParticleDefinition* FindParticle(G4String particleName);
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
