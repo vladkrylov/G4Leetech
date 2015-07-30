@@ -33,7 +33,6 @@
 #include "G4VPrimitiveScorer.hh"
 #include "G4PSEnergyDeposit.hh"
 #include "DetectorConstruction.hh"
-#include "MagneticField.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -126,16 +125,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::ConstructSDandField()
-{
-    G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
-
-    // declare DD as a MultiFunctionalDetector scorer
-    //
-    G4MultiFunctionalDetector* dd = new G4MultiFunctionalDetector("DD");
-    G4VPrimitiveScorer* primitiv1 = new G4PSEnergyDeposit("Edep");
-    dd->RegisterPrimitive(primitiv1);
-    SetSensitiveDetector("DDLV",dd);
-}    
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
