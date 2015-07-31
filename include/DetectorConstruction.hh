@@ -61,6 +61,19 @@ public:
 private:
     static G4ThreadLocal MagneticField* fMagneticField;
     static G4ThreadLocal G4FieldManager* fFieldMgr;
+
+	// Define materials
+	G4Material*        alMy;
+	G4Material*        steelMy;
+	G4Material*        airMy;
+	G4Material*        titanMy;
+	G4Material*        vacuumMy;
+	G4Material*        beamVacuum;
+	G4Material*        G4Lead;
+	G4Material* 	   U;
+
+	void DefineMaterials();
+    G4Material* GetMaterial(G4int t);
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

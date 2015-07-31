@@ -1,33 +1,32 @@
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
-#include "G4Mag_UsualEqRhs.hh"
-#include "G4AutoDelete.hh"
+#include "assert.h"
 
 #include "G4Material.hh"
-#include "G4Element.hh"
-#include "G4MaterialTable.hh"
 #include "G4NistManager.hh"
-
-#include "G4VSolid.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
-#include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
-#include "G4PVParameterised.hh"
 #include "G4PVReplica.hh"
-#include "G4UserLimits.hh"
-
-#include "G4SDManager.hh"
-#include "G4VSensitiveDetector.hh"
-#include "G4RunManager.hh"
-#include "G4GenericMessenger.hh"
-
+#include "G4UniformMagField.hh"
+#include "G4UnionSolid.hh"
+#include "G4SubtractionSolid.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4GeometryManager.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
+#include "G4FieldManager.hh"
+#include "G4TransportationManager.hh"
+#include "G4ChordFinder.hh"
+#include "G4UserLimits.hh"
 
-#include "G4ios.hh"
-#include "G4SystemOfUnits.hh"
+#include "TMath.h"
+
+#include "DetectorConstruction.hh"
+//#include "DetectorMessenger.hh"
+//#include "MagneticField.hh"
 
 #include "G4MultiFunctionalDetector.hh"
 #include "G4VPrimitiveScorer.hh"
@@ -55,40 +54,437 @@ DetectorConstruction::~DetectorConstruction()
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
-	bool fCheckOverlaps = true;
+	DefineMaterials();
 
-	G4String name;
-	G4double z,a, density;
-	density=3.52*g/cm3;
-	a=12.01074*g/mole;
-	G4Material* DD_mat = new G4Material(name="diamond",z=6.,a,density);
+	const bool ColimGeom = true;
+	G4double gap_between_collimators = 3*cm;
 
-	G4NistManager* man = G4NistManager::Instance();
-	G4Material* Air = man->FindOrBuildMaterial("G4_AIR");
+	//	  G4double ShiftingOfAdditionalBox = _Det1X; // Distance from the edge to the beginning of the collimators system
+
+	G4double WorldSizeX         	= 	200.0*cm;
+	G4double WorldSizeY         	= 	WorldSizeX;
+	G4double WorldSizeZ         	= 	WorldSizeX;
+
+	G4double beamSize		=	2*cm;
+	const G4double beamSizeMax	=	2*cm;
+
+	//	  G4double rotAngle	     	= 	_RotationDeg;//rotation of the PHIL pipe
+
+	G4double ThicknesOfChamber 	=	8*mm;
+	G4double ThicknesOfSmallChamber 	=	3*mm;
+
+	G4double gapSize            	= 	1*mm;
+	G4double bigGap            	= 	1*cm;
+
+	G4double beamPipeLenght     	= 	20.0*cm;
+	G4double beamPipeOutRadius  	= 	3.00*cm;
+	G4double beamPipeInRadius   	= 	2.70*cm;
+	G4double beamPipeVOutRadius 	= 	beamPipeInRadius - gapSize;
+
+	G4double cupOutRadius       	= 	beamPipeOutRadius;
+	//	  G4double cupLenght          	= 	_cupLenght;
+
+
+	G4double chamberX		= 	52*cm+ThicknesOfChamber*2;
+	G4double chamberY		= 	4*cm+ThicknesOfChamber*2;
+	G4double chamberZ		= 	25*cm+ThicknesOfChamber*2;
+
+	G4double electronsRadius = 20.3*cm;
+
+	//	  G4double beamCorectionX	=	-electronsRadius - (beamPipeLenght/2+gapSize)*sin(rotAngle);
+	//	  G4double beamCorectionZ	=	(beamPipeLenght/2+gapSize)*(1-cos(rotAngle));
+
+	//G4double windowRad 		= 	0.5*cm;
+	G4double windowThick 		= 	20*um;
+
+	G4double colimatorX		=	20*mm;
+	G4double colimatorY		=	40*mm;
+	G4double colimatorZ		=	20*mm;
+	G4double colimatorZthin	=	2*mm;
+
+	G4double innerBoxX         	= 	chamberX-ThicknesOfChamber*2;
+	G4double innerBoxY         	= 	chamberY-ThicknesOfChamber*2;
+	G4double innerBoxZ         	= 	chamberZ-ThicknesOfChamber*2;
+
+	//Sizes of the connection from chamber to collimator system
+	G4double NeckX         	= 	4*cm;
+	G4double NeckY         	= 	4*cm;
+	G4double NeckZ         	= 	ThicknesOfChamber;
+
+	G4double fieldBoxX         	= 	chamberX-ThicknesOfChamber*2-gapSize*2;
+	G4double fieldBoxY         	= 	chamberY-ThicknesOfChamber*2-gapSize*2;
+	G4double fieldBoxZ         	= 	chamberZ-ThicknesOfChamber*2-gapSize*2 - 6*mm;
+
+	//	  G4double detectorRad         	= 	_Det1OutRad;
+	G4double detectorThick        = 	1*mm;
+
+	G4double AdditionalBoxX	=	colimatorX*2+beamSizeMax+gapSize*2 + ThicknesOfSmallChamber*2;
+	G4double AdditionalBoxY	=	colimatorY+beamSizeMax+gapSize*2 + ThicknesOfSmallChamber*2 + bigGap;
+	G4double AdditionalBoxZ	=	colimatorZ*2+bigGap*0.5 + 2*ThicknesOfSmallChamber;
+
+	//  G4double AdditionalBoxX	=	colimatorX*2+beamSizeMax+gapSize*2 + ThicknesOfChamberOther*2;
+	//  G4double AdditionalBoxY	=	colimatorY+beamSizeMax+gapSize*2 + ThicknesOfChamberOther*2 + bigGap;
+	//  G4double AdditionalBoxZ	=	colimatorZ*2+bigGap*0.5 + 2*ThicknesOfChamberOther;
+
+	G4double AdditionalInnerBoxX	=	AdditionalBoxX-ThicknesOfSmallChamber*2;
+	G4double AdditionalInnerBoxY	=	AdditionalBoxY-ThicknesOfSmallChamber*2;
+	G4double AdditionalInnerBoxZ	=	AdditionalBoxZ-ThicknesOfSmallChamber;
+
+	G4double  windowToCup 	= 	3*cm;
+	//	  G4RotationMatrix*RM1=new G4RotationMatrix(89.9*deg,rotAngle,0);
+
+	//distance between system of cordiantes of beampipe and chamber
+	G4double fromOriginToOrigin 	=	AdditionalBoxZ+2*cm;
+
+	G4double ShieldBarrierX       =       16*cm;
+	G4double ShieldBarrierY       =       40*cm;
+	G4double ShieldBarrierZ       =       30*cm;
+
+	G4double InnerTopShieldX      =       20*mm;
+	G4double InnerTopShieldY      =       fieldBoxY-gapSize;
+	G4double InnerTopShieldZ      =       25*mm;
+
+	G4double InnerBotShield1X      =       InnerTopShieldX;
+	G4double InnerBotShield1Y      =       InnerTopShieldY;
+	G4double InnerBotShield1Z      =       140*mm;
+
+	G4double InnerBotShield2X      =       InnerTopShieldX;
+	G4double InnerBotShield2Y      =       InnerTopShieldY;
+	G4double InnerBotShield2Z      =       60*mm;
+
+	G4double InnerShield3X      =       	180*mm;
+	G4double InnerShield3Y      =       	InnerTopShieldY;
+	G4double InnerShield3Z      =       	InnerTopShieldX;
+
+	G4double InnerShield4X      =  	     InnerTopShieldX;
+	G4double InnerShield4Y      =    	 	 InnerTopShieldY;
+	G4double InnerShield4Z      =     	 60*mm;
+
+	G4double InnerShield5X      =  	     InnerTopShieldX;
+	G4double InnerShield5Y      =    	 	 InnerTopShieldY;
+	G4double InnerShield5Z      =     	 60*mm;
+	//
+	//	Volumes position
+	//
+
+	G4double InnerTopShield_xc    =       0*mm;
+	G4double InnerTopShield_yc    =       0;
+	G4double InnerTopShield_zc    =       fieldBoxZ/2-gapSize-InnerTopShieldZ/2;
+
+	G4double InnerBotShield1_xc    =       90*mm;
+	G4double InnerBotShield1_yc    =       0;
+	G4double InnerBotShield1_zc    =       -fieldBoxZ/2+gapSize+InnerBotShield1Z/2;
+
+	G4double InnerBotShield2_xc    =       -90*mm;
+	G4double InnerBotShield2_yc    =       0;
+	G4double InnerBotShield2_zc    =       -fieldBoxZ/2+gapSize+InnerBotShield2Z/2;
+
+	G4double InnerShield3_xc	    =       InnerBotShield1_xc - InnerBotShield1X/2 - InnerShield3X/2;
+	G4double InnerShield3_yc 	    =       0;
+	G4double InnerShield3_zc   	=       -fieldBoxZ/2+gapSize+InnerBotShield1Z - InnerShield3Z/2;
+
+	G4double InnerShield4_xc	    =       180*mm;
+	G4double InnerShield4_yc 	    =       0;
+	G4double InnerShield4_zc   	=       62*mm;
+
+	G4double InnerShield5_xc	    =       -180*mm;
+	G4double InnerShield5_yc 	    =       0;
+	G4double InnerShield5_zc   	=       62*mm;
+
+	G4double fieldBox_xc         	= 	0;
+	G4double fieldBox_yc         	= 	0;
+	G4double fieldBox_zc = 3*mm;
+
+	G4double innerBox_xc         	= 	0.0*cm;
+	G4double innerBox_yc         	= 	0.0*cm;
+	G4double innerBox_zc         	= 	0.0*cm;
+
+	//	  G4double beamPipe_xc          =       beamCorectionX;
+	G4double beamPipe_yc          =       0;
+	//	  G4double beamPipe_zc          =       - beamPipeLenght/2.0 + beamCorectionZ - 10*cm;
+
+	G4double cup_xc               =       0;
+	G4double cup_yc               =       0;
+	G4double cup_zc               =       0;
+
+	G4double window_xc            =       0;
+	//G4double window_yc  	=       0;
+	//	  G4double window_zc            =       -cupLenght/2.0 - gapSize- windowToCup;
+
+	//Move to other coordinat system
+	//	  beamPipe_zc	-=	fromOriginToOrigin;
+	cup_zc	-=	fromOriginToOrigin;
+	//	  window_zc	-=	fromOriginToOrigin;
+
+	//	  beamPipe_xc	+=	-chamberX/4+AdditionalInnerBoxX/2+ShiftingOfAdditionalBox;
+	//	  cup_xc	+=	-chamberX/4+AdditionalInnerBoxX/2+ShiftingOfAdditionalBox;
+	//	  window_xc	+=	-chamberX/4+AdditionalInnerBoxX/2+ShiftingOfAdditionalBox;
+	//Finish
+
+	//std::cout<<std::endl<<"Coordinates of initial position of electrons must be: "<<beamPipe_xc<<" "<<beamPipe_yc<<" "<<beamPipe_zc<<std::endl<<std::endl;
+
+	G4double chamber_xc		= 	0;
+	G4double chamber_yc		= 	0;
+	G4double chamber_zc		= 	chamberZ/2;
+
+	G4double ShieldBarrier_xc     = 10*cm;
+	G4double ShieldBarrier_xc1     =       249*mm - 75*mm;
+	G4double ShieldBarrier_xc2     =       249*mm - 75*mm - 150*mm;
+	G4double ShieldBarrier_yc     =       0;
+	G4double ShieldBarrier_zc     =       chamber_zc-chamberZ/2-ShieldBarrierZ/2-gapSize;
+
+	G4double Trans_x1 = -chamberX/2;
+	G4double Trans_x2 = chamberX/2;
+
+	G4double Trans_z11            =       -chamberZ/2-AdditionalBoxZ/2;
+	G4double Trans_z12            =       -chamber_zc-AdditionalBoxZ/2;
+	G4double Trans_z21            =       -chamberZ/2-AdditionalBoxZ/2-ThicknesOfSmallChamber/2+windowThick;
+	G4double Trans_z22            =       -chamber_zc-AdditionalBoxZ/2-ThicknesOfSmallChamber/2+windowThick;
+
+	G4ThreeVector zTransAddBox11	(Trans_x1, 0, Trans_z11);
+	G4ThreeVector zTransAddBox12	(Trans_x2, 0, Trans_z12);
+
+	G4ThreeVector zTransInnerBox21	(Trans_x1, 0, Trans_z21);
+	G4ThreeVector zTransInnerBox22	(Trans_x2, 0, Trans_z22);
+
+	G4ThreeVector zNeck1	(Trans_x1, 0, -innerBoxZ/2-NeckZ/2);
+	G4ThreeVector zNeck2	(Trans_x2, 0, -innerBoxZ/2-NeckZ/2);
+
+	G4double shiftDet             =       1*cm;
+	G4double detector_xc         	= 	Trans_x2+chamber_xc;
+	G4double detector_yc         	= 	0;
+	G4double detector_zc         	= 	-AdditionalBoxZ - gapSize - shiftDet + 10*mm;
+
+	//	  beamSize = _apertureInRadius;
+
+	G4double colimator_xc11	=	Trans_x1+colimatorX/2+beamSize/2;
+	G4double colimator_yc11	=	0*mm;
+	G4double colimator_zc11	=	-chamber_zc-colimatorZ/2-gapSize-2*ThicknesOfSmallChamber;
+
+	G4double colimator_xc12	=	Trans_x1-colimatorX/2-beamSize/2;
+	G4double colimator_yc12	=	0*mm;
+	G4double colimator_zc12	=	-chamber_zc-colimatorZ/2-gapSize-ThicknesOfSmallChamber*2;
+
+	G4double colimator_xc21	=	Trans_x1;
+	G4double colimator_yc21	=	colimatorX/2+beamSize/2;
+	G4double colimator_zc21	=	-chamber_zc-colimatorZ*1.5-gapSize*2-ThicknesOfSmallChamber*2;
+
+	G4double colimator_xc22	=	Trans_x1;
+	G4double colimator_yc22	=	-colimatorX/2-beamSize/2;
+	G4double colimator_zc22	=	-chamber_zc-colimatorZ*1.5-gapSize*2-ThicknesOfSmallChamber*2;
+
+	//	  beamSize = _apertureLenght;
+
+	G4double colimator_xc31	=	Trans_x2+colimatorX/2+beamSize/2;
+	G4double colimator_yc31	=	0*mm;
+	G4double colimator_zc31	=	-chamber_zc-colimatorZ/2-gapSize-ThicknesOfSmallChamber*2;
+	G4double colimator_zc31thin	=	-chamber_zc-colimatorZthin/2-gapSize-ThicknesOfSmallChamber*2;
+
+	G4double colimator_xc32	=	Trans_x2-colimatorX/2-beamSize/2;
+	G4double colimator_yc32	=	0*mm;
+	G4double colimator_zc32	=	-chamber_zc-colimatorZ/2-gapSize-ThicknesOfSmallChamber*2;
+	G4double colimator_zc32thin	=	-chamber_zc-colimatorZthin/2-gapSize-ThicknesOfSmallChamber*2;
+
+	G4double colimator_xc41	=	Trans_x2;
+	G4double colimator_yc41	=	colimatorX/2+beamSize/2;
+	G4double colimator_zc41	=	-chamber_zc-colimatorZ*1.5-gapSize*2-ThicknesOfSmallChamber*2;
+	G4double colimator_zc41thin	=	-chamber_zc-colimatorZthin*1.5-gapSize*2-ThicknesOfSmallChamber*2;
+
+	G4double colimator_xc42	=	Trans_x2;
+	G4double colimator_yc42	=	-colimatorX/2-beamSize/2;
+	G4double colimator_zc42	=	-chamber_zc-colimatorZ*1.5-gapSize*2-ThicknesOfSmallChamber*2;
+	G4double colimator_zc42thin	=	-chamber_zc-colimatorZthin*1.5-gapSize*2-ThicknesOfSmallChamber*2;
+
+	G4double colimator_xc51	=	Trans_x2+colimatorX/2+beamSize/2;
+	G4double colimator_yc51	=	0*mm;
+	G4double colimator_zc51thin	=	colimator_zc31thin -gap_between_collimators-ThicknesOfChamber*2;
+
+	G4double colimator_xc52	=	Trans_x2-colimatorX/2-beamSize/2;
+	G4double colimator_yc52	=	0*mm;
+	G4double colimator_zc52thin	=	colimator_zc32thin -gap_between_collimators-ThicknesOfChamber*2;
+
+	G4double colimator_xc61	=	Trans_x2;
+	G4double colimator_yc61	=	colimatorX/2+beamSize/2;
+	G4double colimator_zc61thin	=	colimator_zc41thin -gap_between_collimators-ThicknesOfChamber*2;
+
+	G4double colimator_xc62	=	Trans_x2;
+	G4double colimator_yc62	=	-colimatorX/2-beamSize/2;
+	G4double colimator_zc62thin	=	colimator_zc42thin -gap_between_collimators-ThicknesOfChamber*2;
+
+	//	  G4FieldManager* fieldMgr
+	//	      = G4TransportationManager::GetTransportationManager()->GetFieldManager();
+	//	  G4cout<<"DetectorConstruction::ConstructGeom12 _MagFieldVal "<<_MagFieldVal<<G4endl;
+	//	  magField->setBfieldY(_MagFieldVal);
+	//	  magField->setFieldBox1(fieldBox_xc + chamber_xc, fieldBox_yc + chamber_yc, fieldBox_zc + chamber_zc,
+	//				 fieldBoxX, fieldBoxY, fieldBoxZ);
+	//	  fieldMgr->SetDetectorField(magField);
+	//	  fieldMgr->CreateChordFinder(magField);
+	//	  fieldMgr->GetChordFinder()->SetDeltaChord(1.0*mm);
+
+	// Clean old geometry, if any
+	//
+	G4GeometryManager::GetInstance()->OpenGeometry();
+	G4PhysicalVolumeStore::GetInstance()->Clean();
+	G4LogicalVolumeStore::GetInstance()->Clean();
+	G4SolidStore::GetInstance()->Clean();
+
+	G4RotationMatrix RMZero(0,0,0);
+
+	G4Box* solidWorld = new G4Box("World",WorldSizeX/2,WorldSizeY/2,WorldSizeZ/2);
+	G4LogicalVolume* logicWorld = new G4LogicalVolume(solidWorld,
+		  //GetMaterial(3), air
+		  GetMaterial(6),  //myvacuum
+		  "World");
+	G4VPhysicalVolume* physWorld = new G4PVPlacement(0,	 G4ThreeVector(),  logicWorld, "World", 0, false, 0);
 
 	//
-	// World
+	//	Chamber
 	//
-	G4double world_size = 1*cm;
+	G4Box *solidChamberMain = new G4Box("Chamber1",chamberX/2, chamberY/2, chamberZ/2);
 
-	G4Box* solidWorld =
-	new G4Box("World",                       //its name
-			  0.5*world_size, 0.5*world_size, 0.5*world_size); //its size
+	G4double radNeck = 1.4*cm;
+	G4double lengthNeck = 3*cm;
 
-	G4LogicalVolume* logicWorld =
-	new G4LogicalVolume(solidWorld,          //its solid
-						Air,         		 //its material
-						"World");            //its name
+	G4double radNeckRing = 2*cm;
+	G4double lengthNeckRing = 0.4*cm;
 
-	G4VPhysicalVolume* physWorld =
-	new G4PVPlacement(0,                     //no rotation
-					  G4ThreeVector(),       //at (0,0,0)
-					  logicWorld,            //its logical volume
-					  "World",               //its name
-					  0,                     //its mother  volume
-					  false,                 //no boolean operation
-					  0,                     //copy number
-					  fCheckOverlaps);       // checking overlaps
+	G4double neckHoleSide = 2*cm;
+	G4double lengthNeckHole = lengthNeck + ThicknesOfChamber;
+
+	G4Tubs *neckSolid = new G4Tubs("Neck", 0, radNeck, lengthNeck/2, 0, 360.0*deg);
+
+	G4Tubs *neckOuterRing = new G4Tubs("Neck", radNeck, radNeckRing, lengthNeckRing/2, 0, 360.0*deg);
+	G4Transform3D transNeckOuterRing(RMZero, G4ThreeVector(0,0,-(lengthNeck-lengthNeckRing)/2));
+	G4UnionSolid* neckWithOuterRing  = new G4UnionSolid("Chamber", neckSolid, neckOuterRing, transNeckOuterRing);
+
+	G4Box  *neckHole  = new G4Box("NeckHole", neckHoleSide/2, neckHoleSide/2, lengthNeckHole/2);
+	G4Transform3D transNeckHole(RMZero, G4ThreeVector(0,0,ThicknesOfChamber/2));
+	G4SubtractionSolid* neck = new G4SubtractionSolid("Neck", neckWithOuterRing, neckHole, transNeckHole);
+
+	//  G4Box *solidAdditionalBox = new G4Box("ChamberAdd",AdditionalBoxX/2, AdditionalBoxY/2, AdditionalBoxZ/2);
+
+	G4Transform3D transEntranceNeck(RMZero, G4ThreeVector(-electronsRadius,0,-lengthNeck/2-chamberZ/2));
+	G4Transform3D transExit1Neck(RMZero, G4ThreeVector(electronsRadius,0,-lengthNeck/2-chamberZ/2));
+	G4Transform3D transExit2Neck(RMZero, G4ThreeVector(0,0,-lengthNeck/2-chamberZ/2));
+
+	G4UnionSolid* solidChamberEntranceNeck  = new G4UnionSolid("Chamber", solidChamberMain, neck, transEntranceNeck);
+	G4UnionSolid* solidChamberEnEx1Necks    = new G4UnionSolid("Chamber", solidChamberEntranceNeck, neck, transExit1Neck);
+	G4UnionSolid* solidChamberEnEx1Ex2Necks = new G4UnionSolid("Chamber", solidChamberEnEx1Necks, neck, transExit2Neck);
+
+	G4LogicalVolume* logicChamber = new G4LogicalVolume(solidChamberEnEx1Ex2Necks, GetMaterial(1), "Chamber");
+	G4VPhysicalVolume* physiChamber = new G4PVPlacement(0, G4ThreeVector(chamber_xc,chamber_yc,chamber_zc), logicChamber, "Chamber",	 logicWorld, false, 0);
+
+	//
+	//	InnerBox
+	//
+	G4Box *innerMainBox = new G4Box("InnerBox", innerBoxX/2, innerBoxY/2, innerBoxZ/2);
+	//  G4Box *solidAdditionalInnerBox = new G4Box("InnerAdd",AdditionalInnerBoxX/2, AdditionalInnerBoxY/2, AdditionalInnerBoxZ/2);
+
+	G4Transform3D transEntranceNeckHole(RMZero, G4ThreeVector(-electronsRadius,0,-(chamberZ+lengthNeckHole)/2+ThicknesOfChamber));
+	G4Transform3D transExit1NeckHole(RMZero, G4ThreeVector(electronsRadius,0,-(chamberZ+lengthNeckHole)/2+ThicknesOfChamber));
+	G4Transform3D transExit2NeckHole(RMZero, G4ThreeVector(0,0,-(chamberZ+lengthNeckHole)/2+ThicknesOfChamber));
+
+	G4UnionSolid *innerMainEntranceBox = new G4UnionSolid("InnerBox", innerMainBox, neckHole, transEntranceNeckHole);
+	G4UnionSolid *innerMainEnEx1Box    = new G4UnionSolid("InnerBox", innerMainEntranceBox, neckHole, transExit1NeckHole);
+	G4UnionSolid *innerMainEnEx1Ex2Box = new G4UnionSolid("InnerBox", innerMainEnEx1Box, neckHole, transExit2NeckHole);
+
+	G4LogicalVolume *logicInnerBox = new G4LogicalVolume(innerMainEnEx1Ex2Box, GetMaterial(5),"InnerBox");
+	G4VPhysicalVolume *physiInnerBox = new G4PVPlacement(0, G4ThreeVector(innerBox_xc,innerBox_yc,innerBox_zc), logicInnerBox, "InnerBox", logicChamber, false,	 0);
+
+	G4double thicknessOfColBox = 8*mm;
+	G4double sideOfColBox = 12.2*cm + 2*thicknessOfColBox;
+	G4double heightOfColBox = 10.7*cm + 2*thicknessOfColBox;
+
+	G4double collNeckInnerRad = 11.5*mm;
+	G4double collInputNeckLength = 1.6*cm;
+	G4double collOutputNeckLength = 4.2*cm;
+
+	/* Box with holes */
+	G4Box *colBoxMain = new G4Box("ColBox", sideOfColBox/2, sideOfColBox/2, heightOfColBox/2);
+	G4Box *colInnerBox = new G4Box("ColBox", sideOfColBox/2 - thicknessOfColBox, sideOfColBox/2 - thicknessOfColBox, heightOfColBox/2 - thicknessOfColBox);
+	G4Transform3D transColBox(RMZero, G4ThreeVector(0,0,0));
+	G4SubtractionSolid *colBoxWithoutHoles = new G4SubtractionSolid("ColBox", colBoxMain, colInnerBox, transColBox);
+
+	G4Tubs *cutColBoxHole = new G4Tubs("CutColHole", 0, collNeckInnerRad, thicknessOfColBox/2, 0, 360*deg);
+	G4Transform3D transColHoleOut(RMZero, G4ThreeVector(0,0,
+												  colBoxMain->GetZHalfLength() - cutColBoxHole->GetZHalfLength()));
+	G4Transform3D transColHoleIn(RMZero, G4ThreeVector(0,0,
+												  -(colBoxMain->GetZHalfLength() - cutColBoxHole->GetZHalfLength())));
+	G4SubtractionSolid *colBoxWith1Hole = new G4SubtractionSolid("ColBox", colBoxWithoutHoles, cutColBoxHole, transColHoleOut);
+	G4SubtractionSolid *colBox = new G4SubtractionSolid("ColBox", colBoxWith1Hole, cutColBoxHole, transColHoleIn);
+
+	/* Add output neck */
+	G4Tubs *collimOutNeckMain = new G4Tubs("CollimOutNeck", collNeckInnerRad, radNeck, collOutputNeckLength/2, 0, 360*deg);
+	G4Tubs *collimOutNeckRing = new G4Tubs("CollimNeckRing", radNeck, radNeckRing, lengthNeckRing/2, 0, 360*deg);
+	G4Transform3D transColOutRing(RMZero, G4ThreeVector(0,0,(collOutputNeckLength-lengthNeckRing)/2));
+	G4UnionSolid *collimOutNeck = new G4UnionSolid("CollimOutNeck", collimOutNeckMain, collimOutNeckRing, transColOutRing);
+
+	G4Transform3D transOutNeckToColBox(RMZero, G4ThreeVector(0,0,
+										  colBoxMain->GetZHalfLength() + collimOutNeckMain->GetZHalfLength()));
+	G4UnionSolid *collimBoxOutNeck = new G4UnionSolid("CollimOutNeck", colBox, collimOutNeck, transOutNeckToColBox);
+
+	/* Add input neck */
+	G4Tubs *collimInNeckMain = new G4Tubs("CollimInNeck", collNeckInnerRad, radNeck, collInputNeckLength/2, 0, 360*deg);
+	G4Tubs *collimInNeckRing = new G4Tubs("CollimNeckRing", radNeck, radNeckRing, lengthNeckRing/2, 0, 360*deg);
+	G4Transform3D transColInRing(RMZero, G4ThreeVector(0,0,-(collInputNeckLength-lengthNeckRing)/2));
+	G4UnionSolid *collimInNeck = new G4UnionSolid("CollimOutNeck", collimInNeckMain, collimInNeckRing, transColInRing);
+
+	G4Transform3D transInNeckToColBox(RMZero, G4ThreeVector(0,0,
+										  -(colBoxMain->GetZHalfLength() + collimInNeckMain->GetZHalfLength())));
+	G4UnionSolid *collimBoxOutNecks = new G4UnionSolid("ColBox", collimBoxOutNeck, collimInNeck, transInNeckToColBox);
+
+	/* construct the same exit1 collimator box */
+	G4Transform3D trans1stEntranceColBox(RMZero, G4ThreeVector(2*electronsRadius,0,0));
+	G4UnionSolid *twoColBoxes = new G4UnionSolid("ColBoxes", collimBoxOutNecks, collimBoxOutNecks, trans1stEntranceColBox);
+
+	G4LogicalVolume *logicColBoxes = new G4LogicalVolume(twoColBoxes, GetMaterial(1),"ColBoxes");
+	G4VPhysicalVolume *phyColBoxes = new G4PVPlacement(0, G4ThreeVector(-electronsRadius,0,
+																-(2*neckSolid->GetZHalfLength() + 2*collimOutNeckMain->GetZHalfLength() + colBoxMain->GetZHalfLength())),
+											  logicColBoxes, "ColBoxes", logicWorld, false, 0);
+
+	/* construct target */
+	G4double cupLenght = 100*um;
+	G4Tubs *target = new G4Tubs("Target", 0, radNeckRing, cupLenght/2, 0, 360*deg);
+	G4LogicalVolume *logicTarget = new G4LogicalVolume(target, GetMaterial(1), "Target");
+	G4VPhysicalVolume *phyTarget = new G4PVPlacement(0, G4ThreeVector(-electronsRadius,0,
+																-(2*neckSolid->GetZHalfLength()
+																  + 2*collimOutNeckMain->GetZHalfLength()
+																  + 2*colBoxMain->GetZHalfLength()
+																  + 2*collimInNeckMain->GetZHalfLength()
+																  + target->GetZHalfLength())),
+											  logicTarget, "Target", logicWorld, false, 0);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	//
 	// DD
@@ -102,7 +498,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 	G4LogicalVolume* logicDD =
 	new G4LogicalVolume(solidDD,
-						DD_mat,
+			GetMaterial(1),
 						"DDLV");
 
 	new G4PVPlacement(0,
@@ -112,7 +508,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 				  logicWorld,
 				  false,
 				  0,
-				  fCheckOverlaps);
+				  true);
 
 	// Print materials
 	G4cout << *(G4Material::GetMaterialTable()) << G4endl;
@@ -127,5 +523,107 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 void DetectorConstruction::ConstructSDandField()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void DetectorConstruction::DefineMaterials()
+{
+  //This function illustrates the possible ways to define materials
+
+  G4String symbol;             //a=mass of a mole;
+  G4double a, z, density;      //z=mean number of protons;
+//  G4int iz, n;                 //iz=number of protons  in an isotope;
+                               // n=number of nucleons in an isotope;
+
+  G4int ncomponents;
+  G4double fractionmass;
+
+  //
+  // define Elements and simple materials
+  //
+
+  //G4Element* H  = new G4Element("Hydrogen",  symbol="H",  z= 1.00, a= 1.0100*g/mole);
+  //G4Element* C  = new G4Element("Carbon",    symbol="C",  z= 6.00, a= 12.010*g/mole);
+  G4Element* N  = new G4Element("Nitrogen",  symbol="N",  z= 7.00, a= 14.010*g/mole);
+  G4Element* O  = new G4Element("Oxygen",    symbol="O",  z= 8.00, a= 16.000*g/mole);
+  //G4Element* Si = new G4Element("Silicon",   symbol="Si", z= 14.0, a= 28.090*g/mole);
+  G4Element* Cr = new G4Element("Chromium",  symbol="Cr", z= 24.0, a= 51.996*g/mole);
+  G4Element* Mn = new G4Element("Manganese", symbol="Mn", z= 25.0, a= 54.938*g/mole);
+  G4Element* Fe = new G4Element("Ferum",     symbol="Fe", z= 26.0, a= 55.845*g/mole);
+  G4Element* Ni = new G4Element("Nickel",    symbol="Ni", z= 28.0, a= 58.693*g/mole);
+
+  alMy          = new G4Material("Aluminium", z=13.0, a=26.980*g/mole, density=2.700*g/cm3);
+  titanMy       = new G4Material("Titan",     z=22.0, a=47.867*g/mole, density=4.506*g/cm3);
+
+  G4Lead = new G4Material("Lead",     z=82.0, a=207.2*g/mole, density=11.3*g/cm3);
+
+  G4NistManager* nistMan = G4NistManager::Instance();
+  U = nistMan->FindOrBuildMaterial("G4_U");
+
+  //////////////////////////Stainless Steel///////////////////////////////
+  steelMy = new G4Material("steelMy", density= 7.9*g/cm3, ncomponents=4);
+  steelMy->AddElement(Fe, fractionmass=0.72);
+  steelMy->AddElement(Cr, fractionmass=0.18);
+  steelMy->AddElement(Ni, fractionmass=0.08);
+  steelMy->AddElement(Mn, fractionmass=0.02);
+  ////////////////////////////////////////////////////////////////////////
+
+  /////////////////////////////////Air////////////////////////////////////
+  airMy = new G4Material("Air1", density= 1.290*mg/cm3, ncomponents=2);
+  airMy->AddElement(N, fractionmass=0.7);
+  airMy->AddElement(O, fractionmass=0.3);
+  ///////////////////////////////////////////////////////////////////////
+
+  /////////////////////////////beamVacuum////////////////////////////////
+  beamVacuum = new G4Material("beamVacuum", density= 1.290*mg/(1.0e11)/cm3, ncomponents=2);
+  beamVacuum->AddElement(N, fractionmass=0.7);
+  beamVacuum->AddElement(O, fractionmass=0.3);
+  ///////////////////////////////////////////////////////////////////////
+
+  /////////////////////////////vacuumMy//////////////////////////////////
+  //vacuumMy = new G4Material("vacuumMy", density= 1.290*mg/(1.0e3)/cm3, ncomponents=2);
+  vacuumMy = new G4Material("vacuumMy", density= 1.290*mg/(1.0e5)/cm3, ncomponents=2);
+  //vacuumMy = new G4Material("vacuumMy", density= 1.290*mg/(1.0e60)/cm3, ncomponents=2);
+  vacuumMy->AddElement(N, fractionmass=0.7);
+  vacuumMy->AddElement(O, fractionmass=0.3);
+  ///////////////////////////////////////////////////////////////////////
+
+  // print table
+  //
+  //G4cout <<*(G4Material::GetMaterialTable()) << G4endl;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+}
+
+G4Material* DetectorConstruction::GetMaterial(G4int t)
+{
+  switch(t)
+  {
+	  //test = alMy;
+	case 1:
+		return alMy;
+		break;
+	case 2:
+		return steelMy;
+		break;
+	case 3:
+		return airMy;
+		break;
+	case 4:
+		return titanMy;
+		break;
+	case 5:
+		return vacuumMy;
+		break;
+	case 6:
+		return beamVacuum;
+		break;
+	case 7:
+		return G4Lead;
+		break;
+	case 8:
+		return U;
+			break;
+  default:
+	  return beamVacuum;
+		break;
+  }
+
+}
