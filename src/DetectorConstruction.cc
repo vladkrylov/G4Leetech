@@ -684,7 +684,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 						"DDLV");
 
 	new G4PVPlacement(0,
-				  G4ThreeVector(1.9*mm, 0, -5*cm),
+				  G4ThreeVector(2.1*mm, 0, -5*cm),
 				  logicDD,
 				  "DD",
 				  logicWorld,
