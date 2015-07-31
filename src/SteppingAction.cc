@@ -25,6 +25,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 
 	// get volume of the current step
 	G4VPhysicalVolume* volume = aStep->GetPostStepPoint()->GetPhysicalVolume();
+	if (!volume) return;
 
 	if(volume->GetName() == "DD") {
 		if(aStep->GetTrack()->GetDefinition()->GetPDGEncoding() == 11) {
