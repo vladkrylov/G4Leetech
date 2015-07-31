@@ -3,36 +3,22 @@
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
-#include "TString.h"
 
-#include "HitDataStructure.hh"
-
-class TTree;
-class TFile;
-class TString;
 class G4Run;
-class RunActionMessenger;
+
+/// Run action class
 
 class RunAction : public G4UserRunAction
 {
 public:
-	RunAction();
-	virtual ~RunAction();
+    RunAction();
+    virtual ~RunAction();
 
-	void   BeginOfRunAction(const G4Run*); //set writing parameters
-	void   EndOfRunAction(const G4Run*);	//write seted parameters
-
-	TTree* tree;
-	HitData HitInfo;
-
-	void SetRootFile(G4String newValue);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void   EndOfRunAction(const G4Run*);
 
 private:
-	TFile* hfile;
-	TString _RootFile;
-	RunActionMessenger* runMessenger;
-	time_t systime;
-
+    G4String rootFileName;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

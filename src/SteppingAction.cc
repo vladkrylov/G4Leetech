@@ -1,70 +1,56 @@
-#include "G4Step.hh"
-#include "G4Track.hh"
-#include "G4RunManager.hh"
-#include "G4ParticleDefinition.hh"
+#include <cmath>
 
-#include "TTree.h"
+#include "g4root.hh"
+#include "G4Step.hh"
+#include "G4VPhysicalVolume.hh"
 
 #include "SteppingAction.hh"
-#include "DetectorConstruction.hh"
-#include "EventAction.hh"
-#include "RunAction.hh"
 
-SteppingAction::SteppingAction(){
-  detector = (DetectorConstruction*)
-    G4RunManager::GetRunManager()->GetUserDetectorConstruction();
-  eventAction = (EventAction*)
-    G4RunManager::GetRunManager()->GetUserEventAction();	       
-  runAction = (RunAction*)G4RunManager::GetRunManager()->GetUserRunAction();
+SteppingAction::SteppingAction()
+{
+
 }
 
 SteppingAction::~SteppingAction()
-{ }
+{}
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
+	G4int BranchId;
+	G4double Px, Py, Pz, P;
+	G4double theta;
+
+    // Get analysis manager
+    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+
 	// get volume of the current step
-	G4VPhysicalVolume* volume
-		= aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
-	//G4cout<<volume->GetName()<<G4endl;
-  
-	runAction->HitInfo.IsInDetector = 0;
-	runAction->HitInfo.TypeID   = aStep->GetTrack()->GetDefinition()->GetPDGEncoding();
+	G4VPhysicalVolume* volume = aStep->GetPostStepPoint()->GetPhysicalVolume();
+	if (!volume) return;
 
-	//fill the parameters of the step
-	if(volume->GetName()=="SenDet1") { //|| volume->GetName()=="SenDet2"){
-		//G4cout<<"### Run "<<G4RunManager::GetRunManager()->GetRunID()<<G4endl
-		//	  <<aStep->GetTrack()->GetKineticEnergy()<<G4endl;
-		//	G4cout<<aStep->GetTrack()->GetDefinition()->GetPDGEncoding()<<std::endl;
-		if(aStep->GetTrack()->GetDefinition()->GetPDGEncoding()==11) {
-			runAction->HitInfo.IsInDetector = 1;
-		  	runAction->HitInfo.EventID  = eventAction->_evtNb;
-			runAction->HitInfo.TypeID   = aStep->GetTrack()->GetDefinition()->GetPDGEncoding();
-			if(aStep->GetTrack()->GetDefinition()->GetPDGEncoding() == 22)
-				G4cout<<"gamma was 100%\n";
-			runAction->HitInfo.TrackID  = aStep->GetTrack()->GetTrackID();
-			runAction->HitInfo.ParentID = aStep->GetTrack()->GetParentID();
-			runAction->HitInfo.Energy   = aStep->GetTrack()->GetKineticEnergy();
-			runAction->HitInfo.Time     = aStep->GetPostStepPoint()->GetGlobalTime();
-			runAction->HitInfo.PosX     = aStep->GetPostStepPoint()->GetPosition().getX();
-			runAction->HitInfo.PosY     = aStep->GetPostStepPoint()->GetPosition().getY();
-			runAction->HitInfo.PosZ     = aStep->GetPostStepPoint()->GetPosition().getZ();
-			runAction->HitInfo.PX       = aStep->GetPostStepPoint()->GetMomentum().getX();
-			runAction->HitInfo.PY       = aStep->GetPostStepPoint()->GetMomentum().getY();
-			runAction->HitInfo.PZ       = aStep->GetPostStepPoint()->GetMomentum().getZ();
-	
-			double Pe=sqrt(runAction->HitInfo.PZ*runAction->HitInfo.PZ+
-						   runAction->HitInfo.PY*runAction->HitInfo.PY+
-						   runAction->HitInfo.PX*runAction->HitInfo.PX);
-			runAction->HitInfo.P = Pe;
-	
-			double Tet = acos(runAction->HitInfo.PZ/Pe)*180/3.14;
-			runAction->HitInfo.Theta = Tet;
+	if(volume->GetName() == "DD") {
+		if(aStep->GetTrack()->GetDefinition()->GetPDGEncoding() == 11) {
+			Px = aStep->GetPostStepPoint()->GetMomentum().getX();
+			Py = aStep->GetPostStepPoint()->GetMomentum().getY();
+			Pz = aStep->GetPostStepPoint()->GetMomentum().getZ();
+			P = sqrt(Px*Px + Py*Py + Pz*Pz);
 
-			double PosXYnow = sqrt(runAction->HitInfo.PosX*runAction->HitInfo.PosX+runAction->HitInfo.PosY*runAction->HitInfo.PosY);
-			runAction->HitInfo.PosXY = PosXYnow;
+			theta = acos(Pz/P) * 180 / M_PI;
 
-			runAction->tree->Fill();
+			// save the parameters of the step
+			analysisManager->FillNtupleIColumn(BranchId=0, 1);
+			analysisManager->FillNtupleIColumn(BranchId=1, aStep->GetTrack()->GetTrackID());
+			analysisManager->FillNtupleIColumn(BranchId=2, aStep->GetTrack()->GetParentID());
+			analysisManager->FillNtupleDColumn(BranchId=3, aStep->GetTrack()->GetKineticEnergy());
+			analysisManager->FillNtupleDColumn(BranchId=4, aStep->GetPostStepPoint()->GetGlobalTime());
+			analysisManager->FillNtupleDColumn(BranchId=5, aStep->GetPostStepPoint()->GetPosition().getX());
+			analysisManager->FillNtupleDColumn(BranchId=6, aStep->GetPostStepPoint()->GetPosition().getY());
+			analysisManager->FillNtupleDColumn(BranchId=7, aStep->GetPostStepPoint()->GetPosition().getZ());
+			analysisManager->FillNtupleDColumn(BranchId=8, Px);
+			analysisManager->FillNtupleDColumn(BranchId=9, Py);
+			analysisManager->FillNtupleDColumn(BranchId=10, Pz);
+			analysisManager->FillNtupleDColumn(BranchId=11, P);
+			analysisManager->FillNtupleDColumn(BranchId=12, theta);
+			analysisManager->AddNtupleRow();
 		}
 		aStep->GetTrack()->SetTrackStatus(fStopAndKill);
 	}

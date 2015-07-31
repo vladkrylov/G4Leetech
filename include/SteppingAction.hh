@@ -3,26 +3,13 @@
 
 #include "G4UserSteppingAction.hh"
 
-class DetectorConstruction;
-class EventAction;
-class RunAction;
-
-class SteppingAction : public G4UserSteppingAction
+class SteppingAction: public G4UserSteppingAction
 {
 public:
 	SteppingAction();
 	virtual ~SteppingAction();
 
 	void UserSteppingAction(const G4Step*);
-
-	RunAction* GetRunAction();
-    
-private:
-	DetectorConstruction* detector;
-	EventAction*          eventAction;
-	RunAction*            runAction;
 };
 
-inline RunAction* SteppingAction::GetRunAction() {return runAction;}
-
-#endif
+#endif /* SteppingAction_h */
