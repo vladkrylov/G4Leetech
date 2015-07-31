@@ -47,7 +47,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 	fParticleGun->SetNumberOfParticles(1);
 	fParticleGun->SetParticleDefinition(FindParticle("e+"));
 	fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-	fParticleGun->SetParticlePosition(G4ThreeVector(0, 0, -10*cm));
+	fParticleGun->SetParticlePosition(G4ThreeVector(0*cm, 0, -10*cm));
 	fParticleGun->SetParticleEnergy(2.5*MeV);
 }
 

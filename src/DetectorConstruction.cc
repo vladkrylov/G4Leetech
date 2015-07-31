@@ -588,25 +588,25 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	G4Tubs* solidBeamPipe = new G4Tubs("BeamPipe", beamPipeInRadius, beamPipeOutRadius, beamPipeLenght/2.0, 0, 360.0*deg);
 	G4LogicalVolume* logicBeamPipe = new G4LogicalVolume(solidBeamPipe, GetMaterial(2),"BeamPipe");
 	G4VPhysicalVolume* physiBeamPipe = new G4PVPlacement(RM1, beamPipeCenter, logicBeamPipe, "BeamPipe",  logicWorld,false,0);
-//
-//	  //
-//	  // Beampipe Vacuum
-//	  //
-//	  G4Tubs* solidBeamPipeV = new G4Tubs("BeamPipeV", 0.0, beamPipeVOutRadius, beamPipeLenght/2.0, 0, 360.0*deg);
-//	  G4LogicalVolume* logicBeamPipeV = new G4LogicalVolume(solidBeamPipeV, GetMaterial(6),"BeamPipeV");
-//	  G4VPhysicalVolume* physiBeamPipeV = new G4PVPlacement(RM1, beamPipeCenter, logicBeamPipeV,"BeamPipeV",logicWorld, false, 0);
-//
-//	  //
-//	  // Detector shielding
-//	  //
-//
-//	  G4Box *solidShieldBarrier1 = new G4Box("ShieldBarrier1",ShieldBarrierX/2, ShieldBarrierY/2, ShieldBarrierZ/2);
-//	  G4LogicalVolume *logicShieldBarrier1 = new G4LogicalVolume(solidShieldBarrier1,GetMaterial(7), "ShieldBarrier1");
-//
-//	  G4ThreeVector detShieldCenter(0, 0, -solidShieldBarrier1->GetZHalfLength()
-//			                              - 2*neckSolid->GetZHalfLength());
-//	  G4VPhysicalVolume *physiShieldBarrier1 = new G4PVPlacement(0, detShieldCenter,
-//			  	  	  	 logicShieldBarrier1, "ShieldBarrier1",logicWorld, false, 0);
+
+	//
+	// Beampipe Vacuum
+	//
+	G4Tubs* solidBeamPipeV = new G4Tubs("BeamPipeV", 0.0, beamPipeVOutRadius, beamPipeLenght/2.0, 0, 360.0*deg);
+	G4LogicalVolume* logicBeamPipeV = new G4LogicalVolume(solidBeamPipeV, GetMaterial(6),"BeamPipeV");
+	G4VPhysicalVolume* physiBeamPipeV = new G4PVPlacement(RM1, beamPipeCenter, logicBeamPipeV,"BeamPipeV",logicWorld, false, 0);
+
+	//
+	// Detector shielding
+	//
+
+	G4Box *solidShieldBarrier1 = new G4Box("ShieldBarrier1",ShieldBarrierX/2, ShieldBarrierY/2, ShieldBarrierZ/2);
+	G4LogicalVolume *logicShieldBarrier1 = new G4LogicalVolume(solidShieldBarrier1,GetMaterial(7), "ShieldBarrier1");
+
+	G4ThreeVector detShieldCenter(0, 0, -solidShieldBarrier1->GetZHalfLength()
+									  - 2*neckSolid->GetZHalfLength() - 7.9*cm);
+	G4VPhysicalVolume *physiShieldBarrier1 = new G4PVPlacement(0, detShieldCenter,
+					 logicShieldBarrier1, "ShieldBarrier1",logicWorld, false, 0);
 //
 //	  //
 //	  // Exit window
