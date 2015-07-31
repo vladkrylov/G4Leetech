@@ -601,42 +601,42 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	//
 
 	G4Box *solidShieldBarrier1 = new G4Box("ShieldBarrier1",ShieldBarrierX/2, ShieldBarrierY/2, ShieldBarrierZ/2);
-	G4LogicalVolume *logicShieldBarrier1 = new G4LogicalVolume(solidShieldBarrier1,GetMaterial(7), "ShieldBarrier1");
+	G4LogicalVolume* logicShieldBarrier1 = new G4LogicalVolume(solidShieldBarrier1,GetMaterial(7), "ShieldBarrier1");
 
 	G4ThreeVector detShieldCenter(0, 0, -solidShieldBarrier1->GetZHalfLength()
-									  - 2*neckSolid->GetZHalfLength() - 7.9*cm);
-	G4VPhysicalVolume *physiShieldBarrier1 = new G4PVPlacement(0, detShieldCenter,
+									  - 2*neckSolid->GetZHalfLength() - 15*cm);
+	G4VPhysicalVolume* physiShieldBarrier1 = new G4PVPlacement(0, detShieldCenter,
 					 logicShieldBarrier1, "ShieldBarrier1",logicWorld, false, 0);
-//
-//	  //
-//	  // Exit window
-//	  //
-//	  G4double exitWinRad = radNeckRing;
-//	  G4double exitWinWidth = 100*um;
-//	  G4ThreeVector exitWinCenter = phyTarget->GetObjectTranslation() + G4ThreeVector(2*electronsRadius, 0, target->GetZHalfLength() - exitWinWidth/2);
-//
-//	  G4Tubs *exitWin = new G4Tubs("ExitWindow", 0, exitWinRad, exitWinWidth/2, 0, 360*deg);
-//	  G4LogicalVolume *logicExitWin = new G4LogicalVolume(exitWin, GetMaterial(1), "ExitWindow");
-//	  G4VPhysicalVolume *phyExitWin = new G4PVPlacement(0, exitWinCenter, logicExitWin, "ExitWindow", logicWorld, false, 0);
 
-	  //
-	  // Detector
-	  //
-//	  G4double detectorGap = 1*mm;
-//	  G4ThreeVector detectorCenter = phyExitWin->GetObjectTranslation() + G4ThreeVector(0, 0, - exitWin->GetZHalfLength() - detectorGap - detectorThick/2);
+	//
+	// Exit window
+	//
+	G4double exitWinRad = radNeckRing;
+	G4double exitWinWidth = 100*um;
+	G4ThreeVector exitWinCenter = phyTarget->GetObjectTranslation() + G4ThreeVector(2*electronsRadius, 0, target->GetZHalfLength() - exitWinWidth/2);
+
+	G4Tubs *exitWin = new G4Tubs("ExitWindow", 0, exitWinRad, exitWinWidth/2, 0, 360*deg);
+	G4LogicalVolume *logicExitWin = new G4LogicalVolume(exitWin, GetMaterial(1), "ExitWindow");
+	G4VPhysicalVolume *phyExitWin = new G4PVPlacement(0, exitWinCenter, logicExitWin, "ExitWindow", logicWorld, false, 0);
 //
-//	  solidSenDet1 = new G4Tubs("SenDet1", 0, radNeckRing, detectorThick, 0, 360.0*deg);
-//	  logicSenDet1 = new G4LogicalVolume(solidSenDet1,
-//					     //beamVacuum,
-//							GetMaterial(6),
-//					     "SenDet1");
-//	  physiSenDet1 = new G4PVPlacement(0,	//rotation
-//					   detectorCenter,
-//					   logicSenDet1,	//its logical volume
-//					   "SenDet1",		//its name
-//					   logicWorld,	     	//its mother  volume
-//					   false,      		//no boolean operation
-//					   0);			//copy number
+//	//
+//	// Detector
+//	//
+//	G4double detectorGap = 1*mm;
+//	G4ThreeVector detectorCenter = phyExitWin->GetObjectTranslation() + G4ThreeVector(0, 0, - exitWin->GetZHalfLength() - detectorGap - detectorThick/2);
+//
+//	G4Tubs* solidSenDet1 = new G4Tubs("SenDet1", 0, radNeckRing, detectorThick, 0, 360.0*deg);
+//	G4LogicalVolume* logicSenDet1 = new G4LogicalVolume(solidSenDet1,
+//					 //beamVacuum,
+//						GetMaterial(6),
+//					 "SenDet1");
+//	G4VPhysicalVolume* physiSenDet1 = new G4PVPlacement(0,	//rotation
+//				   detectorCenter,
+//				   logicSenDet1,	//its logical volume
+//				   "DD",		//its name
+//				   logicWorld,	     	//its mother  volume
+//				   false,      		//no boolean operation
+//				   0);			//copy number
 
 
 
@@ -674,6 +674,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	G4double width = 4*mm;
 	G4double height = 4*mm;
 
+
 	G4Box* solidDD =
 	new G4Box("DD", 0.5*height, 0.5*width, 0.5*thickness);
 
@@ -683,7 +684,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 						"DDLV");
 
 	new G4PVPlacement(0,
-				  G4ThreeVector(),
+				  G4ThreeVector(1.9*mm, 0, -5*cm),
 				  logicDD,
 				  "DD",
 				  logicWorld,
