@@ -74,6 +74,11 @@ private:
 
 	void DefineMaterials();
     G4Material* GetMaterial(G4int t);
+
+	G4double collEntranceGapX;
+	G4double collEntranceGapY;
+	G4double collExit1GapX;
+  	G4double collExit1GapY;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
