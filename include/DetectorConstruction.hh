@@ -58,6 +58,8 @@ public:
     virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField();
 
+    G4ThreeVector GetBeamPipeCenter();
+
 private:
     static G4ThreadLocal MagneticField* fMagneticField;
     static G4ThreadLocal G4FieldManager* fFieldMgr;
@@ -75,10 +77,15 @@ private:
 	void DefineMaterials();
     G4Material* GetMaterial(G4int t);
 
+    // members that are accessible/changeable from other classes
 	G4double collEntranceGapX;
 	G4double collEntranceGapY;
 	G4double collExit1GapX;
   	G4double collExit1GapY;
+
+    G4VPhysicalVolume* physiBeamPipeV;
+
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

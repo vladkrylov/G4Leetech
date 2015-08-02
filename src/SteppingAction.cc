@@ -27,7 +27,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 	G4VPhysicalVolume* volume = aStep->GetPostStepPoint()->GetPhysicalVolume();
 	if (!volume) return;
 
-	if(volume->GetName() == "DD") {
+	if(volume->GetName() == "SenDet1") {
 		if(aStep->GetTrack()->GetDefinition()->GetPDGEncoding() == 11) {
 			Px = aStep->GetPostStepPoint()->GetMomentum().getX();
 			Py = aStep->GetPostStepPoint()->GetMomentum().getY();

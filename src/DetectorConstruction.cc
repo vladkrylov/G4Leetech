@@ -594,7 +594,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	//
 	G4Tubs* solidBeamPipeV = new G4Tubs("BeamPipeV", 0.0, beamPipeVOutRadius, beamPipeLenght/2.0, 0, 360.0*deg);
 	G4LogicalVolume* logicBeamPipeV = new G4LogicalVolume(solidBeamPipeV, GetMaterial(6),"BeamPipeV");
-	G4VPhysicalVolume* physiBeamPipeV = new G4PVPlacement(RM1, beamPipeCenter, logicBeamPipeV,"BeamPipeV",logicWorld, false, 0);
+	physiBeamPipeV = new G4PVPlacement(RM1, beamPipeCenter, logicBeamPipeV,"BeamPipeV",logicWorld, false, 0);
 
 	//
 	// Detector shielding
@@ -618,49 +618,25 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	G4Tubs *exitWin = new G4Tubs("ExitWindow", 0, exitWinRad, exitWinWidth/2, 0, 360*deg);
 	G4LogicalVolume *logicExitWin = new G4LogicalVolume(exitWin, GetMaterial(1), "ExitWindow");
 	G4VPhysicalVolume *phyExitWin = new G4PVPlacement(0, exitWinCenter, logicExitWin, "ExitWindow", logicWorld, false, 0);
-//
-//	//
-//	// Detector
-//	//
-//	G4double detectorGap = 1*mm;
-//	G4ThreeVector detectorCenter = phyExitWin->GetObjectTranslation() + G4ThreeVector(0, 0, - exitWin->GetZHalfLength() - detectorGap - detectorThick/2);
-//
-//	G4Tubs* solidSenDet1 = new G4Tubs("SenDet1", 0, radNeckRing, detectorThick, 0, 360.0*deg);
-//	G4LogicalVolume* logicSenDet1 = new G4LogicalVolume(solidSenDet1,
-//					 //beamVacuum,
-//						GetMaterial(6),
-//					 "SenDet1");
-//	G4VPhysicalVolume* physiSenDet1 = new G4PVPlacement(0,	//rotation
-//				   detectorCenter,
-//				   logicSenDet1,	//its logical volume
-//				   "DD",		//its name
-//				   logicWorld,	     	//its mother  volume
-//				   false,      		//no boolean operation
-//				   0);			//copy number
 
+	//
+	// Detector
+	//
+	G4double detectorGap = 1*mm;
+	G4ThreeVector detectorCenter = phyExitWin->GetObjectTranslation() + G4ThreeVector(0, 0, - exitWin->GetZHalfLength() - detectorGap - detectorThick/2);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	G4Tubs* solidSenDet1 = new G4Tubs("SenDet1", 0, radNeckRing, detectorThick, 0, 360.0*deg);
+	G4LogicalVolume* logicSenDet1 = new G4LogicalVolume(solidSenDet1,
+					 //beamVacuum,
+						GetMaterial(6),
+					 "SenDet1");
+	G4VPhysicalVolume* physiSenDet1 = new G4PVPlacement(0,	//rotation
+				   detectorCenter,
+				   logicSenDet1,	//its logical volume
+				   "SenDet1",		//its name
+				   logicWorld,	     	//its mother  volume
+				   false,      		//no boolean operation
+				   0);			//copy number
 
 
 
@@ -668,29 +644,81 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 
 	//
-	// DD
+	// Visualization attributes
 	//
-	G4double thickness = 500*um;
-	G4double width = 4*mm;
-	G4double height = 4*mm;
+	G4VisAttributes* detVisAtt = new G4VisAttributes(G4Colour(0.25,0.7,0.0));
+	logicSenDet1->SetVisAttributes(detVisAtt);
+
+	G4VisAttributes* pipeVisAtt = new G4VisAttributes(G4Colour(0.5,0.0,0.6));
+	logicBeamPipe->SetVisAttributes(pipeVisAtt);
+
+	G4VisAttributes* pipeVVisAtt = new G4VisAttributes(G4Colour(0.4,0.3,0.0));
+	logicBeamPipeV->SetVisAttributes(pipeVVisAtt);
+
+	G4VisAttributes* cupVisAtt = new G4VisAttributes(G4Colour(0.0,0.0,1.0));
+	logicTarget->SetVisAttributes(cupVisAtt);
+	G4VisAttributes* exitWinVisAtt = new G4VisAttributes(G4Colour(1.0,0.5,0.0));
+	logicExitWin->SetVisAttributes(exitWinVisAtt);
+//
+//  G4VisAttributes* chamberVisAtt = new G4VisAttributes(G4Colour(0.0,0.0,1.0));
+//  logicChamber->SetVisAttributes(chamberVisAtt);
+//
+//  G4VisAttributes* innerVisAtt = new G4VisAttributes(G4Colour(0.0,1.0,1.0));
+//  logicInnerBox->SetVisAttributes(innerVisAtt);
+//
+//	G4VisAttributes* fieldVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+//	logicFieldBox->SetVisAttributes(fieldVisAtt);
+//
+//
+//  G4VisAttributes* detVisAtt = new G4VisAttributes(G4Colour(0.0,0.0,1.0));
+//  logicSenDet1->SetVisAttributes(detVisAtt);
 
 
-	G4Box* solidDD =
-	new G4Box("DD", 0.5*height, 0.5*width, 0.5*thickness);
 
-	G4LogicalVolume* logicDD =
-	new G4LogicalVolume(solidDD,
-			GetMaterial(1),
-						"DDLV");
 
-	new G4PVPlacement(0,
-				  G4ThreeVector(2.1*mm, 0, -5*cm),
-				  logicDD,
-				  "DD",
-				  logicWorld,
-				  false,
-				  0,
-				  true);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//	//
+//	// DD
+//	//
+//	G4double thickness = 500*um;
+//	G4double width = 4*mm;
+//	G4double height = 4*mm;
+//
+//
+//	G4Box* solidDD =
+//	new G4Box("DD", 0.5*height, 0.5*width, 0.5*thickness);
+//
+//	G4LogicalVolume* logicDD =
+//	new G4LogicalVolume(solidDD,
+//			GetMaterial(1),
+//						"DDLV");
+//
+//	new G4PVPlacement(0,
+//				  G4ThreeVector(2.1*mm, 0, -5*cm),
+//				  logicDD,
+//				  "DD",
+//				  logicWorld,
+//				  false,
+//				  0,
+//				  true);
 
 	// Print materials
 	G4cout << *(G4Material::GetMaterialTable()) << G4endl;
@@ -809,3 +837,11 @@ G4Material* DetectorConstruction::GetMaterial(G4int t)
   }
 
 }
+
+G4ThreeVector DetectorConstruction::GetBeamPipeCenter()
+{
+	return physiBeamPipeV->GetObjectTranslation();
+}
+
+
+

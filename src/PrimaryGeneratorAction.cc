@@ -1,10 +1,13 @@
 #include "G4Event.hh"
+#include "G4RunManager.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4GenericMessenger.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
+
+#include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -16,9 +19,11 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 	fParticleGun = new G4ParticleGun();
 	fParticleGun->SetNumberOfParticles(1);
 	fParticleGun->SetParticleDefinition(FindParticle("e+"));
-	fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-	fParticleGun->SetParticlePosition(G4ThreeVector(0, 0, -10*cm));
+	fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
 	fParticleGun->SetParticleEnergy(2.5*MeV);
+
+	Detector = (DetectorConstruction*)G4RunManager::GetRunManager()->GetUserDetectorConstruction();
+	fParticleGun->SetParticlePosition(Detector->GetBeamPipeCenter());
 }
 
 G4ParticleDefinition* PrimaryGeneratorAction::FindParticle(G4String particleName)
