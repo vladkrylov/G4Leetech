@@ -46,6 +46,7 @@ class G4VSensitiveDetector;
 class G4VisAttributes;
 class G4GenericMessenger;
 class MagneticField;
+class DetectorMessenger;
 
 /// Detector construction
 
@@ -64,6 +65,11 @@ private:
     static G4ThreadLocal MagneticField* fMagneticField;
     static G4ThreadLocal G4FieldManager* fFieldMgr;
 
+    DetectorMessenger* detectorMessenger;
+
+	void DefineMaterials();
+    G4Material* GetMaterial(G4int t);
+
 	// Define materials
 	G4Material*        alMy;
 	G4Material*        steelMy;
@@ -74,20 +80,135 @@ private:
 	G4Material*        G4Lead;
 	G4Material* 	   U;
 
-	void DefineMaterials();
-    G4Material* GetMaterial(G4int t);
-
     // members that are accessible/changeable from other classes
-	G4double collEntranceGapX;
-	G4double collEntranceGapY;
-	G4double collExit1GapX;
-  	G4double collExit1GapY;
+	G4double _collEntranceGapX;
+	G4double _collEntranceGapY;
+	G4double _collExit1GapX;
+  	G4double _collExit1GapY;
+
+  	G4double _MagFieldVal;
+    G4double _cupLenght;			//length of the absorber
+    G4double _apertureInRadius;		//radius of first calimator
+    G4double _apertureLenght;		//length of first calimator
+
+	G4double _maxStep;
+	G4double _maxLength;
+	G4double _maxTime;
+  	G4double _minEkin;
+  	G4double _mionRang;
+
+
+  	G4double _Det1InRad;
+  	G4double _Det1OutRad;
+  	G4double _Det1X;
+  	G4double _RotationDeg;
+  	G4double _RotAddDist;
 
     G4VPhysicalVolume* physiBeamPipeV;
 
+// messenger access functions
+public:
+    void UpdateGeometry();
 
+    void SetMagField(G4double valMy);	//set value of B - induction of magnetic field in Gauss
+    void SetCupLenght(G4double valMy);	//set length of absorber
+    void SetApertureInRadius(G4double valMy);//radius of the first collimator
+    void SetApertureLenght(G4double valMy); //length of the first collimator
+    G4ThreeVector getBeamPipeCenter();
+
+	void SetMaxStep(G4double valMy);
+	void SetMaxLength(G4double valMy);
+	void SetMaxTime(G4double valMy);
+	void SetMinEkin(G4double valMy);
+	void SetMionRang(G4double valMy);
+
+	void SetDet1OutRad(G4double valMy);
+	void SetDet1InRad(G4double valMy);
+	void SetDet1X(G4double valMy);
+
+	void SetRotationDeg(G4double valMy);
+	void SetRotationAddDistCmd(G4double valMy);
+
+	void SetCollimatorGapEntranceX(G4double valMy);
+	void SetCollimatorGapEntranceY(G4double valMy);
+	void SetCollimatorGapExit1X(G4double valMy);
+	void SetCollimatorGapExit1Y(G4double valMy);
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void DetectorConstruction::SetMagField(G4double valMy){
+  _MagFieldVal = valMy;
+}
+
+inline void DetectorConstruction::SetCupLenght(G4double valMy){
+  _cupLenght = valMy;
+}
+
+inline void DetectorConstruction::SetApertureInRadius(G4double valMy){
+  _apertureInRadius = valMy;
+}
+
+inline void DetectorConstruction::SetApertureLenght(G4double valMy){
+  _apertureLenght = valMy;
+}
+
+inline void DetectorConstruction::SetMaxStep(G4double valMy){
+  _maxStep = valMy;
+}
+
+inline void DetectorConstruction::SetMaxLength(G4double valMy){
+  _maxLength = valMy;
+}
+
+inline void DetectorConstruction::SetMaxTime(G4double valMy){
+  _maxTime = valMy;
+}
+
+inline void DetectorConstruction::SetMinEkin(G4double valMy){
+  _minEkin = valMy;
+  G4cout<<"_minEkin = "<<_minEkin<<std::endl;
+}
+
+inline void DetectorConstruction::SetMionRang(G4double valMy){
+  _mionRang = valMy;
+}
+
+inline void DetectorConstruction::SetDet1InRad(G4double valMy){
+  _Det1InRad = valMy;
+}
+
+inline void DetectorConstruction::SetDet1OutRad(G4double valMy){
+  _Det1OutRad = valMy;
+}
+
+inline void DetectorConstruction::SetDet1X(G4double valMy){
+  _Det1X = valMy;
+}
+
+inline void DetectorConstruction::SetRotationDeg(G4double valMy){
+  _RotationDeg = valMy;
+}
+
+inline void DetectorConstruction::SetRotationAddDistCmd(G4double valMy){
+	_RotAddDist = valMy;
+}
+
+inline void DetectorConstruction::SetCollimatorGapEntranceX(G4double valMy){
+	_collEntranceGapX = valMy;
+}
+
+inline void DetectorConstruction::SetCollimatorGapEntranceY(G4double valMy){
+	_collEntranceGapY = valMy;
+}
+
+inline void DetectorConstruction::SetCollimatorGapExit1X(G4double valMy){
+	_collExit1GapX = valMy;
+}
+
+inline void DetectorConstruction::SetCollimatorGapExit1Y(G4double valMy){
+	_collExit1GapY = valMy;
+}
+
 
 #endif
