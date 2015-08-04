@@ -27,9 +27,9 @@
 		
 /Micromegas/det/setCupThick 1 um
 
-/Leetech/det/SetCollimatorEntranceGapX 20 mm
+/Leetech/det/SetCollimatorEntranceGapX 10 mm
 /Leetech/det/SetCollimatorEntranceGapY 20 mm
-/Leetech/det/SetCollimatorExit1GapX 20 mm
+/Leetech/det/SetCollimatorExit1GapX 10 mm
 /Leetech/det/SetCollimatorExit1GapY 20 mm
 
 #equal to first colim gap

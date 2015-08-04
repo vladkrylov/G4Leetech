@@ -591,7 +591,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	G4LogicalVolume* logicShieldBarrier1 = new G4LogicalVolume(solidShieldBarrier1,GetMaterial(7), "ShieldBarrier1");
 
 	G4ThreeVector detShieldCenter(0, 0, -solidShieldBarrier1->GetZHalfLength()
-									  - 2*neckSolid->GetZHalfLength() - 15*cm);
+									  - 2*neckSolid->GetZHalfLength());
 	G4VPhysicalVolume* physiShieldBarrier1 = new G4PVPlacement(0, detShieldCenter,
 					 logicShieldBarrier1, "ShieldBarrier1",logicWorld, false, 0);
 
@@ -625,6 +625,49 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 				   false,      		//no boolean operation
 				   0);			//copy number
 
+	//
+	// Inner shielding
+	//
+	G4Box *solidInnerBotShield1 = new G4Box("InnerBotShield1",InnerBotShield1X/2, InnerBotShield1Y/2, InnerBotShield1Z/2);
+	G4LogicalVolume *logicInnerBotShield1 = new G4LogicalVolume(solidInnerBotShield1,GetMaterial(7), "InnerBotShield1");
+	G4RotationMatrix*RM11 = new G4RotationMatrix;
+	RM11->rotateY(0*deg);
+	G4VPhysicalVolume *physiInnerBotShield1 = new G4PVPlacement(RM11,
+		  G4ThreeVector(InnerBotShield1_xc,InnerBotShield1_yc,InnerBotShield1_zc),
+		  logicInnerBotShield1, "InnerBotShield1", logicInnerBox, false, 0);
+
+	G4Box *solidInnerBotShield2 = new G4Box("InnerBotShield2",InnerBotShield2X/2, InnerBotShield2Y/2, InnerBotShield2Z/2);
+	G4LogicalVolume *logicInnerBotShield2 = new G4LogicalVolume(solidInnerBotShield2,GetMaterial(7), "InnerBotShield2");
+	G4RotationMatrix*RM12=new G4RotationMatrix;
+	RM12->rotateY(0*deg);
+	G4VPhysicalVolume *physiInnerBotShield2 = new G4PVPlacement(RM12,
+		  G4ThreeVector(InnerBotShield2_xc,InnerBotShield2_yc,InnerBotShield2_zc),
+		  logicInnerBotShield2, "InnerBotShield2", logicInnerBox, false, 0);
+
+	G4Box *solidInnerShield3 = new G4Box("InnerShield3",InnerShield3X/2, InnerShield3Y/2, InnerShield3Z/2);
+	G4LogicalVolume *logicInnerShield3 = new G4LogicalVolume(solidInnerShield3,GetMaterial(7), "InnerShield3");
+	G4RotationMatrix*RM13=new G4RotationMatrix;
+	RM13->rotateY(0*deg);
+	G4VPhysicalVolume *physiInnerShield3 = new G4PVPlacement(RM13,
+		  G4ThreeVector(InnerShield3_xc,InnerShield3_yc,InnerShield3_zc),
+		  logicInnerShield3, "InnerShield3", logicInnerBox, false, 0);
+
+
+	G4Box *solidInnerShield4 = new G4Box("InnerShield4",InnerShield4X/2, InnerShield4Y/2, InnerShield4Z/2);
+	G4LogicalVolume *logicInnerShield4 = new G4LogicalVolume(solidInnerShield4,GetMaterial(7), "InnerShield4");
+	G4RotationMatrix*RM14=new G4RotationMatrix;
+	RM14->rotateY(-45*deg);
+	G4VPhysicalVolume *physiInnerShield4 = new G4PVPlacement(RM14,
+		  G4ThreeVector(InnerShield4_xc,InnerShield4_yc,InnerShield4_zc),
+		  logicInnerShield4, "InnerShield4", logicInnerBox, false, 0);
+
+	G4Box *solidInnerShield5 = new G4Box("InnerShield5",InnerShield5X/2, InnerShield5Y/2, InnerShield5Z/2);
+	G4LogicalVolume *logicInnerShield5 = new G4LogicalVolume(solidInnerShield5,GetMaterial(7), "InnerShield5");
+	G4RotationMatrix*RM15=new G4RotationMatrix;
+	RM15->rotateY(45*deg);
+	G4VPhysicalVolume *physiInnerShield5 = new G4PVPlacement(RM15,
+		  G4ThreeVector(InnerShield5_xc,InnerShield5_yc,InnerShield5_zc),
+		  logicInnerShield5, "InnerShield5", logicInnerBox, false, 0);
 
 	//
 	// Visualization attributes
