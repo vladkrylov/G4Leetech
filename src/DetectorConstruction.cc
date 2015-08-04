@@ -313,14 +313,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	G4double colimator_yc62	=	-colimatorX/2-beamSize/2;
 	G4double colimator_zc62thin	=	colimator_zc42thin -gap_between_collimators-ThicknesOfChamber*2;
 
-//	fFieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-//	fMagneticField->setBfieldY(_MagFieldVal);
-//	fMagneticField->setFieldBox1(fieldBox_xc + chamber_xc, fieldBox_yc + chamber_yc, fieldBox_zc + chamber_zc,
-//			 fieldBoxX, fieldBoxY, fieldBoxZ);
-//	fFieldMgr->SetDetectorField(fMagneticField);
-//	fFieldMgr->CreateChordFinder(fMagneticField);
-//	fFieldMgr->GetChordFinder()->SetDeltaChord(1.0*mm);
-
 	// Clean old geometry, if any
 	//
 	G4GeometryManager::GetInstance()->OpenGeometry();
