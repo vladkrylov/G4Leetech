@@ -31,7 +31,6 @@ private:
     G4UIcmdWithADoubleAndUnit  		*CupThickCmd;
     G4UIcmdWithADoubleAndUnit  		*ApertureThickCmd;
     G4UIcmdWithADoubleAndUnit  		*ApertureRadiusCmd;
-    G4UIcmdWithoutParameter    		*UpdateCmd;
 
 	G4UIcmdWithADoubleAndUnit       *maxStepCmd;
 	G4UIcmdWithADoubleAndUnit       *maxLengthCmd;

@@ -19,12 +19,6 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction* detector)
 	detDirNew = new G4UIdirectory("/Leetech/det/");
 	detDirNew->SetGuidance("detector control");
 
-	UpdateCmd = new G4UIcmdWithoutParameter("/Micromegas/det/update",this);
-	UpdateCmd->SetGuidance("Update detector geometry.");
-	UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-	UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-	UpdateCmd->AvailableForStates(G4State_Idle);
-
 	MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/Micromegas/det/setField",this);
 	MagFieldCmd->SetGuidance("Define magnetic field.");
 	MagFieldCmd->SetGuidance("Magnetic field will be in Y direction.");
@@ -135,7 +129,6 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction* detector)
 }
 DetectorMessenger::~DetectorMessenger()
 {
-	delete UpdateCmd;
 	delete ApertureThickCmd;
 	delete ApertureRadiusCmd;
 	delete CupThickCmd;
@@ -164,8 +157,6 @@ DetectorMessenger::~DetectorMessenger()
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
-	if( command == UpdateCmd ){
-	Detector->UpdateGeometry();}
 	if( command == MagFieldCmd ){
 		Detector->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));}
 	if( command == CupThickCmd ){

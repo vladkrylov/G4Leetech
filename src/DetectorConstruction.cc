@@ -442,10 +442,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 											  logicColBoxes, "ColBoxes", logicWorld, false, 0);
 
 	/* construct target */
-	G4double cupLenght = 3000*um;
-	G4Tubs *target = new G4Tubs("Target", 0, radNeckRing, cupLenght/2, 0, 360*deg);
+	G4Tubs *target = new G4Tubs("Target", 0, radNeckRing, _targetThickness/2, 0, 360*deg);
 	G4LogicalVolume *logicTarget = new G4LogicalVolume(target, GetMaterial(1), "Target");
-	G4VPhysicalVolume *phyTarget = new G4PVPlacement(0, G4ThreeVector(-electronsRadius,0,
+	phyTarget = new G4PVPlacement(0, G4ThreeVector(-electronsRadius,0,
 																-(2*neckSolid->GetZHalfLength()
 																  + 2*collimOutNeckMain->GetZHalfLength()
 																  + 2*colBoxMain->GetZHalfLength()
@@ -782,16 +781,13 @@ G4Material* DetectorConstruction::GetMaterial(G4int t)
 
 }
 
-void DetectorConstruction::UpdateGeometry()
-{
-  G4cout<<"DetectorConstruction::UpdateGeometry()"<<G4endl;
-  G4RunManager::GetRunManager()->DefineWorldVolume(Construct());
-}
-
 G4ThreeVector DetectorConstruction::GetBeamPipeCenter()
 {
 	return physiBeamPipeV->GetObjectTranslation();
 }
 
-
+G4ThreeVector DetectorConstruction::GetTargetFaceCenter()
+{
+	return phyTarget->GetObjectTranslation() - G4ThreeVector(0, 0, _targetThickness/2);
+}
 

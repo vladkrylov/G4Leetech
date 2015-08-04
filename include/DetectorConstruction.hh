@@ -60,6 +60,7 @@ public:
     virtual void ConstructSDandField();
 
     G4ThreeVector GetBeamPipeCenter();
+    G4ThreeVector GetTargetFaceCenter();
 
 private:
     static G4ThreadLocal MagneticField* fMagneticField;
@@ -87,7 +88,7 @@ private:
   	G4double _collExit1GapY;
 
   	G4double _MagFieldVal;
-    G4double _cupLenght;			//length of the absorber
+    G4double _targetThickness;			//length of the absorber
     G4double _apertureInRadius;		//radius of first calimator
     G4double _apertureLenght;		//length of first calimator
 
@@ -105,11 +106,10 @@ private:
   	G4double _RotAddDist;
 
     G4VPhysicalVolume* physiBeamPipeV;
+    G4VPhysicalVolume* phyTarget;
 
 // messenger access functions
 public:
-    void UpdateGeometry();
-
     void SetMagField(G4double valMy);	//set value of B - induction of magnetic field in Gauss
     void SetCupLenght(G4double valMy);	//set length of absorber
     void SetApertureInRadius(G4double valMy);//radius of the first collimator
@@ -142,7 +142,7 @@ inline void DetectorConstruction::SetMagField(G4double valMy){
 }
 
 inline void DetectorConstruction::SetCupLenght(G4double valMy){
-  _cupLenght = valMy;
+	_targetThickness = valMy;
 }
 
 inline void DetectorConstruction::SetApertureInRadius(G4double valMy){

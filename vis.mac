@@ -1,4 +1,3 @@
-/run/initialize
 # set messenger parameters
 /run/verbose 1
 /event/verbose 0
@@ -58,7 +57,8 @@
 /Micromegas/det/setMinEkin 10 keV
 /Micromegas/det/setMionRang 0.01 mm
 
-/Micromegas/det/update
+/run/initialize
+#/Micromegas/det/update
 
 #gamma, e-, e+, mu-, mu+, pi-, pi+, kaon-, kaon+, anti_proton, proton
 #/Micromegas/gun/PerticleType e- 

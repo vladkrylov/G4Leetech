@@ -19,11 +19,15 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 	fParticleGun = new G4ParticleGun();
 	fParticleGun->SetNumberOfParticles(1);
 	fParticleGun->SetParticleDefinition(FindParticle("e+"));
-	fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
 	fParticleGun->SetParticleEnergy(2.5*MeV);
 
 	Detector = (DetectorConstruction*)G4RunManager::GetRunManager()->GetUserDetectorConstruction();
+
+	G4ThreeVector beamPipeCenter = Detector->GetBeamPipeCenter();
+	G4ThreeVector targetCenter = Detector->GetTargetFaceCenter();
+
 	fParticleGun->SetParticlePosition(Detector->GetBeamPipeCenter());
+	fParticleGun->SetParticleMomentumDirection(targetCenter - fParticleGun->GetParticlePosition());
 }
 
 G4ParticleDefinition* PrimaryGeneratorAction::FindParticle(G4String particleName)
