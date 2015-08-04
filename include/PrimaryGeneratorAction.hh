@@ -8,6 +8,7 @@ class G4ParticleGun;
 class G4GenericMessenger;
 class G4Event;
 class G4ParticleDefinition;
+class DetectorConstruction;
 
 /// Primary generator
 ///
@@ -28,6 +29,8 @@ public:
     
 private:
     G4ParticleGun* fParticleGun;
+    DetectorConstruction* Detector;
+
     G4ParticleDefinition* FindParticle(G4String particleName);
 };
 

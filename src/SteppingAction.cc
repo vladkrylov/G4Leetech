@@ -27,8 +27,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 	G4VPhysicalVolume* volume = aStep->GetPostStepPoint()->GetPhysicalVolume();
 	if (!volume) return;
 
-	if(volume->GetName() == "DD") {
-		if(aStep->GetTrack()->GetDefinition()->GetPDGEncoding() == 11) {
+	if(volume->GetName() == "SenDet1") {
+//		if(aStep->GetTrack()->GetDefinition()->GetPDGEncoding() == 11) {
 			Px = aStep->GetPostStepPoint()->GetMomentum().getX();
 			Py = aStep->GetPostStepPoint()->GetMomentum().getY();
 			Pz = aStep->GetPostStepPoint()->GetMomentum().getZ();
@@ -51,7 +51,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 			analysisManager->FillNtupleDColumn(BranchId=11, P);
 			analysisManager->FillNtupleDColumn(BranchId=12, theta);
 			analysisManager->AddNtupleRow();
-		}
+//		}
 		aStep->GetTrack()->SetTrackStatus(fStopAndKill);
 	}
 }

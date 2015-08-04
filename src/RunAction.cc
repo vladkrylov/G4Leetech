@@ -22,9 +22,9 @@ RunAction::RunAction()
     long seeds[2];
     time_t systime = time(NULL);
     seeds[0] = (long) systime;
-    seeds[1] = (long) systime*G4UniformRand();
-    CLHEP::HepRandom::setTheSeeds(seeds);
-    CLHEP::HepRandom::showEngineStatus();
+    seeds[1] = (long) (systime*G4UniformRand());
+    G4Random::setTheSeeds(seeds);
+    G4Random::showEngineStatus();
 
     // Create analysis manager
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
