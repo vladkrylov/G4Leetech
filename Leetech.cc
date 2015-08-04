@@ -29,7 +29,7 @@ int main(int argc,char** argv)
 {
 	// Choose the Random engine
 	//
-	CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+	G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
 #ifdef G4UI_USE
 	// Detect interactive mode (if no arguments) and define UI session

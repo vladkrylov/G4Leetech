@@ -23,7 +23,7 @@
 #E=100keV
 #/Micromegas/det/setField 81.5 gauss
 #/Micromegas/det/setField 163 gauss
-/Micromegas/det/setField 400 gauss
+/Micromegas/det/setField 500 gauss
 		
 /Micromegas/det/setCupThick 1 um
 
