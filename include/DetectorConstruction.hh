@@ -47,6 +47,7 @@ class G4VisAttributes;
 class G4GenericMessenger;
 class MagneticField;
 class DetectorMessenger;
+class G4UniformMagField;
 
 /// Detector construction
 
@@ -63,13 +64,19 @@ public:
     G4ThreeVector GetTargetFaceCenter();
 
 private:
-    static G4ThreadLocal MagneticField* fMagneticField;
-    static G4ThreadLocal G4FieldManager* fFieldMgr;
+//    static G4ThreadLocal G4UniformMagField* fMagneticField;
+//    static G4ThreadLocal G4FieldManager* fFieldMgr;
 
     DetectorMessenger* detectorMessenger;
 
 	void DefineMaterials();
     G4Material* GetMaterial(G4int t);
+
+    G4UniformMagField *fMagneticField;
+  	G4FieldManager* fFieldMgr;
+    G4VPhysicalVolume* physiBeamPipeV;
+    G4VPhysicalVolume* phyTarget;
+    G4LogicalVolume *logicInnerBox;
 
 	// Define materials
 	G4Material*        alMy;
@@ -104,9 +111,6 @@ private:
   	G4double _Det1X;
   	G4double _RotationDeg;
   	G4double _RotAddDist;
-
-    G4VPhysicalVolume* physiBeamPipeV;
-    G4VPhysicalVolume* phyTarget;
 
 // messenger access functions
 public:

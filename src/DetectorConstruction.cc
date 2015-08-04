@@ -22,17 +22,18 @@
 #include "G4ChordFinder.hh"
 #include "G4UserLimits.hh"
 #include "G4RunManager.hh"
+#include "G4AutoDelete.hh"
 
 #include "TMath.h"
 
 #include "DetectorConstruction.hh"
 #include "DetectorMessenger.hh"
-//#include "MagneticField.hh"
+#include "MagneticField.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ThreadLocal MagneticField* DetectorConstruction::fMagneticField = 0;
-G4ThreadLocal G4FieldManager* DetectorConstruction::fFieldMgr = 0;
+//G4ThreadLocal G4UniformMagField* DetectorConstruction::fMagneticField = 0;
+//G4ThreadLocal G4FieldManager* DetectorConstruction::fFieldMgr = 0;
     
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -41,6 +42,7 @@ DetectorConstruction::DetectorConstruction()
 , _RotationDeg(0)
 , detectorMessenger(NULL)
 {
+//	magField = new MagneticField();
 	detectorMessenger = new DetectorMessenger(this);
 }
 
@@ -311,14 +313,13 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	G4double colimator_yc62	=	-colimatorX/2-beamSize/2;
 	G4double colimator_zc62thin	=	colimator_zc42thin -gap_between_collimators-ThicknesOfChamber*2;
 
-//	G4FieldManager* fieldMgr
-//	  = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-//	magField->setBfieldY(_MagFieldVal);
-//	magField->setFieldBox1(fieldBox_xc + chamber_xc, fieldBox_yc + chamber_yc, fieldBox_zc + chamber_zc,
+//	fFieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
+//	fMagneticField->setBfieldY(_MagFieldVal);
+//	fMagneticField->setFieldBox1(fieldBox_xc + chamber_xc, fieldBox_yc + chamber_yc, fieldBox_zc + chamber_zc,
 //			 fieldBoxX, fieldBoxY, fieldBoxZ);
-//	fieldMgr->SetDetectorField(magField);
-//	fieldMgr->CreateChordFinder(magField);
-//	fieldMgr->GetChordFinder()->SetDeltaChord(1.0*mm);
+//	fFieldMgr->SetDetectorField(fMagneticField);
+//	fFieldMgr->CreateChordFinder(fMagneticField);
+//	fFieldMgr->GetChordFinder()->SetDeltaChord(1.0*mm);
 
 	// Clean old geometry, if any
 	//
@@ -387,7 +388,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	G4UnionSolid *innerMainEnEx1Box    = new G4UnionSolid("InnerBox", innerMainEntranceBox, neckHole, transExit1NeckHole);
 	G4UnionSolid *innerMainEnEx1Ex2Box = new G4UnionSolid("InnerBox", innerMainEnEx1Box, neckHole, transExit2NeckHole);
 
-	G4LogicalVolume *logicInnerBox = new G4LogicalVolume(innerMainEnEx1Ex2Box, GetMaterial(5),"InnerBox");
+	logicInnerBox = new G4LogicalVolume(innerMainEnEx1Ex2Box, GetMaterial(5),"InnerBox");
 	G4VPhysicalVolume *physiInnerBox = new G4PVPlacement(0, G4ThreeVector(innerBox_xc,innerBox_yc,innerBox_zc), logicInnerBox, "InnerBox", logicChamber, false,	 0);
 
 	G4double thicknessOfColBox = 8*mm;
@@ -653,18 +654,21 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 //  G4VisAttributes* chamberVisAtt = new G4VisAttributes(G4Colour(0.0,0.0,1.0));
 //  logicChamber->SetVisAttributes(chamberVisAtt);
 //
-//  G4VisAttributes* innerVisAtt = new G4VisAttributes(G4Colour(0.0,1.0,1.0));
-//  logicInnerBox->SetVisAttributes(innerVisAtt);
-//
-//	G4VisAttributes* fieldVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
-//	logicFieldBox->SetVisAttributes(fieldVisAtt);
+	G4VisAttributes* fieldVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+	logicInnerBox->SetVisAttributes(fieldVisAtt);
 //
 //
 //  G4VisAttributes* detVisAtt = new G4VisAttributes(G4Colour(0.0,0.0,1.0));
 //  logicSenDet1->SetVisAttributes(detVisAtt);
 
-	// Print materials
-	G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+	G4UserLimits* stepLimit = new G4UserLimits(_maxStep, _maxLength, _maxTime, _minEkin, _mionRang);
+	logicWorld->SetUserLimits(stepLimit);
+	logicTarget->SetUserLimits(stepLimit);
+	logicChamber->SetUserLimits(stepLimit);
+	logicInnerBox->SetUserLimits(stepLimit);
+
+
+
 
 	//always return the physical World
 	//
@@ -674,8 +678,15 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::ConstructSDandField()
-{}
+{
+	fMagneticField = new G4UniformMagField(G4ThreeVector(0., _MagFieldVal, 0.));
+	fFieldMgr = new G4FieldManager();
+	fFieldMgr->SetDetectorField(fMagneticField);
+	fFieldMgr->CreateChordFinder(fMagneticField);
+	fFieldMgr->GetChordFinder()->SetDeltaChord(1.0*mm);
 
+	logicInnerBox->SetFieldManager(fFieldMgr, true);
+}
 
 void DetectorConstruction::DefineMaterials()
 {
@@ -790,4 +801,5 @@ G4ThreeVector DetectorConstruction::GetTargetFaceCenter()
 {
 	return phyTarget->GetObjectTranslation() - G4ThreeVector(0, 0, _targetThickness/2);
 }
+
 

@@ -18,7 +18,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 {
 	fParticleGun = new G4ParticleGun();
 	fParticleGun->SetNumberOfParticles(1);
-	fParticleGun->SetParticleDefinition(FindParticle("e+"));
+	fParticleGun->SetParticleDefinition(FindParticle("e-"));
 	fParticleGun->SetParticleEnergy(2.5*MeV);
 
 	Detector = (DetectorConstruction*)G4RunManager::GetRunManager()->GetUserDetectorConstruction();

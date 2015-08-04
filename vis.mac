@@ -23,9 +23,9 @@
 #E=100keV
 #/Micromegas/det/setField 81.5 gauss
 #/Micromegas/det/setField 163 gauss
-/Micromegas/det/setField 575 gauss
+/Micromegas/det/setField 400 gauss
 		
-/Micromegas/det/setCupThick 100 um
+/Micromegas/det/setCupThick 1 um
 
 /Leetech/det/SetCollimatorEntranceGapX 20 mm
 /Leetech/det/SetCollimatorEntranceGapY 20 mm
@@ -47,7 +47,7 @@
 #distance from the edge to beginning of the collimator system
 /Micromegas/det/setDet1X 20 mm
 
-/Micromegas/det/setRotationDeg 23 deg
+/Micromegas/det/setRotationDeg 0 deg
 #/Micromegas/det/setRotationAddDist 6.5 cm
 /Micromegas/det/setRotationAddDist 65 cm
 
