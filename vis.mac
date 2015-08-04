@@ -1,35 +1,10 @@
-# set messenger parameters
-/run/verbose 1
-/event/verbose 0
-/tracking/verbose 0
+/Micromegas/det/setField 475 gauss
 
-/vis/open HepRepFile
-#/vis/open OGLSXm
+/Micromegas/det/setCupThick 2 mm
 
-/vis/drawVolume
-
-# for drawing the tracks
-/vis/scene/add/trajectories
-
-# (if you prefer refreshing each event, comment out next line)
-/vis/scene/endOfEventAction accumulate
-
-#P=1MeV
-#/Micromegas/det/setField 223 gauss
-#P=100keV
-#/Micromegas/det/setField 22.5 gauss
-#P=5MeV
-#/Micromegas/det/setField 500 gauss
-#E=100keV
-#/Micromegas/det/setField 81.5 gauss
-#/Micromegas/det/setField 163 gauss
-/Micromegas/det/setField 500 gauss
-		
-/Micromegas/det/setCupThick 1 um
-
-/Leetech/det/SetCollimatorEntranceGapX 10 mm
+/Leetech/det/SetCollimatorEntranceGapX 20 mm
 /Leetech/det/SetCollimatorEntranceGapY 20 mm
-/Leetech/det/SetCollimatorExit1GapX 10 mm
+/Leetech/det/SetCollimatorExit1GapX 20 mm
 /Leetech/det/SetCollimatorExit1GapY 20 mm
 
 #equal to first colim gap
@@ -47,7 +22,7 @@
 #distance from the edge to beginning of the collimator system
 /Micromegas/det/setDet1X 20 mm
 
-/Micromegas/det/setRotationDeg 0 deg
+/Micromegas/det/setRotationDeg 23 deg
 #/Micromegas/det/setRotationAddDist 6.5 cm
 /Micromegas/det/setRotationAddDist 65 cm
 
@@ -57,28 +32,35 @@
 /Micromegas/det/setMinEkin 10 keV
 /Micromegas/det/setMionRang 0.01 mm
 
+/run/numberOfThreads 4
 /run/initialize
-#/Micromegas/det/update
+
+#/run/initialize
+
+# set messenger parameters
+/run/verbose 1
+/event/verbose 0
+/tracking/verbose 0
+
+/vis/open HepRepFile
+#/vis/open OGLSXm
+
+/vis/drawVolume
+
+# for drawing the tracks
+/vis/scene/add/trajectories
+
+# (if you prefer refreshing each event, comment out next line)
+/vis/scene/endOfEventAction accumulate
 
 #gamma, e-, e+, mu-, mu+, pi-, pi+, kaon-, kaon+, anti_proton, proton
 #/Micromegas/gun/PerticleType e- 
 
-# settings for don't use window 20mkm
-#/Micromegas/gun/ParticlePosition -500 0 -500
-#/Micromegas/gun/ParticleDirection 0.0 0.0 1.0
-#/Micromegas/gun/ParticleDirectionRMS 0 0 0
-#/Micromegas/gun/ParticleMomentum 3.5 3.5 -999
 
 # FIGHT settings
 #/Micromegas/gun/ParticleDirection 39 0.0 92
-#/Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
-#/Micromegas/gun/ParticleMomentum 3.5 3.5 -999
-
-# DIRECT TO DETECTOR settings
-#/Micromegas/gun/ParticlePosition 210 0 -161.193
-#/Micromegas/gun/ParticleDirection 39 0.0 92
-#/Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
-#/Micromegas/gun/ParticleMomentum 5.0 5.0 -999
+/Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
+/Micromegas/gun/ParticleEnergy 3.5 MeV
 
 #/Leetech/RootFile LeetechVis
 #/Micromegas/printModulo 100000

@@ -4,6 +4,7 @@
 screenshots/
 ResultsAndAnalysis/
 nohup*
+core
 
 *.root
 *.zip
