@@ -1,12 +1,32 @@
 void MergeRootFiles()
 {
-    const char *TreeName = "T";
-    const int numberOfFiles = 4;
+    const char *TreeName = "Hits";
+    const int numberOfFiles = 24;
     char* mergeFilenames[numberOfFiles] = {
-"/home/vlad/5g4work/LeetechParallel/ResultsAndAnalysis/B_scan_d=4mm_E=3.5MeV/B_field_csan_d=4mm_E=3.5 MeV_B=550 G/LeetechRun003.root",
-"/home/vlad/5g4work/LeetechParallel/ResultsAndAnalysis/B_scan_d=4mm_E=3.5MeV/B_field_csan_d=4mm_E=3.5 MeV_B=550 G/LeetechRun001.root",
-"/home/vlad/5g4work/LeetechParallel/ResultsAndAnalysis/B_scan_d=4mm_E=3.5MeV/B_field_csan_d=4mm_E=3.5 MeV_B=550 G/LeetechRun002.root",
-"/home/vlad/5g4work/LeetechParallel/ResultsAndAnalysis/B_scan_d=4mm_E=3.5MeV/B_field_csan_d=4mm_E=3.5 MeV_B=550 G/LeetechRun000.root"};
+"/home/vlad/10g4work/LeetechRuns/test/leetech_t11.root",
+"/home/vlad/10g4work/LeetechRuns/test/leetech_t19.root",
+"/home/vlad/10g4work/LeetechRuns/test/leetech_t16.root",
+"/home/vlad/10g4work/LeetechRuns/test/leetech_t14.root",
+"/home/vlad/10g4work/LeetechRuns/test/leetech_t3.root",
+"/home/vlad/10g4work/LeetechRuns/test/leetech_t4.root",
+"/home/vlad/10g4work/LeetechRuns/test/leetech_t18.root",
+"/home/vlad/10g4work/LeetechRuns/test/leetech_t13.root",
+"/home/vlad/10g4work/LeetechRuns/test/leetech_t2.root",
+"/home/vlad/10g4work/LeetechRuns/test/leetech_t12.root",
+"/home/vlad/10g4work/LeetechRuns/test/leetech_t20.root",
+"/home/vlad/10g4work/LeetechRuns/test/leetech_t22.root",
+"/home/vlad/10g4work/LeetechRuns/test/leetech_t0.root",
+"/home/vlad/10g4work/LeetechRuns/test/leetech_t23.root",
+"/home/vlad/10g4work/LeetechRuns/test/leetech_t21.root",
+"/home/vlad/10g4work/LeetechRuns/test/leetech_t6.root",
+"/home/vlad/10g4work/LeetechRuns/test/leetech_t10.root",
+"/home/vlad/10g4work/LeetechRuns/test/leetech_t9.root",
+"/home/vlad/10g4work/LeetechRuns/test/leetech_t7.root",
+"/home/vlad/10g4work/LeetechRuns/test/leetech_t5.root",
+"/home/vlad/10g4work/LeetechRuns/test/leetech_t17.root",
+"/home/vlad/10g4work/LeetechRuns/test/leetech_t8.root",
+"/home/vlad/10g4work/LeetechRuns/test/leetech_t1.root",
+"/home/vlad/10g4work/LeetechRuns/test/leetech_t15.root"};
 
     TFile **f = new TFile*[numberOfFiles];
     TTree **t = new TTree*[numberOfFiles];
@@ -18,7 +38,7 @@ void MergeRootFiles()
     	treeList.Add(t[i]);
 	}
 
-    TFile resultFile("/home/vlad/5g4work/LeetechParallel/ResultsAndAnalysis/B_scan_d=4mm_E=3.5MeV/B_field_csan_d=4mm_E=3.5 MeV_B=550 G/Result.root", "RECREATE");
+    TFile resultFile("/home/vlad/10g4work/LeetechRuns/test/Result.root", "RECREATE");
 
     TTree::MergeTrees(&treeList);
     resultFile.Write();
