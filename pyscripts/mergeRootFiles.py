@@ -41,7 +41,6 @@ def modify_root_merge_script(path_to_rootfiles, rootfiles_list, result_file):
 def merge(filenames_base, path_to_mergefiles):
     if isinstance(path_to_mergefiles, basestring) and os.path.exists(path_to_mergefiles):
         out_filename = "Result.root"
-        tree_name = "T"
         
         merge_filenames = [fname for fname in os.listdir(path_to_mergefiles) 
                                  if re.match(".*%s.*\.root$" % filenames_base, fname)]
@@ -70,7 +69,7 @@ def find_base_name(path_to_mergefiles):
                            if os.path.isfile(("%s/%s") % (path_to_mergefiles, fname))]
     base_names = []
     for fname in all_files:
-        m = re.match(r"(\d*)([a-zA-Z]+)(\d*)(\.root$)", fname)
+        m = re.match(r"(\d*)([a-zA-Z_]+)(\d*)(\.root$)", fname)
         if m:
             base_names.append(m.group(2))
     
