@@ -175,7 +175,6 @@ void PhysicsList::ConstructDecay()
       ph->RegisterProcess(theDecayProcess, particle);
     }
   }
-  delete theDecayProcess;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
