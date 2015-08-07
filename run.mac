@@ -1,8 +1,8 @@
-/Micromegas/det/setField 575 gauss
+/Micromegas/det/setField 530 gauss
 
-/Micromegas/det/setCupThick 100 um
+/Micromegas/det/setCupThick 2 mm
 
-/Leetech/det/SetCollimatorEntranceGapX 20 mm
+/Leetech/det/SetCollimatorEntranceGapX 10 mm
 /Leetech/det/SetCollimatorEntranceGapY 20 mm
 /Leetech/det/SetCollimatorExit1GapX 20 mm
 /Leetech/det/SetCollimatorExit1GapY 20 mm
@@ -41,12 +41,12 @@
 # FIGHT settings
 #/Micromegas/gun/ParticleDirection 39 0.0 92
 #/Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
-/Micromegas/gun/ParticleEnergy 3.5 MeV
+/Micromegas/gun/ParticleEnergy 5 MeV
 
 #/Leetech/RootFile Test
 #/Micromegas/printModulo 100000
 
-/run/beamOn 10000000
+/run/beamOn 100000000
 
 
 

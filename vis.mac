@@ -13,7 +13,7 @@
 
 #equal to sec colim gap
 #/Micromegas/det/setApertureThick 1.4 cm
-/Micromegas/det/setApertureThick 0.001 cm
+/Micromegas/det/setApertureThick 2 cm
 
 #/Micromegas/det/setDet1InRad 0 mm unusable for now
 
@@ -22,7 +22,7 @@
 #distance from the edge to beginning of the collimator system
 /Micromegas/det/setDet1X 20 mm
 
-/Micromegas/det/setRotationDeg 0 deg
+/Micromegas/det/setRotationDeg 23 deg
 #/Micromegas/det/setRotationAddDist 6.5 cm
 /Micromegas/det/setRotationAddDist 65 cm
 
@@ -60,9 +60,9 @@
 # FIGHT settings
 #/Micromegas/gun/ParticleDirection 39 0.0 92
 /Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
-/Micromegas/gun/ParticleEnergy 5 MeV
+/Micromegas/gun/ParticleEnergy 3.5 MeV
 
-#/Leetech/RootFile LeetechVis
 #/Micromegas/printModulo 100000
+/analysis/setHistoDirName test
 
 /run/beamOn 500
