@@ -50,9 +50,9 @@ int main(int argc,char** argv)
 
 	// Mandatory user initialization classes
 	runManager->SetUserInitialization(new DetectorConstruction);
-//	runManager->SetUserInitialization(new PhysicsList);
-	G4VModularPhysicsList* physicsList = new FTFP_BERT;
-	physicsList->RegisterPhysics(new G4StepLimiterPhysics());
+	PhysicsList* physicsList = new PhysicsList;
+//	G4VModularPhysicsList* physicsList = new FTFP_BERT;
+//	physicsList->RegisterPhysics(new G4StepLimiterPhysics());
 	runManager->SetUserInitialization(physicsList);
 
 	// User action initialization
