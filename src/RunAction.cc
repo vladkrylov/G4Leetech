@@ -8,6 +8,7 @@
 #include "G4HCofThisEvent.hh"
 
 #include "RunAction.hh"
+#include "RunActionMessenger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -15,6 +16,8 @@ RunAction::RunAction()
 : G4UserRunAction()
 , rootFileName("leetech")
 {
+	runMessenger = new RunActionMessenger(this);
+
     // automatic (time-based) random seeds for each run
     G4cout << "*******************" << G4endl;
     G4cout << "*** AUTOSEED ON ***" << G4endl;
@@ -25,7 +28,20 @@ RunAction::RunAction()
     seeds[1] = (long) (systime*G4UniformRand());
     G4Random::setTheSeeds(seeds);
     G4Random::showEngineStatus();
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+RunAction::~RunAction()
+{
+  delete G4AnalysisManager::Instance();
+  delete runMessenger;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::BeginOfRunAction(const G4Run* /*run*/)
+{
     // Create analysis manager
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
     analysisManager->SetFileName(rootFileName);
@@ -46,20 +62,6 @@ RunAction::RunAction()
     analysisManager->CreateNtupleDColumn("P");
     analysisManager->CreateNtupleDColumn("Theta");
     analysisManager->FinishNtuple();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-RunAction::~RunAction()
-{
-  delete G4AnalysisManager::Instance();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void RunAction::BeginOfRunAction(const G4Run* /*run*/)
-{
-	G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 
 	// Open an output file
 	// The default file name is set in RunAction::RunAction(),
@@ -79,3 +81,6 @@ void RunAction::EndOfRunAction(const G4Run* /*run*/)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+
+

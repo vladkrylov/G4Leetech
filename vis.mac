@@ -32,6 +32,8 @@
 /Micromegas/det/setMinEkin 10 keV
 /Micromegas/det/setMionRang 0.01 mm
 
+/Leetech/RootFile Test
+
 /run/numberOfThreads 4
 /run/initialize
 
@@ -63,6 +65,6 @@
 /Micromegas/gun/ParticleEnergy 3.5 MeV
 
 #/Micromegas/printModulo 100000
-/analysis/setHistoDirName test
+
 
 /run/beamOn 500
