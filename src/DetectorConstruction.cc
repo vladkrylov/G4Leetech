@@ -42,7 +42,6 @@ DetectorConstruction::DetectorConstruction()
 , _RotationDeg(0)
 , detectorMessenger(NULL)
 {
-//	magField = new MagneticField();
 	detectorMessenger = new DetectorMessenger(this);
 }
 
@@ -104,9 +103,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	G4double colimatorZ		=	20*mm;
 	G4double colimatorZthin	=	2*mm;
 
-	G4double innerBoxX         	= 	chamberX-ThicknesOfChamber*2;
-	G4double innerBoxY         	= 	chamberY-ThicknesOfChamber*2;
-	G4double innerBoxZ         	= 	chamberZ-ThicknesOfChamber*2;
+	innerBoxX         	= 	chamberX-ThicknesOfChamber*2;
+	innerBoxY         	= 	chamberY-ThicknesOfChamber*2;
+	innerBoxZ         	= 	chamberZ-ThicknesOfChamber*2;
 
 	//Sizes of the connection from chamber to collimator system
 	G4double NeckX         	= 	4*cm;
@@ -197,10 +196,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	G4double fieldBox_yc         	= 	0;
 	G4double fieldBox_zc = 3*mm;
 
-	G4double innerBox_xc         	= 	0.0*cm;
-	G4double innerBox_yc         	= 	0.0*cm;
-	G4double innerBox_zc         	= 	0.0*cm;
-
 	//	  G4double beamPipe_xc          =       beamCorectionX;
 	G4double beamPipe_yc          =       0;
 	//	  G4double beamPipe_zc          =       - beamPipeLenght/2.0 + beamCorectionZ - 10*cm;
@@ -225,9 +220,13 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 	//std::cout<<std::endl<<"Coordinates of initial position of electrons must be: "<<beamPipe_xc<<" "<<beamPipe_yc<<" "<<beamPipe_zc<<std::endl<<std::endl;
 
-	G4double chamber_xc		= 	0;
-	G4double chamber_yc		= 	0;
-	G4double chamber_zc		= 	chamberZ/2;
+	chamber_xc		= 	0;
+	chamber_yc		= 	0;
+	chamber_zc		= 	chamberZ/2;
+
+	G4double innerBox_xc         	= 	0.0*cm;
+	G4double innerBox_yc         	= 	0.0*cm;
+	G4double innerBox_zc         	= 	0.0*cm;
 
 	G4double ShieldBarrier_xc     = 10*cm;
 	G4double ShieldBarrier_xc1     =       249*mm - 75*mm;
@@ -370,7 +369,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	//	InnerBox
 	//
 	G4Box *innerMainBox = new G4Box("InnerBox", innerBoxX/2, innerBoxY/2, innerBoxZ/2);
-	//  G4Box *solidAdditionalInnerBox = new G4Box("InnerAdd",AdditionalInnerBoxX/2, AdditionalInnerBoxY/2, AdditionalInnerBoxZ/2);
 
 	G4Transform3D transEntranceNeckHole(RMZero, G4ThreeVector(-electronsRadius,0,-(chamberZ+lengthNeckHole)/2+ThicknesOfChamber));
 	G4Transform3D transExit1NeckHole(RMZero, G4ThreeVector(electronsRadius,0,-(chamberZ+lengthNeckHole)/2+ThicknesOfChamber));
@@ -714,13 +712,22 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 void DetectorConstruction::ConstructSDandField()
 {
-	fMagneticField = new G4UniformMagField(G4ThreeVector(0., _MagFieldVal, 0.));
-	fFieldMgr = new G4FieldManager();
+//	fMagneticField = new G4UniformMagField(G4ThreeVector(0., _MagFieldVal, 0.));
+//	fFieldMgr = new G4FieldManager();
+//	fFieldMgr->SetDetectorField(fMagneticField);
+//	fFieldMgr->CreateChordFinder(fMagneticField);
+//	fFieldMgr->GetChordFinder()->SetDeltaChord(1.0*mm);
+//
+//	logicInnerBox->SetFieldManager(fFieldMgr, true);
+
+	fMagneticField = new MagneticField();
+	fFieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
+	fMagneticField->setBfieldY(_MagFieldVal);
+	fMagneticField->setFieldBox1(chamber_xc, chamber_yc, chamber_zc,
+			1*m, innerBoxY, innerBoxZ);
 	fFieldMgr->SetDetectorField(fMagneticField);
 	fFieldMgr->CreateChordFinder(fMagneticField);
-	fFieldMgr->GetChordFinder()->SetDeltaChord(1.0*mm);
-
-	logicInnerBox->SetFieldManager(fFieldMgr, true);
+	fFieldMgr->GetChordFinder()->SetDeltaChord(0.1*mm);
 }
 
 void DetectorConstruction::DefineMaterials()
@@ -785,7 +792,7 @@ void DetectorConstruction::DefineMaterials()
   vacuumMy->AddElement(O, fractionmass=0.3);
   ///////////////////////////////////////////////////////////////////////
 
-  // print table
+  // print table*
   //
   //G4cout <<*(G4Material::GetMaterialTable()) << G4endl;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

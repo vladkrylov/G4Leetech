@@ -72,11 +72,20 @@ private:
 	void DefineMaterials();
     G4Material* GetMaterial(G4int t);
 
-    G4UniformMagField *fMagneticField;
+    MagneticField* fMagneticField;
+//    G4UniformMagField* fMagneticField;
   	G4FieldManager* fFieldMgr;
     G4VPhysicalVolume* physiBeamPipeV;
     G4VPhysicalVolume* phyTarget;
     G4LogicalVolume *logicInnerBox;
+
+	G4double innerBoxX;
+	G4double innerBoxY;
+	G4double innerBoxZ;
+
+	G4double chamber_xc;
+	G4double chamber_yc;
+	G4double chamber_zc;
 
 	// Define materials
 	G4Material*        alMy;
