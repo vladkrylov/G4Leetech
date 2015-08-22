@@ -52,7 +52,7 @@ int main(int argc,char** argv)
 	runManager->SetUserInitialization(new DetectorConstruction);
 	PhysicsList* physicsList = new PhysicsList;
 //	G4VModularPhysicsList* physicsList = new FTFP_BERT;
-//	physicsList->RegisterPhysics(new G4StepLimiterPhysics());
+	physicsList->RegisterPhysics(new G4StepLimiterPhysics());
 	runManager->SetUserInitialization(physicsList);
 
 	// User action initialization

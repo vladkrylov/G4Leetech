@@ -44,10 +44,16 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 
 	Detector = (DetectorConstruction*)G4RunManager::GetRunManager()->GetUserDetectorConstruction();
 
-//	G4ThreeVector beamPipeCenter = Detector->GetBeamPipeCenter();
-//	G4ThreeVector targetCenter = Detector->GetTargetFaceCenter();
-	G4ThreeVector beamPipeCenter(-20.3*cm, 0, -20*cm);
-	G4ThreeVector targetCenter = beamPipeCenter + G4ThreeVector(0, 0, 1);
+	G4ThreeVector beamPipeCenter = Detector->GetBeamPipeCenter();
+	G4ThreeVector targetCenter = Detector->GetTargetFaceCenter();
+	G4cout << "===============================================" << G4endl;
+	G4cout << "===============================================" << G4endl;
+	G4cout << beamPipeCenter.x() << beamPipeCenter.y() << beamPipeCenter.z() << G4endl;
+	G4cout << targetCenter.x() << targetCenter.y() << targetCenter.z() << G4endl;
+	G4cout << "===============================================" << G4endl;
+	G4cout << "===============================================" << G4endl;
+//	G4ThreeVector beamPipeCenter(-20.3*cm, 0, -20*cm);
+//	G4ThreeVector targetCenter = beamPipeCenter + G4ThreeVector(0, 0, 1);
 	G4ThreeVector targetDirection = targetCenter - beamPipeCenter;
 	_xDir0 = _xDir = targetDirection.x();
 	_yDir0 = _yDir = targetDirection.y();

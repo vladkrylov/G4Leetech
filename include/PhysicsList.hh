@@ -35,30 +35,35 @@
 #ifndef PhysicsList_h
 #define PhysicsList_h 1
 
-#include "G4VUserPhysicsList.hh"
 #include "globals.hh"
+#include "G4VModularPhysicsList.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class PhysicsList: public G4VUserPhysicsList
+/// Modular physics list
+///
+/// It includes the folowing physics builders
+/// - G4DecayPhysics
+/// - G4RadioactiveDecayPhysics
+/// - G4EmStandardPhysics
+class PhysicsList : public G4VModularPhysicsList
 {
 public:
-  PhysicsList();
-  virtual ~PhysicsList();
+	PhysicsList();
+	virtual ~PhysicsList();
 
-  // Construct particle and physics
-  void ConstructParticle();
-  void ConstructProcess();
-
-  void SetCuts();
+	virtual void SetCuts();
 
 private:
+	// Construct particle and physics process
+//	void ConstructParticle();
+//	void ConstructProcess();
 
-  // these methods Construct physics processes and register them
-  void ConstructDecay();
-  void ConstructEM();
+	void ConstructEM();
+	void ConstructDecay();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
+
+
