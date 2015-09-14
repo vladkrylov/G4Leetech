@@ -79,30 +79,12 @@ def find_base_name(path_to_mergefiles):
         return None
     else:
         return repeated_basenames[0]
- 
+
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        merge_dirs = []
-            # maybe regular expression has been specified instead of full path
-            # try to interpret it
-        dirs = sys.argv[1].split('/')
-        pre_path = '/' + '/'.join(dirs[1:-1])
-        if not os.path.exists(pre_path):
-            no_dir_found(path_to_mergefiles)
-            
-        pat = re.compile(dirs[-1].replace(r"*",r".*"))
-        merge_dirs = [dname for dname in os.listdir(pre_path) 
-                       if os.path.isdir(("%s/%s") % (pre_path, dname))
-                       and pat.match(dname)]
-    # if no argument specified set the current dir as a merge dir
-    else:
-        path_to_mergefiles = os.getcwd()
-    
-    if merge_dirs:
-        for d in merge_dirs:
-            full_merge_path = "%s/%s" % (pre_path, d)
-            base_name = find_base_name(full_merge_path)
-            if base_name:
-                merge(base_name, full_merge_path)
+        full_merge_path = os.path.abspath(sys.argv[1])
+        base_name = find_base_name(full_merge_path)
+        if base_name:
+            merge(base_name, full_merge_path)
             
             

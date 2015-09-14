@@ -1,6 +1,6 @@
-/Micromegas/det/setField 475 gauss
+/Micromegas/det/setField 520 gauss
 
-/Micromegas/det/setCupThick 0.00002 mm
+/Micromegas/det/setCupThick 2 mm
 
 /Leetech/det/SetCollimatorEntranceGapX 20 mm
 /Leetech/det/SetCollimatorEntranceGapY 20 mm
@@ -63,5 +63,5 @@
 #/Leetech/RootFile LeetechVis
 #/Micromegas/printModulo 100000
 
-/run/beamOn 500
+/run/beamOn 5000
 
