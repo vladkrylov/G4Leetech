@@ -1,6 +1,6 @@
-/Micromegas/det/setField 300 gauss
+/Micromegas/det/setField 100.000000 gauss
 
-/Micromegas/det/setCupThick 1 mm
+/Micromegas/det/setCupThick 4.000000 mm
 
 /Leetech/det/SetCollimatorEntranceGapX 10 mm
 /Leetech/det/SetCollimatorEntranceGapY 20 mm
@@ -22,7 +22,7 @@
 #distance from the edge to beginning of the collimator system
 /Micromegas/det/setDet1X 20 mm
 
-/Micromegas/det/setRotationDeg 23 deg
+/Micromegas/det/setRotationDeg 0 deg
 #/Micromegas/det/setRotationAddDist 6.5 cm
 /Micromegas/det/setRotationAddDist 65 cm
 
@@ -41,12 +41,12 @@
 # FIGHT settings
 #/Micromegas/gun/ParticleDirection 39 0.0 92
 #/Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
-/Micromegas/gun/ParticleEnergy 3.5 MeV
+/Micromegas/gun/ParticleEnergy 3500.000000 MeV
 
-#/Leetech/RootFile Test
+/Leetech/RootFile /home/vlad/10g4work/Leetech/leetech
 #/Micromegas/printModulo 100000
 
-/run/beamOn 1000000
+/run/beamOn 1000
 
 
 

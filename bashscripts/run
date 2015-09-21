@@ -1,16 +1,16 @@
 #!/bin/bash
 
 # set momentum of primary electrons
-P_primaries=3.5
-./../pyscripts/change_parameter.py /Micromegas/gun/ParticleMomentum "$P_primaries $P_primaries -999"
+E_primaries=3.5
+python ../pyscripts/change_parameter.py /Micromegas/gun/ParticleEnergy "$E_primaries MeV"
 
 # set the target thickness
 target=4
-./../pyscripts/change_parameter.py /Micromegas/det/setCupThick "$target mm"
+python ../pyscripts/change_parameter.py /Micromegas/det/setCupThick "$target mm"
 
 # cycle through magnetic field values
-for B_field in {0..20..500}
+for B_field in {0..20..100}
   do
-    ./../pyscripts/change_parameter.py /Micromegas/det/setField "$B_field gauss"
-    ./../pyscripts/run.py -n 4 --remote --noreadme -o "../LeetechRuns/B_field_scan_Target=4mm_$P_primaries MeV_B=$B_field G"
+    python ../pyscripts/change_parameter.py /Micromegas/det/setField "$B_field gauss"
+    python ../pyscripts/run.py -n 4 --noreadme -o "../LeetechRuns/B_field_scan_Target=$target mm_$E_primaries MeV_B=$B_field G"
   done
