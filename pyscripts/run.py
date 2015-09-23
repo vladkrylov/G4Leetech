@@ -7,6 +7,7 @@ from output_structure import setOutDirName
 from linecache import getlines
 from time import sleep
 from change_parameter import change_parameter
+from sre_parse import isdigit
 
 try:
 	from mergeRootFiles import merge
@@ -22,12 +23,20 @@ favorite_editor = "vim"
 
 run_command = [exe, os.path.join(project_dir, 'run.mac')]
 
+def set_out_dir(user_dir):
+	output_dir = os.path.abspath(user_dir)
+	if os.path.exists(output_dir):
+		if isdigit(output_dir[-1]):
+			output_dir = output_dir[:-1] + str(int(output_dir[-1]) + 1)
+		else:
+			output_dir = output_dir + "_1"
+	os.makedirs(output_dir)
+	return output_dir
+		
 # create the output directory and modify run.mac file appropriately
-# output_dir = setOutDirName(project_dir, out_user_dir_name)
-def run(number_of_processes, out_user_dir_name, readme_enable):
-	if out_user_dir_name:
-		output_dir = os.path.abspath(out_user_dir_name)
-		os.makedirs(output_dir)
+def run(number_of_processes, out_user_dir, readme_enable):
+	if out_user_dir:
+		output_dir = set_out_dir(out_user_dir)
 	else:
 		output_dir = project_dir
 	

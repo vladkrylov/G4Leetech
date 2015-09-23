@@ -11,19 +11,19 @@ for o, a in opts:
     if o == '-n':
         number_of_processes = a
 
-target = 4 # mm
+target = 2 # mm
 E = 3500 # keV
-Bs = range(20, 101, 20) # Gauss
+Bs = range(525, 751, 25) # Gauss
 
 change_parameter("/Micromegas/det/setCupThick", "%f mm" % target)
-change_parameter("/Micromegas/gun/ParticleEnergy", "%f MeV" % E)
+change_parameter("/Micromegas/gun/ParticleEnergy", "%f keV" % E)
 
 for B in Bs:
     change_parameter("/Micromegas/det/setField", "%f gauss" % B)
     
-    out_dir = os.path.abspath("../../LeetechRuns/scan/d=%dmm_E=%dMev_B=%dG" % (target, E, B))
+    out_dir = os.path.abspath("/home/vlad/10g4work/LeetechRuns/B_scan_d=%dmm_E=%dkeV_1/B=%dG" % (target, E, B))
     run(number_of_processes=number_of_processes,
-        out_user_dir_name=out_dir,
+        out_user_dir=out_dir,
         readme_enable=False)
     
     merge_root_files(out_dir)

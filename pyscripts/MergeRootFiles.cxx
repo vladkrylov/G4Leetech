@@ -3,10 +3,10 @@ void MergeRootFiles()
     const char *TreeName = "Hits";
     const int numberOfFiles = 4;
     char* mergeFilenames[numberOfFiles] = {
-"/home/vlad/10g4work/LeetechRuns/scan/d=4mm_E=3500Mev_B=100G/leetech_t3.root",
-"/home/vlad/10g4work/LeetechRuns/scan/d=4mm_E=3500Mev_B=100G/leetech_t2.root",
-"/home/vlad/10g4work/LeetechRuns/scan/d=4mm_E=3500Mev_B=100G/leetech_t0.root",
-"/home/vlad/10g4work/LeetechRuns/scan/d=4mm_E=3500Mev_B=100G/leetech_t1.root"};
+"/home/vlad/10g4work/LeetechRuns/B_scan_d=2mm_E=3500keV_1/B=750G/leetech_t3.root",
+"/home/vlad/10g4work/LeetechRuns/B_scan_d=2mm_E=3500keV_1/B=750G/leetech_t2.root",
+"/home/vlad/10g4work/LeetechRuns/B_scan_d=2mm_E=3500keV_1/B=750G/leetech_t0.root",
+"/home/vlad/10g4work/LeetechRuns/B_scan_d=2mm_E=3500keV_1/B=750G/leetech_t1.root"};
 
     TFile **f = new TFile*[numberOfFiles];
     TTree **t = new TTree*[numberOfFiles];
@@ -18,7 +18,7 @@ void MergeRootFiles()
     	treeList.Add(t[i]);
 	}
 
-    TFile resultFile("/home/vlad/10g4work/LeetechRuns/scan/d=4mm_E=3500Mev_B=100G/Result.root", "RECREATE");
+    TFile resultFile("/home/vlad/10g4work/LeetechRuns/B_scan_d=2mm_E=3500keV_1/B=750G/Result.root", "RECREATE");
 
     TTree::MergeTrees(&treeList);
     resultFile.Write();

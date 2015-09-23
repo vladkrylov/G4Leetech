@@ -1,6 +1,6 @@
-/Micromegas/det/setField 100.000000 gauss
+/Micromegas/det/setField 750.000000 gauss
 
-/Micromegas/det/setCupThick 4.000000 mm
+/Micromegas/det/setCupThick 2.000000 mm
 
 /Leetech/det/SetCollimatorEntranceGapX 10 mm
 /Leetech/det/SetCollimatorEntranceGapY 20 mm
@@ -41,12 +41,12 @@
 # FIGHT settings
 #/Micromegas/gun/ParticleDirection 39 0.0 92
 #/Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
-/Micromegas/gun/ParticleEnergy 3500.000000 MeV
+/Micromegas/gun/ParticleEnergy 3500.000000 keV
 
-/Leetech/RootFile /home/vlad/10g4work/Leetech/leetech
+/Leetech/RootFile /home/vlad/10g4work/LeetechRuns/B_scan_d=2mm_E=3500keV_1/B=750G/leetech
 #/Micromegas/printModulo 100000
 
-/run/beamOn 1000
+/run/beamOn 20000
 
 
 
