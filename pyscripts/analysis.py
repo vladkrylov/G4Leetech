@@ -26,7 +26,7 @@ for d in data_listdir:
             
         f = ROOT.TFile("%s/Result.root" % d)
         try:
-            hits.append(f.Get("Hits").GetBranch("Energy").GetEntries())
+            hits.append(f.Get("T").GetBranch("Energy").GetEntries())
             print d, '\t', hits[-1]
         except:
             hits.append(0)
@@ -35,10 +35,12 @@ for d in data_listdir:
           
           
 if B and hits:
-    description = "Magnetic field scan results Ptot=3.5MeV d=4mm"
-    with open("%s.txt" % description, 'w') as out_file:
-        for i in range(len(B)):
-            out_file.write("%d\t\t%d\n" % (B[i], hits[i]))
+    description = scan_dir.split("/")[-1]
+    with open(os.path.join(scan_dir, "%s.txt" % description), 'w') as out_file:
+        tmp = zip(B, hits)
+        tmp.sort(key=lambda tup: tup[0])
+        for b_field, n_hits in tmp:
+            out_file.write("%d\t\t%d\n" % (b_field, n_hits))
     
     g = ROOT.TGraph(len(B), array("d", B), array("d", hits))
   
