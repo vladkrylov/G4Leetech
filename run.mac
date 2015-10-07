@@ -1,4 +1,4 @@
-/Micromegas/det/setField 750.000000 gauss
+/Micromegas/det/setField 600.000000 gauss
 
 /Micromegas/det/setCupThick 2.000000 mm
 
@@ -22,7 +22,7 @@
 #distance from the edge to beginning of the collimator system
 /Micromegas/det/setDet1X 20 mm
 
-/Micromegas/det/setRotationDeg 0 deg
+/Micromegas/det/setRotationDeg 23 deg
 #/Micromegas/det/setRotationAddDist 6.5 cm
 /Micromegas/det/setRotationAddDist 65 cm
 
@@ -43,10 +43,10 @@
 #/Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
 /Micromegas/gun/ParticleEnergy 3500.000000 keV
 
-/Leetech/RootFile /home/vlad/10g4work/LeetechRuns/B_scan_d=2mm_E=3500keV_1/B=750G/leetech
+/Leetech/RootFile /home/vlad/10g4work/LeetechRuns/B_scan_d=2mm_E=3500keV_1/B=600G/leetech
 #/Micromegas/printModulo 100000
 
-/run/beamOn 20000
+/run/beamOn 100000
 
 
 

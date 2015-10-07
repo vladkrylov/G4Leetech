@@ -13,7 +13,7 @@ for o, a in opts:
 
 target = 2 # mm
 E = 3500 # keV
-Bs = range(525, 751, 25) # Gauss
+Bs = range(25, 601, 25) # Gauss
 
 change_parameter("/Micromegas/det/setCupThick", "%f mm" % target)
 change_parameter("/Micromegas/gun/ParticleEnergy", "%f keV" % E)

@@ -26,7 +26,7 @@ for d in data_listdir:
             
         f = ROOT.TFile("%s/Result.root" % d)
         try:
-            hits.append(f.Get("T").GetBranch("Energy").GetEntries())
+            hits.append(f.Get("Hits").GetBranch("Energy").GetEntries())
             print d, '\t', hits[-1]
         except:
             hits.append(0)
