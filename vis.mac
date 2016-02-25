@@ -32,7 +32,7 @@
 /Micromegas/det/setMinEkin 10 keV
 /Micromegas/det/setMionRang 0.01 mm
 
-/run/numberOfThreads 4
+/run/numberOfThreads 1
 /run/initialize
 
 # set messenger parameters

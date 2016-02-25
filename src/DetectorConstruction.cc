@@ -609,7 +609,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	//
 	G4double detectorGap = 1*mm;
 	G4ThreeVector detectorCenter = phyExitWin->GetObjectTranslation() + G4ThreeVector(0, 0, - exitWin->GetZHalfLength() - detectorGap - detectorThick/2);
-
 	G4Tubs* solidSenDet1 = new G4Tubs("SenDet1", 0, radNeckRing, detectorThick, 0, 360.0*deg);
 	G4LogicalVolume* logicSenDet1 = new G4LogicalVolume(solidSenDet1,
 					 //beamVacuum,
@@ -699,9 +698,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	logicTarget->SetUserLimits(stepLimit);
 	logicChamber->SetUserLimits(stepLimit);
 	logicInnerBox->SetUserLimits(stepLimit);
-
-
-
 
 	//always return the physical World
 	//
