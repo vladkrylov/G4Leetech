@@ -61,6 +61,7 @@ void RunAction::BeginOfRunAction(const G4Run* /*run*/)
     analysisManager->CreateNtupleDColumn("PZ");
     analysisManager->CreateNtupleDColumn("P");
     analysisManager->CreateNtupleDColumn("Theta");
+    analysisManager->CreateNtupleDColumn("StepLength");
     analysisManager->FinishNtuple();
 
 	// Open an output file

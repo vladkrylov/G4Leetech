@@ -17,7 +17,7 @@ RunActionMessenger::RunActionMessenger(RunAction* run)
   RootFileCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
-RunActionMessenger::~RunActionMessenger(){
+RunActionMessenger::~RunActionMessenger() {
   delete RootFileCmd;
 }
 

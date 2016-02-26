@@ -2,7 +2,7 @@
 
 /Micromegas/det/setCupThick 2.000000 mm
 
-/Leetech/det/SetCollimatorEntranceGapX 10 mm
+/Leetech/det/SetCollimatorEntranceGapX 20 mm
 /Leetech/det/SetCollimatorEntranceGapY 20 mm
 /Leetech/det/SetCollimatorExit1GapX 20 mm
 /Leetech/det/SetCollimatorExit1GapY 20 mm
@@ -32,7 +32,7 @@
 /Micromegas/det/setMinEkin 10 keV
 /Micromegas/det/setMionRang 0.01 mm
 
-/run/numberOfThreads 4
+/run/numberOfThreads 1
 /run/initialize
 
 #gamma, e-, e+, mu-, mu+, pi-, pi+, kaon-, kaon+, anti_proton, proton
@@ -43,10 +43,10 @@
 #/Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
 /Micromegas/gun/ParticleEnergy 3500.000000 keV
 
-/Leetech/RootFile /home/vlad/10g4work/LeetechRuns/B_scan_d=2mm_E=3500keV_1/B=600G/leetech
+/Leetech/RootFile leetech
 #/Micromegas/printModulo 100000
 
-/run/beamOn 100000
+/run/beamOn 500000
 
 
 

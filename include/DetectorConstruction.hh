@@ -48,6 +48,7 @@ class G4GenericMessenger;
 class MagneticField;
 class DetectorMessenger;
 class G4UniformMagField;
+class SensitiveXZPlane;
 
 /// Detector construction
 
@@ -146,6 +147,8 @@ public:
 	void SetCollimatorGapEntranceY(G4double valMy);
 	void SetCollimatorGapExit1X(G4double valMy);
 	void SetCollimatorGapExit1Y(G4double valMy);
+
+	SensitiveXZPlane* p1;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

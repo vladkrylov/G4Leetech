@@ -29,6 +29,7 @@
 #include "DetectorConstruction.hh"
 #include "DetectorMessenger.hh"
 #include "MagneticField.hh"
+#include "SensitiveXZPlane.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -621,6 +622,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 				   logicWorld,	     	//its mother  volume
 				   false,      		//no boolean operation
 				   0);			//copy number
+
+	p1 = new SensitiveXZPlane("Exit", detectorCenter.getX(), detectorCenter.getZ(), radNeckRing);
 
 	//
 	// Inner shielding
