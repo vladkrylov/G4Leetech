@@ -5,8 +5,12 @@
  *      Author: vlad
  */
 
-#include "SensitiveXZPlane.hh"
 #include "G4Step.hh"
+#include "G4Polyline.hh"
+#include "G4Colour.hh"
+#include "G4VisAttributes.hh"
+
+#include "SensitiveXZPlane.hh"
 
 SensitiveXZPlane::SensitiveXZPlane(G4String my_name, double my_xc, double my_zc, double my_halfLength)
 {
@@ -37,3 +41,18 @@ bool SensitiveXZPlane::Crossed(const G4Step* step)
 
 }
 
+void SensitiveXZPlane::Visualize(G4double worldYhalfSize)
+{
+	G4Polyline planeCountour;
+
+	// Set red line colour
+	G4Colour         red(1.0, 0.0, 0.0);
+	G4VisAttributes  att(red);
+	planeCountour.SetVisAttributes(&att);
+
+	// Set vertex positions
+	planeCountour.push_back( G4Point3D(xc+halfLength, worldYhalfSize, zc) );
+	planeCountour.push_back( G4Point3D(xc-halfLength, worldYhalfSize, zc) );
+	planeCountour.push_back( G4Point3D(xc+halfLength, -worldYhalfSize, zc) );
+	planeCountour.push_back( G4Point3D(xc-halfLength, -worldYhalfSize, zc) );
+}

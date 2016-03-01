@@ -20,6 +20,8 @@ public:
 	virtual ~SensitiveXZPlane();
 
 	bool Crossed(const G4Step* step);
+	G4String& GetName();
+	void Visualize(G4double worldYhalfSize);
 
 private:
 	G4String name;
@@ -27,5 +29,15 @@ private:
 	double zc;
 	double halfLength;
 };
+
+class PlaneDetectors {
+public:
+	PlaneDetectors();
+	virtual ~PlaneDetectors();
+};
+
+inline G4String& SensitiveXZPlane::GetName() {
+	return name;
+}
 
 #endif /* INCLUDE_SENSITIVEXZPLANE_HH_ */

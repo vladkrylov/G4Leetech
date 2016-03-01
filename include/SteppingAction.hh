@@ -1,6 +1,7 @@
 #ifndef SteppingAction_h
 #define SteppingAction_h 1
 
+#include <vector>
 #include "G4UserSteppingAction.hh"
 
 class SensitiveXZPlane;
@@ -14,7 +15,7 @@ public:
 	void UserSteppingAction(const G4Step*);
 
 private:
-	SensitiveXZPlane* p1;
+	std::vector<SensitiveXZPlane*>* detectors;
 };
 
 #endif /* SteppingAction_h */

@@ -47,6 +47,8 @@
 
 # for drawing the tracks
 /vis/scene/add/trajectories
+/vis/scene/add/userAction
+/vis/scene/add/axes
 
 # (if you prefer refreshing each event, comment out next line)
 /vis/scene/endOfEventAction accumulate
@@ -63,5 +65,5 @@
 /Leetech/RootFile LeetechVis
 #/Micromegas/printModulo 100000
 
-/run/beamOn 5000
+/run/beamOn 500
 

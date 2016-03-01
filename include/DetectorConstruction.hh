@@ -122,6 +122,8 @@ private:
   	G4double _RotationDeg;
   	G4double _RotAddDist;
 
+  	std::vector<SensitiveXZPlane*> planeDetectors;
+
 // messenger access functions
 public:
     void SetMagField(G4double valMy);	//set value of B - induction of magnetic field in Gauss
@@ -148,7 +150,9 @@ public:
 	void SetCollimatorGapExit1X(G4double valMy);
 	void SetCollimatorGapExit1Y(G4double valMy);
 
-	SensitiveXZPlane* p1;
+//	SensitiveXZPlane* p1;
+	void AddPlaneDetector(SensitiveXZPlane* p);
+	std::vector<SensitiveXZPlane*>* GetPlaneDetectorList();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -226,5 +230,8 @@ inline void DetectorConstruction::SetCollimatorGapExit1Y(G4double valMy){
 	_collExit1GapY = valMy;
 }
 
+inline std::vector<SensitiveXZPlane*>* DetectorConstruction::GetPlaneDetectorList() {
+	return &planeDetectors;
+}
 
 #endif

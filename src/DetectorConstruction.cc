@@ -23,6 +23,9 @@
 #include "G4UserLimits.hh"
 #include "G4RunManager.hh"
 #include "G4AutoDelete.hh"
+#include "G4Polyline.hh"
+#include "G4VVisManager.hh"
+#include "G4Circle.hh"
 
 #include "TMath.h"
 
@@ -30,6 +33,7 @@
 #include "DetectorMessenger.hh"
 #include "MagneticField.hh"
 #include "SensitiveXZPlane.hh"
+#include "G4Text.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -623,7 +627,41 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 				   false,      		//no boolean operation
 				   0);			//copy number
 
-	p1 = new SensitiveXZPlane("Exit", detectorCenter.getX(), detectorCenter.getZ(), radNeckRing);
+	G4ThreeVector entranceDetCenter = GetTargetFaceCenter() - G4ThreeVector(0., 0., 1*mm);
+	AddPlaneDetector(new SensitiveXZPlane("Entrance", entranceDetCenter.getX(), entranceDetCenter.getZ(), radNeckRing));
+	AddPlaneDetector(new SensitiveXZPlane("Exit", detectorCenter.getX(), detectorCenter.getZ(), radNeckRing));
+
+	G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
+//	for(size_t i=0; i<1; i++) {
+//		planeDetectors[i]->Visualize(WorldSizeY/2);
+		G4Polyline planeCountour;
+
+		// Set red line colour
+		G4Colour         detCol(0.0, 1.0, 0.0);
+		G4VisAttributes  att(detCol);
+		att.SetVisibility(true);
+		planeCountour.SetVisAttributes(&att);
+
+		// Set vertex positions
+		planeCountour.push_back( G4Point3D(0,0,0));
+		planeCountour.push_back( G4Point3D(WorldSizeX/2,WorldSizeY/2,WorldSizeZ/2));
+		planeCountour.push_back( G4Point3D(-WorldSizeX/2,-WorldSizeY/2,-WorldSizeZ/2));
+
+	if(pVVisManager) {
+		pVVisManager->Draw(G4Box("box",10*cm,10*cm,10*cm)
+				, G4VisAttributes(G4Colour(1,1,0))
+				, G4Transform3D(RMZero, G4ThreeVector(0,0,0))
+				);
+//		pVVisManager->Draw(planeCountour);
+//		pVVisManager->Draw(G4Circle(G4Point3D(0,0,0)));
+//		pVVisManager->Draw(G4Text("test"));
+	}
+
+//		planeCountour->push_back( G4Point3D(entranceDetCenter.getX()+radNeckRing, WorldSizeY/2, entranceDetCenter.getZ()) );
+//		planeCountour->push_back( G4Point3D(entranceDetCenter.getX()-radNeckRing, WorldSizeY/2, entranceDetCenter.getZ()) );
+//		planeCountour->push_back( G4Point3D(entranceDetCenter.getX()+radNeckRing, -WorldSizeY/2, entranceDetCenter.getZ()) );
+//		planeCountour->push_back( G4Point3D(entranceDetCenter.getX()-radNeckRing, -WorldSizeY/2, entranceDetCenter.getZ()) );
+//	}
 
 	//
 	// Inner shielding
@@ -842,5 +880,12 @@ G4ThreeVector DetectorConstruction::GetTargetFaceCenter()
 {
 	return phyTarget->GetObjectTranslation() - G4ThreeVector(0, 0, _targetThickness/2);
 }
+
+void DetectorConstruction::AddPlaneDetector(SensitiveXZPlane* p)
+{
+	planeDetectors.push_back(p);
+}
+
+
 
 
