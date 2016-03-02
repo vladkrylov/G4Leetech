@@ -638,8 +638,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	AddPlaneDetector(new SensitiveXZPlane("AfterExitColl", detectorCenter.getX(), detectorCenter.getZ() + 5.2*cm, radNeckRing+1*cm));
 	AddPlaneDetector(new SensitiveXZPlane("AfterExitWindow", detectorCenter.getX(), detectorCenter.getZ(), radNeckRing));
 
-	for(size_t i=0; i<planeDetectors.size(); i++)
-		planeDetectors[i]->Visualize(logicWorld);
+//	for(size_t i=0; i<planeDetectors.size(); i++)
+//		planeDetectors[i]->Visualize(logicWorld);
 
 	//
 	// Inner shielding

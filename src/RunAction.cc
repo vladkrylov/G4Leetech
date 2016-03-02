@@ -49,7 +49,6 @@ void RunAction::BeginOfRunAction(const G4Run* /*run*/)
 	// Get the information about detectors from DetectorConstruction
 	DetectorConstruction* geometry = (DetectorConstruction*)G4RunManager::GetRunManager()->GetUserDetectorConstruction();
 	const std::vector<SensitiveXZPlane*>* detectors = geometry->GetPlaneDetectorList();
-	G4cout << detectors->at(0)->GetName();
 
     // Create analysis manager
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();

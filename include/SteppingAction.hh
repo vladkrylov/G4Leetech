@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "G4UserSteppingAction.hh"
+#include "g4root.hh"
 
 class SensitiveXZPlane;
 
@@ -16,6 +17,11 @@ public:
 
 private:
 	std::vector<SensitiveXZPlane*>* detectors;
+
+	G4AnalysisManager* analysisManager;
+	G4int BranchId;
+	G4double Px, Py, Pz, P;
+	G4double theta;
 };
 
 #endif /* SteppingAction_h */

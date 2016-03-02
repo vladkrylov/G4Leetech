@@ -1,6 +1,5 @@
 #include <cmath>
 
-#include "g4root.hh"
 #include "G4Step.hh"
 #include "G4RunManager.hh"
 #include "G4VPhysicalVolume.hh"
@@ -13,6 +12,9 @@ SteppingAction::SteppingAction()
 {
 	DetectorConstruction* geometry = (DetectorConstruction*)G4RunManager::GetRunManager()->GetUserDetectorConstruction();
 	detectors = geometry->GetPlaneDetectorList();
+
+    // Get analysis manager
+    analysisManager = G4AnalysisManager::Instance();
 }
 
 SteppingAction::~SteppingAction()
@@ -20,19 +22,6 @@ SteppingAction::~SteppingAction()
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-	G4int BranchId;
-	G4double Px, Py, Pz, P;
-	G4double theta;
-
-    // Get analysis manager
-    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-
-
-//	// get volume of the current step
-//	G4VPhysicalVolume* volume = aStep->GetPostStepPoint()->GetPhysicalVolume();
-//	if (!volume) return;
-////
-//	if(volume->GetName() == "SenDet1") {
     for(int i=0; i < detectors->size(); i++)
     {
 		if (detectors->at(i)->Crossed(aStep)) {
@@ -61,6 +50,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 			analysisManager->AddNtupleRow(i);
 
 //			aStep->GetTrack()->SetTrackStatus(fStopAndKill);
+			break;
 		}
     }
 }

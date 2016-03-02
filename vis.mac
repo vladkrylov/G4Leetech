@@ -22,7 +22,7 @@
 #distance from the edge to beginning of the collimator system
 /Micromegas/det/setDet1X 20 mm
 
-/Micromegas/det/setRotationDeg 0 deg
+/Micromegas/det/setRotationDeg 23 deg
 #/Micromegas/det/setRotationAddDist 6.5 cm
 /Micromegas/det/setRotationAddDist 65 cm
 
@@ -47,8 +47,7 @@
 
 # for drawing the tracks
 /vis/scene/add/trajectories
-/vis/scene/add/userAction
-/vis/scene/add/axes
+#/vis/scene/add/axes
 
 # (if you prefer refreshing each event, comment out next line)
 /vis/scene/endOfEventAction accumulate

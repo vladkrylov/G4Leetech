@@ -1,4 +1,4 @@
-/Micromegas/det/setField 600.000000 gauss
+/Micromegas/det/setField 525 gauss
 
 /Micromegas/det/setCupThick 2.000000 mm
 
@@ -32,7 +32,7 @@
 /Micromegas/det/setMinEkin 10 keV
 /Micromegas/det/setMionRang 0.01 mm
 
-/run/numberOfThreads 1
+/run/numberOfThreads 4
 /run/initialize
 
 #gamma, e-, e+, mu-, mu+, pi-, pi+, kaon-, kaon+, anti_proton, proton
@@ -46,7 +46,7 @@
 /Leetech/RootFile leetech
 #/Micromegas/printModulo 100000
 
-/run/beamOn 500000
+/run/beamOn 100000
 
 
 
