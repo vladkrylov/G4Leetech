@@ -23,9 +23,6 @@
 #include "G4UserLimits.hh"
 #include "G4RunManager.hh"
 #include "G4AutoDelete.hh"
-#include "G4Polyline.hh"
-#include "G4VVisManager.hh"
-#include "G4Circle.hh"
 
 #include "TMath.h"
 
@@ -33,7 +30,7 @@
 #include "DetectorMessenger.hh"
 #include "MagneticField.hh"
 #include "SensitiveXZPlane.hh"
-#include "G4Text.hh"
+#include "GhostDetector.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -614,54 +611,35 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	//
 	G4double detectorGap = 1*mm;
 	G4ThreeVector detectorCenter = phyExitWin->GetObjectTranslation() + G4ThreeVector(0, 0, - exitWin->GetZHalfLength() - detectorGap - detectorThick/2);
-	G4Tubs* solidSenDet1 = new G4Tubs("SenDet1", 0, radNeckRing, detectorThick, 0, 360.0*deg);
-	G4LogicalVolume* logicSenDet1 = new G4LogicalVolume(solidSenDet1,
-					 //beamVacuum,
-						GetMaterial(6),
-					 "SenDet1");
-	G4VPhysicalVolume* physiSenDet1 = new G4PVPlacement(0,	//rotation
-				   detectorCenter,
-				   logicSenDet1,	//its logical volume
-				   "SenDet1",		//its name
-				   logicWorld,	     	//its mother  volume
-				   false,      		//no boolean operation
-				   0);			//copy number
+//	G4Tubs* solidSenDet1 = new G4Tubs("SenDet1", 0, radNeckRing, detectorThick, 0, 360.0*deg);
+//	G4LogicalVolume* logicSenDet1 = new G4LogicalVolume(solidSenDet1,
+//					 //beamVacuum,
+//						GetMaterial(6),
+//					 "SenDet1");
+//	G4VPhysicalVolume* physiSenDet1 = new G4PVPlacement(0,	//rotation
+//				   detectorCenter,
+//				   logicSenDet1,	//its logical volume
+//				   "SenDet1",		//its name
+//				   logicWorld,	     	//its mother  volume
+//				   false,      		//no boolean operation
+//				   0);			//copy number
 
-	G4ThreeVector entranceDetCenter = GetTargetFaceCenter() - G4ThreeVector(0., 0., 1*mm);
-	AddPlaneDetector(new SensitiveXZPlane("Entrance", entranceDetCenter.getX(), entranceDetCenter.getZ(), radNeckRing));
-	AddPlaneDetector(new SensitiveXZPlane("Exit", detectorCenter.getX(), detectorCenter.getZ(), radNeckRing));
+	G4ThreeVector beforeTargetDetCenter = GetTargetFaceCenter() - G4ThreeVector(0., 0., 10*mm);
+	AddPlaneDetector(new SensitiveXZPlane("BeforeTarget", beforeTargetDetCenter.getX(), beforeTargetDetCenter.getZ(), radNeckRing));
 
-	G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-//	for(size_t i=0; i<1; i++) {
-//		planeDetectors[i]->Visualize(WorldSizeY/2);
-		G4Polyline planeCountour;
+	G4ThreeVector afterTargetDetCenter = GetTargetFaceCenter() + G4ThreeVector(0., 0., target->GetZHalfLength()*2 + 1*um);
+	AddPlaneDetector(new SensitiveXZPlane("AfterTarget", afterTargetDetCenter.getX(), afterTargetDetCenter.getZ(), radNeckRing));
 
-		// Set red line colour
-		G4Colour         detCol(0.0, 1.0, 0.0);
-		G4VisAttributes  att(detCol);
-		att.SetVisibility(true);
-		planeCountour.SetVisAttributes(&att);
+	G4ThreeVector entrCollDetCenter = GetTargetFaceCenter() + G4ThreeVector(0., 0., 9.7*cm);
+	AddPlaneDetector(new SensitiveXZPlane("AfterEntranceColl", entrCollDetCenter.getX(), entrCollDetCenter.getZ(), radNeckRing+1*cm));
 
-		// Set vertex positions
-		planeCountour.push_back( G4Point3D(0,0,0));
-		planeCountour.push_back( G4Point3D(WorldSizeX/2,WorldSizeY/2,WorldSizeZ/2));
-		planeCountour.push_back( G4Point3D(-WorldSizeX/2,-WorldSizeY/2,-WorldSizeZ/2));
+	AddPlaneDetector(new SensitiveXZPlane("ExitChamber", detectorCenter.getX(), detectorCenter.getZ() + 22.4*cm, radNeckRing));
+	AddPlaneDetector(new SensitiveXZPlane("BeforeExitColl", detectorCenter.getX(), detectorCenter.getZ() + 9.7*cm, radNeckRing+1*cm));
+	AddPlaneDetector(new SensitiveXZPlane("AfterExitColl", detectorCenter.getX(), detectorCenter.getZ() + 5.2*cm, radNeckRing+1*cm));
+	AddPlaneDetector(new SensitiveXZPlane("AfterExitWindow", detectorCenter.getX(), detectorCenter.getZ(), radNeckRing));
 
-	if(pVVisManager) {
-		pVVisManager->Draw(G4Box("box",10*cm,10*cm,10*cm)
-				, G4VisAttributes(G4Colour(1,1,0))
-				, G4Transform3D(RMZero, G4ThreeVector(0,0,0))
-				);
-//		pVVisManager->Draw(planeCountour);
-//		pVVisManager->Draw(G4Circle(G4Point3D(0,0,0)));
-//		pVVisManager->Draw(G4Text("test"));
-	}
-
-//		planeCountour->push_back( G4Point3D(entranceDetCenter.getX()+radNeckRing, WorldSizeY/2, entranceDetCenter.getZ()) );
-//		planeCountour->push_back( G4Point3D(entranceDetCenter.getX()-radNeckRing, WorldSizeY/2, entranceDetCenter.getZ()) );
-//		planeCountour->push_back( G4Point3D(entranceDetCenter.getX()+radNeckRing, -WorldSizeY/2, entranceDetCenter.getZ()) );
-//		planeCountour->push_back( G4Point3D(entranceDetCenter.getX()-radNeckRing, -WorldSizeY/2, entranceDetCenter.getZ()) );
-//	}
+	for(size_t i=0; i<planeDetectors.size(); i++)
+		planeDetectors[i]->Visualize(logicWorld);
 
 	//
 	// Inner shielding
@@ -710,8 +688,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	//
 	// Visualization attributes
 	//
-	G4VisAttributes* detVisAtt = new G4VisAttributes(G4Colour(0.25,0.7,0.0));
-	logicSenDet1->SetVisAttributes(detVisAtt);
+//	G4VisAttributes* detVisAtt = new G4VisAttributes(G4Colour(0.25,0.7,0.0));
+//	logicSenDet1->SetVisAttributes(detVisAtt);
 
 	G4VisAttributes* pipeVisAtt = new G4VisAttributes(G4Colour(0.5,0.0,0.6));
 	logicBeamPipe->SetVisAttributes(pipeVisAtt);

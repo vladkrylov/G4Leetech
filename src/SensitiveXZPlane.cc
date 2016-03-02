@@ -5,10 +5,15 @@
  *      Author: vlad
  */
 
+#include "globals.hh"
 #include "G4Step.hh"
-#include "G4Polyline.hh"
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
+#include "G4Material.hh"
+#include "G4NistManager.hh"
+#include "G4Box.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4PVPlacement.hh"
 
 #include "SensitiveXZPlane.hh"
 
@@ -41,18 +46,24 @@ bool SensitiveXZPlane::Crossed(const G4Step* step)
 
 }
 
-void SensitiveXZPlane::Visualize(G4double worldYhalfSize)
+/**
+ * WARNING: call this method just to visualize the geometry!
+ * Simulation results are not correct when plane is visualized.
+ */
+void SensitiveXZPlane::Visualize(G4LogicalVolume* world)
 {
-	G4Polyline planeCountour;
+	G4NistManager* man = G4NistManager::Instance();
+	G4Material* vacuum  = man->FindOrBuildMaterial("G4_Galactic");
 
-	// Set red line colour
-	G4Colour         red(1.0, 0.0, 0.0);
-	G4VisAttributes  att(red);
-	planeCountour.SetVisAttributes(&att);
+	G4Box* solid = new G4Box(name, halfLength, halfLength, 1e-8);
+	G4LogicalVolume* logic = new G4LogicalVolume(solid, vacuum, name);
+	G4VPhysicalVolume* phys = new G4PVPlacement(0,	//rotation
+											    G4ThreeVector(xc, 0., zc),
+												logic,	//its logical volume
+											    name,		//its name
+												world,	     	//its mother  volume
+											    false,      		//no boolean operation
+												0);			//copy number
 
-	// Set vertex positions
-	planeCountour.push_back( G4Point3D(xc+halfLength, worldYhalfSize, zc) );
-	planeCountour.push_back( G4Point3D(xc-halfLength, worldYhalfSize, zc) );
-	planeCountour.push_back( G4Point3D(xc+halfLength, -worldYhalfSize, zc) );
-	planeCountour.push_back( G4Point3D(xc-halfLength, -worldYhalfSize, zc) );
+	logic->SetVisAttributes( new G4VisAttributes(G4Colour(153./255,76./255,0.)));
 }

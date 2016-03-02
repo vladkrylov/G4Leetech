@@ -9,6 +9,7 @@
 #define INCLUDE_SENSITIVEXZPLANE_HH_
 
 #include "G4ThreeVector.hh"
+#include "G4LogicalVolume.hh"
 #include "globals.hh"
 
 class G4Step;
@@ -21,7 +22,7 @@ public:
 
 	bool Crossed(const G4Step* step);
 	G4String& GetName();
-	void Visualize(G4double worldYhalfSize);
+	void Visualize(G4LogicalVolume* world);
 
 private:
 	G4String name;
