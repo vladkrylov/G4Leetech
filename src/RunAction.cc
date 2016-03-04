@@ -72,6 +72,7 @@ void RunAction::BeginOfRunAction(const G4Run* /*run*/)
 		analysisManager->CreateNtupleDColumn("P");
 		analysisManager->CreateNtupleDColumn("Theta");
 		analysisManager->CreateNtupleDColumn("StepLength");
+		analysisManager->CreateNtupleDColumn("PDGEncoding");
 		analysisManager->FinishNtuple();
     }
 
