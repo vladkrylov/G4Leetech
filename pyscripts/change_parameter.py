@@ -6,8 +6,8 @@ from subprocess import call
 
 current_path = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 
-def change_parameter(name, value):
-    mac_file_name = "%s/../run.mac" % current_path
+def change_parameter(mac_file_name, name, value):
+#     mac_file_name = "%s/../../LeetechSimpleMagnetV.0.4/run.mac" % current_path
     mac_temp_file_name = "%s.temp" % mac_file_name
     call(['cp', mac_file_name, mac_temp_file_name])
     

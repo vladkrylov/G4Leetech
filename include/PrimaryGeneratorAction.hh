@@ -12,6 +12,9 @@ class G4ParticleDefinition;
 class DetectorConstruction;
 class PrimaryGeneratorMessenger;
 
+class TFile;
+class TTree;
+
 /// Primary generator
 ///
 /// A single particle is generated.
@@ -59,6 +62,16 @@ private:
 
 	G4double GenerateEkin();
 	G4ThreeVector GenerateParticleDir();
+
+	// for root file source
+	G4int nEvents, eventsCounter;
+	G4double kinEnergy;
+	G4double Px, Py, Pz;
+	G4double x0, y0, z0;
+	G4double type;
+
+	TFile* f;
+	TTree* tree;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

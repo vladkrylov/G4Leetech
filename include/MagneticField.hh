@@ -8,7 +8,7 @@ class MagneticField : public G4MagneticField
 {
 public:
 	MagneticField();
-	~MagneticField();
+	virtual ~MagneticField();
 
 	virtual void GetFieldValue( const  double Point[4], double *Bfield ) const;
 

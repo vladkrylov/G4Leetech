@@ -48,6 +48,7 @@ class G4GenericMessenger;
 class MagneticField;
 class DetectorMessenger;
 class G4UniformMagField;
+class SensitiveXZPlane;
 
 /// Detector construction
 
@@ -72,7 +73,7 @@ private:
 	void DefineMaterials();
     G4Material* GetMaterial(G4int t);
 
-    MagneticField* fMagneticField;
+    static G4ThreadLocal MagneticField* fMagneticField;
 //    G4UniformMagField* fMagneticField;
   	G4FieldManager* fFieldMgr;
     G4VPhysicalVolume* physiBeamPipeV;
@@ -121,6 +122,8 @@ private:
   	G4double _RotationDeg;
   	G4double _RotAddDist;
 
+  	std::vector<SensitiveXZPlane*> planeDetectors;
+
 // messenger access functions
 public:
     void SetMagField(G4double valMy);	//set value of B - induction of magnetic field in Gauss
@@ -146,6 +149,10 @@ public:
 	void SetCollimatorGapEntranceY(G4double valMy);
 	void SetCollimatorGapExit1X(G4double valMy);
 	void SetCollimatorGapExit1Y(G4double valMy);
+
+//	SensitiveXZPlane* p1;
+	void AddPlaneDetector(SensitiveXZPlane* p);
+	std::vector<SensitiveXZPlane*>* GetPlaneDetectorList();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -223,5 +230,8 @@ inline void DetectorConstruction::SetCollimatorGapExit1Y(G4double valMy){
 	_collExit1GapY = valMy;
 }
 
+inline std::vector<SensitiveXZPlane*>* DetectorConstruction::GetPlaneDetectorList() {
+	return &planeDetectors;
+}
 
 #endif

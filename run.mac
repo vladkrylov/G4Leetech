@@ -1,28 +1,41 @@
-/Micromegas/det/setField 600.000000 gauss
 
-/Micromegas/det/setCupThick 2.000000 mm
-
-/Leetech/det/SetCollimatorEntranceGapX 10 mm
-/Leetech/det/SetCollimatorEntranceGapY 20 mm
+#
+#/Micromegas/det/SetGeomID 12
+#
+##P=1MeV
+##/Micromegas/det/setField 223 gauss
+##P=100keV
+##/Micromegas/det/setField 22.5 gauss
+##P=5MeV
+##/Micromegas/det/setField 500 gauss
+##E=100keV
+##/Micromegas/det/setField 81.5 gauss
+##P=3.5MeV -> 778 G
+#/Micromegas/det/setField 480 gauss
+#
+/Micromegas/det/setCupThick 10.000000 mm
+#
+/Leetech/det/SetCollimatorEntranceGapX 20.000000 mm
+/Leetech/det/SetCollimatorEntranceGapY 20.000000 mm
 /Leetech/det/SetCollimatorExit1GapX 20 mm
 /Leetech/det/SetCollimatorExit1GapY 20 mm
-
-#equal to first colim gap
-#/Micromegas/det/setApertureRaduis 1 cm
+#
+##equal to first colim gap
+##/Micromegas/det/setApertureRaduis 1 cm
 /Micromegas/det/setApertureRaduis 2 cm
-
-#equal to sec colim gap
-#/Micromegas/det/setApertureThick 1.4 cm
+#
+##equal to sec colim gap
+##/Micromegas/det/setApertureThick 1.4 cm
 /Micromegas/det/setApertureThick 2 cm
-
-#/Micromegas/det/setDet1InRad 0 mm unusable for now
-
+#
+##/Micromegas/det/setDet1InRad 0 mm unusable for now
+#
 /Micromegas/det/setDet1OutRad 1 cm
-
-#distance from the edge to beginning of the collimator system
-/Micromegas/det/setDet1X 20 mm
-
-/Micromegas/det/setRotationDeg 23 deg
+#
+##distance from the edge to beginning of the collimator system
+#/Micromegas/det/setDet1X 20 mm
+#
+/Micromegas/det/setRotationDeg 0 deg
 #/Micromegas/det/setRotationAddDist 6.5 cm
 /Micromegas/det/setRotationAddDist 65 cm
 
@@ -31,19 +44,16 @@
 /Micromegas/det/setMaxTime 20 s
 /Micromegas/det/setMinEkin 10 keV
 /Micromegas/det/setMionRang 0.01 mm
-
 /run/numberOfThreads 4
 /run/initialize
-
 #gamma, e-, e+, mu-, mu+, pi-, pi+, kaon-, kaon+, anti_proton, proton
-#/Micromegas/gun/PerticleType e-
+#/Micromegas/gun/PerticleType e- 
 
-# FIGHT settings
-#/Micromegas/gun/ParticleDirection 39 0.0 92
-#/Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
+/Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
 /Micromegas/gun/ParticleEnergy 3500.000000 keV
 
-/Leetech/RootFile /home/vlad/10g4work/LeetechRuns/B_scan_d=2mm_E=3500keV_1/B=600G/leetech
+#/control/execute gun.mac
+/Leetech/RootFile result
 #/Micromegas/printModulo 100000
 
 /run/beamOn 100000

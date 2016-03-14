@@ -1,9 +1,18 @@
 import getopt
 import sys
 import os
+
 from run import run
 from change_parameter import change_parameter
-from merge_root_files import merge as merge_root_files
+from subprocess import call
+
+# check for Geant4
+try:
+    G4_work_dir = os.environ['G4WORKDIR']
+except KeyError:
+    print "No Geant4 found"
+    exit(1)
+################################################
 
 number_of_processes = 1
 opts, args = getopt.getopt(sys.argv[1:], 'n:')
@@ -11,19 +20,22 @@ for o, a in opts:
     if o == '-n':
         number_of_processes = a
 
-target = 2 # mm
+entrance_coll = range(1,21) # mm
 E = 3500 # keV
-Bs = range(25, 601, 25) # Gauss
 
-change_parameter("/Micromegas/det/setCupThick", "%f mm" % target)
-change_parameter("/Micromegas/gun/ParticleEnergy", "%f keV" % E)
+project_dir = os.path.join(G4_work_dir, "Leetech")
+run_mac = os.path.join(project_dir, 'run.mac')
 
-for B in Bs:
-    change_parameter("/Micromegas/det/setField", "%f gauss" % B)
+change_parameter(run_mac, "/Micromegas/gun/ParticleEnergy", "%f keV" % E)
+
+for d in entrance_coll:
+    change_parameter(run_mac, "/Leetech/det/SetCollimatorEntranceGapX", "%f mm" % d)
+    change_parameter(run_mac, "/Leetech/det/SetCollimatorEntranceGapY", "%f mm" % d)
     
-    out_dir = os.path.abspath("/home/vlad/10g4work/LeetechRuns/B_scan_d=%dmm_E=%dkeV_1/B=%dG" % (target, E, B))
-    run(number_of_processes=number_of_processes,
-        out_user_dir=out_dir,
+    out_file = os.path.abspath("/home/vlad/10g4work/LeetechRuns/EntranceCollScan/opening=%dmm_E=%dkeV/result.root" % (d, E))
+    run(number_of_processes=4,
+        number_of_events=100000,
+        out_file=out_file,
         readme_enable=False)
+#     call(['python', ])
     
-    merge_root_files(out_dir)

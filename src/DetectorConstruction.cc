@@ -29,10 +29,12 @@
 #include "DetectorConstruction.hh"
 #include "DetectorMessenger.hh"
 #include "MagneticField.hh"
+#include "SensitiveXZPlane.hh"
+#include "GhostDetector.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//G4ThreadLocal G4UniformMagField* DetectorConstruction::fMagneticField = 0;
+G4ThreadLocal MagneticField* DetectorConstruction::fMagneticField = 0;
 //G4ThreadLocal G4FieldManager* DetectorConstruction::fFieldMgr = 0;
     
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -609,18 +611,35 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	//
 	G4double detectorGap = 1*mm;
 	G4ThreeVector detectorCenter = phyExitWin->GetObjectTranslation() + G4ThreeVector(0, 0, - exitWin->GetZHalfLength() - detectorGap - detectorThick/2);
-	G4Tubs* solidSenDet1 = new G4Tubs("SenDet1", 0, radNeckRing, detectorThick, 0, 360.0*deg);
-	G4LogicalVolume* logicSenDet1 = new G4LogicalVolume(solidSenDet1,
-					 //beamVacuum,
-						GetMaterial(6),
-					 "SenDet1");
-	G4VPhysicalVolume* physiSenDet1 = new G4PVPlacement(0,	//rotation
-				   detectorCenter,
-				   logicSenDet1,	//its logical volume
-				   "SenDet1",		//its name
-				   logicWorld,	     	//its mother  volume
-				   false,      		//no boolean operation
-				   0);			//copy number
+//	G4Tubs* solidSenDet1 = new G4Tubs("SenDet1", 0, radNeckRing, detectorThick, 0, 360.0*deg);
+//	G4LogicalVolume* logicSenDet1 = new G4LogicalVolume(solidSenDet1,
+//					 //beamVacuum,
+//						GetMaterial(6),
+//					 "SenDet1");
+//	G4VPhysicalVolume* physiSenDet1 = new G4PVPlacement(0,	//rotation
+//				   detectorCenter,
+//				   logicSenDet1,	//its logical volume
+//				   "SenDet1",		//its name
+//				   logicWorld,	     	//its mother  volume
+//				   false,      		//no boolean operation
+//				   0);			//copy number
+
+	G4ThreeVector beforeTargetDetCenter = GetTargetFaceCenter() - G4ThreeVector(0., 0., 10*mm);
+//	AddPlaneDetector(new SensitiveXZPlane("BeforeTarget", beforeTargetDetCenter.getX(), beforeTargetDetCenter.getZ(), radNeckRing, logicWorld));
+
+	G4ThreeVector afterTargetDetCenter = GetTargetFaceCenter() + G4ThreeVector(0., 0., target->GetZHalfLength()*2 + 5*cm);
+	AddPlaneDetector(new SensitiveXZPlane("BeforeEntranceColl", afterTargetDetCenter.getX(), afterTargetDetCenter.getZ(), radNeckRing, logicWorld));
+
+	G4ThreeVector entrCollDetCenter = GetTargetFaceCenter() + G4ThreeVector(0., 0., 9.7*cm);
+	AddPlaneDetector(new SensitiveXZPlane("AfterEntranceColl", entrCollDetCenter.getX(), entrCollDetCenter.getZ(), radNeckRing+1*cm, logicWorld));
+
+	AddPlaneDetector(new SensitiveXZPlane("ExitChamber", detectorCenter.getX(), detectorCenter.getZ() + 22.4*cm, radNeckRing, logicWorld));
+	AddPlaneDetector(new SensitiveXZPlane("BeforeExitColl", detectorCenter.getX(), detectorCenter.getZ() + 9.7*cm, radNeckRing+1*cm, logicWorld));
+	AddPlaneDetector(new SensitiveXZPlane("AfterExitColl", detectorCenter.getX(), detectorCenter.getZ() + 5.2*cm, radNeckRing+1*cm, logicWorld));
+	AddPlaneDetector(new SensitiveXZPlane("AfterExitWindow", detectorCenter.getX(), detectorCenter.getZ(), radNeckRing, logicWorld));
+
+//	for(size_t i=0; i<planeDetectors.size(); i++)
+//		planeDetectors[i]->Visualize(logicWorld);
 
 	//
 	// Inner shielding
@@ -669,8 +688,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	//
 	// Visualization attributes
 	//
-	G4VisAttributes* detVisAtt = new G4VisAttributes(G4Colour(0.25,0.7,0.0));
-	logicSenDet1->SetVisAttributes(detVisAtt);
+//	G4VisAttributes* detVisAtt = new G4VisAttributes(G4Colour(0.25,0.7,0.0));
+//	logicSenDet1->SetVisAttributes(detVisAtt);
 
 	G4VisAttributes* pipeVisAtt = new G4VisAttributes(G4Colour(0.5,0.0,0.6));
 	logicBeamPipe->SetVisAttributes(pipeVisAtt);
@@ -716,14 +735,14 @@ void DetectorConstruction::ConstructSDandField()
 //
 //	logicInnerBox->SetFieldManager(fFieldMgr, true);
 
-	fMagneticField = new MagneticField();
+	if(!fMagneticField) fMagneticField = new MagneticField();
 	fFieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
 	fMagneticField->setBfieldY(_MagFieldVal);
 	fMagneticField->setFieldBox1(chamber_xc, chamber_yc, chamber_zc,
 			1*m, innerBoxY, innerBoxZ);
 	fFieldMgr->SetDetectorField(fMagneticField);
 	fFieldMgr->CreateChordFinder(fMagneticField);
-	fFieldMgr->GetChordFinder()->SetDeltaChord(0.1*mm);
+//	fFieldMgr->GetChordFinder()->SetDeltaChord(0.1*mm);
 }
 
 void DetectorConstruction::DefineMaterials()
@@ -839,5 +858,12 @@ G4ThreeVector DetectorConstruction::GetTargetFaceCenter()
 {
 	return phyTarget->GetObjectTranslation() - G4ThreeVector(0, 0, _targetThickness/2);
 }
+
+void DetectorConstruction::AddPlaneDetector(SensitiveXZPlane* p)
+{
+	planeDetectors.push_back(p);
+}
+
+
 
 
