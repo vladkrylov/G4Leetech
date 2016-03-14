@@ -24,7 +24,9 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
     for(int i=0; i < detectors->size(); i++)
     {
-		if (detectors->at(i)->Crossed(aStep)) {
+		if (detectors->at(i)->Crossed(aStep)
+		&& (aStep->GetTrack()->GetDefinition()->GetPDGEncoding() == 11) // save only electrons to avoid Gb output files
+		) {
 			Px = aStep->GetPostStepPoint()->GetMomentum().getX();
 			Py = aStep->GetPostStepPoint()->GetMomentum().getY();
 			Pz = aStep->GetPostStepPoint()->GetMomentum().getZ();
