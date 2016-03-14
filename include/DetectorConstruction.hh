@@ -73,7 +73,7 @@ private:
 	void DefineMaterials();
     G4Material* GetMaterial(G4int t);
 
-    MagneticField* fMagneticField;
+    static G4ThreadLocal MagneticField* fMagneticField;
 //    G4UniformMagField* fMagneticField;
   	G4FieldManager* fFieldMgr;
     G4VPhysicalVolume* physiBeamPipeV;

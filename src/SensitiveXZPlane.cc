@@ -6,6 +6,7 @@
  */
 
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Step.hh"
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
@@ -17,53 +18,40 @@
 
 #include "SensitiveXZPlane.hh"
 
-SensitiveXZPlane::SensitiveXZPlane(G4String my_name, double my_xc, double my_zc, double my_halfLength)
+SensitiveXZPlane::SensitiveXZPlane(G4String my_name,
+		double my_xc,
+		double my_zc,
+		double my_halfLength,
+		G4LogicalVolume* motherLogic)
 {
+	G4NistManager* man = G4NistManager::Instance();
+	G4Material* vacuum  = man->FindOrBuildMaterial("G4_Galactic");
+
 	name = my_name;
 	xc = my_xc;
 	zc = my_zc;
 	halfLength = my_halfLength;
+
+	G4Box* plate = new G4Box(my_name, my_halfLength, my_halfLength, 1*um);
+	G4LogicalVolume *logic = new G4LogicalVolume(plate, vacuum, my_name);
+	phys = new G4PVPlacement(0, G4ThreeVector(my_xc, 0, my_zc), logic, my_name, motherLogic, false, 0);
+
+	logic->SetVisAttributes( new G4VisAttributes(G4Colour(153./255,76./255,0.)));
 }
 
 SensitiveXZPlane::~SensitiveXZPlane()
 {}
 
 /**
- * @brief: Checks whether the step crosses this plane
+ * @brief: Checks whether the step crosses this detector
  *
- * this implementation is valid only for phi == 0
- * i.e. plane is parallel to X axis and perpendicular to Z axis
- *
- * Also it is assumed that the step is small compared to
- * plane size (length) so it simplifies check of crossing
  */
 bool SensitiveXZPlane::Crossed(const G4Step* step)
 {
-	step->GetStepLength();
-
-	return ( (step->GetPreStepPoint()->GetPosition().getZ() - zc)*(step->GetPostStepPoint()->GetPosition().getZ() - zc) < 0 ) &&
-		( fabs(step->GetPreStepPoint()->GetPosition().getX() - xc) < halfLength );
-
+//	step->GetStepLength();
+//
+//	return ( (step->GetPreStepPoint()->GetPosition().getZ() - zc)*(step->GetPostStepPoint()->GetPosition().getZ() - zc) < 0 ) &&
+//		( fabs(step->GetPreStepPoint()->GetPosition().getX() - xc) < halfLength );
+	return step->GetPostStepPoint()->GetPhysicalVolume() == phys;
 }
 
-/**
- * WARNING: call this method just to visualize the geometry!
- * Simulation results are not correct when plane is visualized.
- */
-void SensitiveXZPlane::Visualize(G4LogicalVolume* world)
-{
-	G4NistManager* man = G4NistManager::Instance();
-	G4Material* vacuum  = man->FindOrBuildMaterial("G4_Galactic");
-
-	G4Box* solid = new G4Box(name, halfLength, halfLength, 1e-8);
-	G4LogicalVolume* logic = new G4LogicalVolume(solid, vacuum, name);
-	G4VPhysicalVolume* phys = new G4PVPlacement(0,	//rotation
-											    G4ThreeVector(xc, 0., zc),
-												logic,	//its logical volume
-											    name,		//its name
-												world,	     	//its mother  volume
-											    false,      		//no boolean operation
-												0);			//copy number
-
-	logic->SetVisAttributes( new G4VisAttributes(G4Colour(153./255,76./255,0.)));
-}

@@ -1,4 +1,4 @@
-/Micromegas/det/setField 520 gauss
+/Micromegas/det/setField 525 gauss
 
 /Micromegas/det/setCupThick 2 mm
 
@@ -22,7 +22,7 @@
 #distance from the edge to beginning of the collimator system
 /Micromegas/det/setDet1X 20 mm
 
-/Micromegas/det/setRotationDeg 23 deg
+/Micromegas/det/setRotationDeg 0 deg
 #/Micromegas/det/setRotationAddDist 6.5 cm
 /Micromegas/det/setRotationAddDist 65 cm
 

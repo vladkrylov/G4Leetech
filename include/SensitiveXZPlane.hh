@@ -14,21 +14,22 @@
 
 class G4Step;
 class G4String;
+class G4VPhysicalVolume;
 
 class SensitiveXZPlane {
 public:
-	SensitiveXZPlane(G4String my_name, double my_xc, double my_zc, double my_length);
+	SensitiveXZPlane(G4String my_name, double my_xc, double my_zc, double my_length, G4LogicalVolume* motherLogic);
 	virtual ~SensitiveXZPlane();
 
 	bool Crossed(const G4Step* step);
 	G4String& GetName();
-	void Visualize(G4LogicalVolume* world);
 
 private:
 	G4String name;
 	double xc;
 	double zc;
 	double halfLength;
+	G4VPhysicalVolume *phys;
 };
 
 class PlaneDetectors {

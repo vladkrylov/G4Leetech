@@ -34,7 +34,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//G4ThreadLocal G4UniformMagField* DetectorConstruction::fMagneticField = 0;
+G4ThreadLocal MagneticField* DetectorConstruction::fMagneticField = 0;
 //G4ThreadLocal G4FieldManager* DetectorConstruction::fFieldMgr = 0;
     
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -625,18 +625,18 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 //				   0);			//copy number
 
 	G4ThreeVector beforeTargetDetCenter = GetTargetFaceCenter() - G4ThreeVector(0., 0., 10*mm);
-	AddPlaneDetector(new SensitiveXZPlane("BeforeTarget", beforeTargetDetCenter.getX(), beforeTargetDetCenter.getZ(), radNeckRing));
+//	AddPlaneDetector(new SensitiveXZPlane("BeforeTarget", beforeTargetDetCenter.getX(), beforeTargetDetCenter.getZ(), radNeckRing, logicWorld));
 
-	G4ThreeVector afterTargetDetCenter = GetTargetFaceCenter() + G4ThreeVector(0., 0., target->GetZHalfLength()*2 + 1*um);
-	AddPlaneDetector(new SensitiveXZPlane("AfterTarget", afterTargetDetCenter.getX(), afterTargetDetCenter.getZ(), radNeckRing));
+	G4ThreeVector afterTargetDetCenter = GetTargetFaceCenter() + G4ThreeVector(0., 0., target->GetZHalfLength()*2 + 5*cm);
+	AddPlaneDetector(new SensitiveXZPlane("BeforeEntranceColl", afterTargetDetCenter.getX(), afterTargetDetCenter.getZ(), radNeckRing, logicWorld));
 
 	G4ThreeVector entrCollDetCenter = GetTargetFaceCenter() + G4ThreeVector(0., 0., 9.7*cm);
-	AddPlaneDetector(new SensitiveXZPlane("AfterEntranceColl", entrCollDetCenter.getX(), entrCollDetCenter.getZ(), radNeckRing+1*cm));
+	AddPlaneDetector(new SensitiveXZPlane("AfterEntranceColl", entrCollDetCenter.getX(), entrCollDetCenter.getZ(), radNeckRing+1*cm, logicWorld));
 
-	AddPlaneDetector(new SensitiveXZPlane("ExitChamber", detectorCenter.getX(), detectorCenter.getZ() + 22.4*cm, radNeckRing));
-	AddPlaneDetector(new SensitiveXZPlane("BeforeExitColl", detectorCenter.getX(), detectorCenter.getZ() + 9.7*cm, radNeckRing+1*cm));
-	AddPlaneDetector(new SensitiveXZPlane("AfterExitColl", detectorCenter.getX(), detectorCenter.getZ() + 5.2*cm, radNeckRing+1*cm));
-	AddPlaneDetector(new SensitiveXZPlane("AfterExitWindow", detectorCenter.getX(), detectorCenter.getZ(), radNeckRing));
+	AddPlaneDetector(new SensitiveXZPlane("ExitChamber", detectorCenter.getX(), detectorCenter.getZ() + 22.4*cm, radNeckRing, logicWorld));
+	AddPlaneDetector(new SensitiveXZPlane("BeforeExitColl", detectorCenter.getX(), detectorCenter.getZ() + 9.7*cm, radNeckRing+1*cm, logicWorld));
+	AddPlaneDetector(new SensitiveXZPlane("AfterExitColl", detectorCenter.getX(), detectorCenter.getZ() + 5.2*cm, radNeckRing+1*cm, logicWorld));
+	AddPlaneDetector(new SensitiveXZPlane("AfterExitWindow", detectorCenter.getX(), detectorCenter.getZ(), radNeckRing, logicWorld));
 
 //	for(size_t i=0; i<planeDetectors.size(); i++)
 //		planeDetectors[i]->Visualize(logicWorld);
@@ -735,14 +735,14 @@ void DetectorConstruction::ConstructSDandField()
 //
 //	logicInnerBox->SetFieldManager(fFieldMgr, true);
 
-	fMagneticField = new MagneticField();
+	if(!fMagneticField) fMagneticField = new MagneticField();
 	fFieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
 	fMagneticField->setBfieldY(_MagFieldVal);
 	fMagneticField->setFieldBox1(chamber_xc, chamber_yc, chamber_zc,
 			1*m, innerBoxY, innerBoxZ);
 	fFieldMgr->SetDetectorField(fMagneticField);
 	fFieldMgr->CreateChordFinder(fMagneticField);
-	fFieldMgr->GetChordFinder()->SetDeltaChord(0.1*mm);
+//	fFieldMgr->GetChordFinder()->SetDeltaChord(0.1*mm);
 }
 
 void DetectorConstruction::DefineMaterials()

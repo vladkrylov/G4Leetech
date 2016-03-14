@@ -61,6 +61,7 @@ void RunAction::BeginOfRunAction(const G4Run* /*run*/)
 		analysisManager->CreateNtupleIColumn("TypeID");
 		analysisManager->CreateNtupleIColumn("TrackID");
 		analysisManager->CreateNtupleIColumn("ParentID");
+		analysisManager->CreateNtupleIColumn("PDGEncoding");
 		analysisManager->CreateNtupleDColumn("Energy");
 		analysisManager->CreateNtupleDColumn("Time");
 		analysisManager->CreateNtupleDColumn("PosX");
@@ -72,7 +73,6 @@ void RunAction::BeginOfRunAction(const G4Run* /*run*/)
 		analysisManager->CreateNtupleDColumn("P");
 		analysisManager->CreateNtupleDColumn("Theta");
 		analysisManager->CreateNtupleDColumn("StepLength");
-		analysisManager->CreateNtupleDColumn("PDGEncoding");
 		analysisManager->FinishNtuple();
     }
 

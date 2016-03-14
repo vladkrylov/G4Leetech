@@ -57,20 +57,20 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(/*const DetectorConstruction* det
 	fParticleGun->SetParticlePosition(beamPipeCenter);
 	fParticleGun->SetParticleMomentumDirection(targetDirection);
 
-	// reading parameters from .root file
-	f = new TFile("result2.root");
-	tree = (TTree*)f->Get("ExitChamber");
-	tree->SetBranchAddress("Energy", &kinEnergy);
-	tree->SetBranchAddress("PX", &Px);
-	tree->SetBranchAddress("PY", &Py);
-	tree->SetBranchAddress("PZ", &Pz);
-	tree->SetBranchAddress("PosX", &x0);
-	tree->SetBranchAddress("PosY", &y0);
-	tree->SetBranchAddress("PosZ", &z0);
-	tree->SetBranchAddress("PDGEncoding", &type);
-
-	nEvents = tree->GetEntries();
-	eventsCounter = 0;
+//	// reading parameters from .root file
+//	f = new TFile("result2.root");
+//	tree = (TTree*)f->Get("ExitChamber");
+//	tree->SetBranchAddress("Energy", &kinEnergy);
+//	tree->SetBranchAddress("PX", &Px);
+//	tree->SetBranchAddress("PY", &Py);
+//	tree->SetBranchAddress("PZ", &Pz);
+//	tree->SetBranchAddress("PosX", &x0);
+//	tree->SetBranchAddress("PosY", &y0);
+//	tree->SetBranchAddress("PosZ", &z0);
+//	tree->SetBranchAddress("PDGEncoding", &type);
+//
+//	nEvents = tree->GetEntries();
+//	eventsCounter = 0;
 
 //	fParticleGun = new G4ParticleGun();
 //	fParticleGun->SetNumberOfParticles(1);
@@ -98,33 +98,31 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
-//{
-//	fParticleGun->SetParticleDefinition(FindParticle(_particleName));
-//	fParticleGun->SetParticleMomentumDirection(GenerateParticleDir());
-//	fParticleGun->SetParticleEnergy(GenerateEkin());
-//    fParticleGun->GeneratePrimaryVertex(event);
-//}
-
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 {
-	for(int i=eventsCounter%nEvents; i<nEvents; i++) {
-		tree->GetEntry(i);
-		// choose only electrons
-		if (type == 11) {
-			G4cout <<"Event type " << type << G4endl;
-			G4cout <<"      energy = " << kinEnergy << G4endl;
-			G4cout <<"      z0 = " << z0 << G4endl;
-
-			eventsCounter = i+1;
-			fParticleGun->SetParticlePosition(G4ThreeVector(x0, y0, z0));
-			fParticleGun->SetParticleEnergy(kinEnergy);
-			fParticleGun->SetParticleMomentumDirection(G4ThreeVector(Px, Py, Pz));
-			fParticleGun->GeneratePrimaryVertex(event);
-			break;
-		}
-	}
+	fParticleGun->SetParticleEnergy(_energy);
+    fParticleGun->GeneratePrimaryVertex(event);
 }
+
+//void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
+//{
+//	for(int i=eventsCounter%nEvents; i<nEvents; i++) {
+//		tree->GetEntry(i);
+//		// choose only electrons
+//		if (type == 11) {
+//			G4cout <<"Event type " << type << G4endl;
+//			G4cout <<"      energy = " << kinEnergy << G4endl;
+//			G4cout <<"      z0 = " << z0 << G4endl;
+//
+//			eventsCounter = i+1;
+//			fParticleGun->SetParticlePosition(G4ThreeVector(x0, y0, z0));
+//			fParticleGun->SetParticleEnergy(kinEnergy);
+//			fParticleGun->SetParticleMomentumDirection(G4ThreeVector(Px, Py, Pz));
+//			fParticleGun->GeneratePrimaryVertex(event);
+//			break;
+//		}
+//	}
+//}
 
 G4ThreeVector PrimaryGeneratorAction::GenerateParticleDir()
 {
