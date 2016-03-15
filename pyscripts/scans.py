@@ -32,7 +32,7 @@ for d in entrance_coll:
     change_parameter(run_mac, "/Leetech/det/SetCollimatorEntranceGapX", "%f mm" % d)
     change_parameter(run_mac, "/Leetech/det/SetCollimatorEntranceGapY", "%f mm" % d)
     
-    out_file = os.path.abspath("/home/vlad/10g4work/LeetechRuns/EntranceCollScan/opening=%dmm_E=%dkeV/result.root" % (d, E))
+    out_file = os.path.abspath(os.path.join(G4_work_dir, "LeetechRuns/EntranceCollScan/opening=%dmm_E=%dkeV/result.root" % (d, E)))
     run(number_of_processes=4,
         number_of_events=100000,
         out_file=out_file,
