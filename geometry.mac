@@ -1,0 +1,40 @@
+/Micromegas/det/setCupThick 1.000000 mm
+#
+/Leetech/det/SetCollimatorEntranceGapX 20.000000 mm
+/Leetech/det/SetCollimatorEntranceGapY 20.000000 mm
+/Leetech/det/SetCollimatorExit1GapX 20 mm
+/Leetech/det/SetCollimatorExit1GapY 20 mm
+#
+##equal to first colim gap
+##/Micromegas/det/setApertureRaduis 1 cm
+/Micromegas/det/setApertureRaduis 2 cm
+#
+##equal to sec colim gap
+##/Micromegas/det/setApertureThick 1.4 cm
+/Micromegas/det/setApertureThick 2 cm
+#
+##/Micromegas/det/setDet1InRad 0 mm unusable for now
+#
+/Micromegas/det/setDet1OutRad 1 cm
+#
+##distance from the edge to beginning of the collimator system
+#/Micromegas/det/setDet1X 20 mm
+#
+/Micromegas/det/setRotationDeg 0 deg
+#/Micromegas/det/setRotationAddDist 6.5 cm
+/Micromegas/det/setRotationAddDist 65 cm
+
+/Micromegas/det/setMaxStep 10 mm
+/Micromegas/det/setMaxLength 5.0 m
+/Micromegas/det/setMaxTime 20 s
+/Micromegas/det/setMinEkin 10 keV
+/Micromegas/det/setMionRang 0.01 mm
+/run/numberOfThreads 4
+/run/initialize
+#gamma, e-, e+, mu-, mu+, pi-, pi+, kaon-, kaon+, anti_proton, proton
+#/Micromegas/gun/PerticleType e- 
+
+/Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
+/Micromegas/gun/ParticleEnergy 3500.000000 keV
+
+/geometry/test/grid_test
