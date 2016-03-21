@@ -25,10 +25,10 @@ RunAction::RunAction()
     G4cout << "*******************" << G4endl;
     long seeds[2];
     time_t systime = time(NULL);
-//    seeds[0] = (long) systime;
-//    seeds[1] = (long) (systime*G4UniformRand());
-    seeds[0] = (long) 1;
-    seeds[1] = (long) 2;
+    seeds[0] = (long) systime;
+    seeds[1] = (long) (systime*G4UniformRand());
+//    seeds[0] = (long) 1;
+//    seeds[1] = (long) 2;
     G4Random::setTheSeeds(seeds);
     G4Random::showEngineStatus();
 }
