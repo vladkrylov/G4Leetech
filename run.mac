@@ -45,10 +45,10 @@
 #/gps/direction 0    0    1
 
 # beampipe (23 deg inclined) center
-/gps/position -281.146    0    -397.101 mm
-/gps/direction 0.3907311284892737    0    0.9205048534524404
-
-/gps/energy 3.5 MeV
+#/gps/position -281.146    0    -397.101 mm
+#/gps/direction 0.3907311284892737    0    0.9205048534524404
+#
+#/gps/energy 3.5 MeV
 
 #/Leetech/RootFile LeetechVis
 

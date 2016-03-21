@@ -20,7 +20,7 @@ for o, a in opts:
     if o == '-n':
         number_of_processes = a
 
-entrance_coll = range(1,21) # mm
+exit_coll = range(1,21) # mm
 E = 3500 # keV
 
 project_dir = os.path.join(G4_work_dir, "Leetech")
@@ -28,11 +28,11 @@ run_mac = os.path.join(project_dir, 'run.mac')
 
 change_parameter(run_mac, "/Micromegas/gun/ParticleEnergy", "%f keV" % E)
 
-for d in entrance_coll:
-    change_parameter(run_mac, "/Leetech/det/SetCollimatorEntranceGapX", "%f mm" % d)
-    change_parameter(run_mac, "/Leetech/det/SetCollimatorEntranceGapY", "%f mm" % d)
+for d in exit_coll:
+    change_parameter(run_mac, "/Leetech/det/SetCollimatorExit1GapX", "%f mm" % d)
+    change_parameter(run_mac, "/Leetech/det/SetCollimatorExit1GapY", "%f mm" % d)
     
-    out_file = os.path.abspath(os.path.join(G4_work_dir, "LeetechRuns/EntranceCollScan5/opening=%dmm_E=%dkeV/leetech.root" % (d, E)))
+    out_file = os.path.abspath(os.path.join(G4_work_dir, "/exp/leetech/simulations/ExitCollScan_Entr1mm/opening=%dmm_E=%dkeV/leetech.root" % (d, E)))
     run(number_of_processes=4,
         number_of_events=10000,
         out_file=out_file,

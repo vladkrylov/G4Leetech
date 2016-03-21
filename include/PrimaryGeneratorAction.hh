@@ -7,19 +7,14 @@
 
 
 class G4GeneralParticleSource;
+class G4ParticleGun;
 class G4GenericMessenger;
 class G4Event;
 class G4ParticleDefinition;
 class DetectorConstruction;
-
-/// Primary generator
-///
-/// A single particle is generated.
-/// User can select 
-/// - the initial momentum and angle
-/// - the momentum and angle spreads
-/// - random selection of a particle type from proton, kaon+, pi+, muon+, e+ 
-
+class PrimaryGeneratorMessenger;
+class TFile;
+class TTree;
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
@@ -30,15 +25,31 @@ public:
     virtual void GeneratePrimaries(G4Event*);
     
 	static const PrimaryGeneratorAction* Instance();
-	       const G4GeneralParticleSource* GetParticleGun()
-	           const { return pgun; }
-private:
-	       static PrimaryGeneratorAction* fgInstance;
-	                  G4GeneralParticleSource* pgun;
-    DetectorConstruction* Detector;
 
+	void SetRootFile(G4String newValue);
+	void SetTreeName(G4String newValue);
+
+private:
+	static PrimaryGeneratorAction* fgInstance;
+	PrimaryGeneratorMessenger* gunMessenger;
+
+	G4ParticleGun* fParticleGun;
+    DetectorConstruction* Detector;
 	G4String _particleName;
 
+	G4ParticleDefinition* FindParticle(G4String particleName);
+
+	// for root file source
+	G4int nEvents, eventsCounter;
+	G4double kinEnergy;
+	G4double Px, Py, Pz;
+	G4double x0, y0, z0;
+	G4int type;
+
+	G4String rootFileName;
+	G4String rootTreeName;
+	TFile* f;
+	TTree* tree;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
