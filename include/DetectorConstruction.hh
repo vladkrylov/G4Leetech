@@ -36,19 +36,18 @@
 #include "G4RotationMatrix.hh"
 #include "G4FieldManager.hh"
 
-#include <vector>
-
-class B5MagneticField;
+#include "G4ThreeVector.hh"
+#include "fstream"
 
 class G4VPhysicalVolume;
 class G4Material;
 class G4VSensitiveDetector;
 class G4VisAttributes;
 class G4GenericMessenger;
-class MagneticField;
+class MyMagneticField;
 class DetectorMessenger;
-class G4UniformMagField;
-class SensitiveXZPlane;
+class G4ChordFinder;
+class GhostDetector;
 
 /// Detector construction
 
@@ -60,33 +59,40 @@ public:
     
     virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField();
+    std::ofstream myfile;
+    std::ofstream myfile2;
+    G4ThreeVector GetTargetFaceCenter;
+    G4ThreeVector BeamPipeCenter;
+    G4ThreeVector GetTargetFaceCenter1;
+    DetectorMessenger* detectorMessenger;
+    G4ThreeVector GetBeamPipeCenter()const { return BeamPipeCenter; };
+    G4ThreeVector GettTargetFaceCenter()const { return GetTargetFaceCenter1; };
 
-    G4ThreeVector GetBeamPipeCenter();
-    G4ThreeVector GetTargetFaceCenter();
+    void AddPlaneDetector(GhostDetector* d);
+    std::vector<GhostDetector*>* GetPlaneDetectorList();
 
 private:
-//    static G4ThreadLocal G4UniformMagField* fMagneticField;
-//    static G4ThreadLocal G4FieldManager* fFieldMgr;
+	static G4ThreadLocal MyMagneticField* fMagneticField;
+	static G4ThreadLocal G4FieldManager* fFieldMgr;
 
-    DetectorMessenger* detectorMessenger;
+	std::vector<GhostDetector*> ghostDetectors;
 
 	void DefineMaterials();
     G4Material* GetMaterial(G4int t);
 
-    static G4ThreadLocal MagneticField* fMagneticField;
-//    G4UniformMagField* fMagneticField;
-  	G4FieldManager* fFieldMgr;
     G4VPhysicalVolume* physiBeamPipeV;
     G4VPhysicalVolume* phyTarget;
     G4LogicalVolume *logicInnerBox;
+    G4LogicalVolume *SimpleMagnetBox;
 
-	G4double innerBoxX;
-	G4double innerBoxY;
-	G4double innerBoxZ;
+    	G4double innerBoxX;
+    	G4double innerBoxY;
+    	G4double innerBoxZ;
 
-	G4double chamber_xc;
-	G4double chamber_yc;
-	G4double chamber_zc;
+   	G4double chamber_xc;
+    G4double chamber_yc;
+    G4double chamber_zc;
+
 
 	// Define materials
 	G4Material*        alMy;
@@ -122,8 +128,6 @@ private:
   	G4double _RotationDeg;
   	G4double _RotAddDist;
 
-  	std::vector<SensitiveXZPlane*> planeDetectors;
-
 // messenger access functions
 public:
     void SetMagField(G4double valMy);	//set value of B - induction of magnetic field in Gauss
@@ -149,10 +153,6 @@ public:
 	void SetCollimatorGapEntranceY(G4double valMy);
 	void SetCollimatorGapExit1X(G4double valMy);
 	void SetCollimatorGapExit1Y(G4double valMy);
-
-//	SensitiveXZPlane* p1;
-	void AddPlaneDetector(SensitiveXZPlane* p);
-	std::vector<SensitiveXZPlane*>* GetPlaneDetectorList();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -230,8 +230,9 @@ inline void DetectorConstruction::SetCollimatorGapExit1Y(G4double valMy){
 	_collExit1GapY = valMy;
 }
 
-inline std::vector<SensitiveXZPlane*>* DetectorConstruction::GetPlaneDetectorList() {
-	return &planeDetectors;
+inline std::vector<GhostDetector*>* DetectorConstruction::GetPlaneDetectorList() {
+	return &ghostDetectors;
 }
+
 
 #endif

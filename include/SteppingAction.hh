@@ -5,18 +5,19 @@
 #include "G4UserSteppingAction.hh"
 #include "g4root.hh"
 
-class SensitiveXZPlane;
+class EventAction;
+class GhostDetector;
 
 class SteppingAction: public G4UserSteppingAction
 {
 public:
-	SteppingAction();
+	SteppingAction(EventAction*);
 	virtual ~SteppingAction();
 
 	void UserSteppingAction(const G4Step*);
-
 private:
-	std::vector<SensitiveXZPlane*>* detectors;
+  EventAction* fEventAction;
+	std::vector<GhostDetector*>* detectors;
 
 	G4AnalysisManager* analysisManager;
 	G4int BranchId;

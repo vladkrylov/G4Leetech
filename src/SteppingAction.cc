@@ -4,11 +4,12 @@
 #include "G4RunManager.hh"
 #include "G4VPhysicalVolume.hh"
 
-#include "DetectorConstruction.hh"
+#include "EventAction.hh"
 #include "SteppingAction.hh"
-#include "SensitiveXZPlane.hh"
+#include "DetectorConstruction.hh"
+#include "GhostDetector.hh"
 
-SteppingAction::SteppingAction()
+SteppingAction::SteppingAction(EventAction* EvAct):G4UserSteppingAction(),fEventAction(EvAct)
 {
 	DetectorConstruction* geometry = (DetectorConstruction*)G4RunManager::GetRunManager()->GetUserDetectorConstruction();
 	detectors = geometry->GetPlaneDetectorList();
@@ -22,11 +23,11 @@ SteppingAction::~SteppingAction()
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-    for(int i=0; i < detectors->size(); i++)
-    {
+	for(size_t i=0; i < detectors->size(); i++) {
 		if (detectors->at(i)->Crossed(aStep)
 		&& (aStep->GetTrack()->GetDefinition()->GetPDGEncoding() == 11) // save only electrons to avoid Gb output files
 		) {
+
 			Px = aStep->GetPostStepPoint()->GetMomentum().getX();
 			Py = aStep->GetPostStepPoint()->GetMomentum().getY();
 			Pz = aStep->GetPostStepPoint()->GetMomentum().getZ();
@@ -55,6 +56,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 //			aStep->GetTrack()->SetTrackStatus(fStopAndKill);
 			break;
 		}
-    }
+	}
 }
+
 
