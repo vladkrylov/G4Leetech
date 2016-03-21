@@ -24,13 +24,15 @@
 #include "G4UserLimits.hh"
 #include "G4RunManager.hh"
 #include "G4AutoDelete.hh"
-#include"SensitiveDetector.hh"
 #include "G4SDManager.hh"
 #include "G4ChordFinder.hh"
 #include "TMath.h"
-#include<fstream>
+
+#include <fstream>
+
 #include "DetectorConstruction.hh"
 #include "DetectorMessenger.hh"
+#include "GhostDetector.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -409,14 +411,14 @@ myfile2.open("gun.mac");
 	G4VPhysicalVolume *physiInnerBox = new G4PVPlacement(0, G4ThreeVector(innerBox_xc,innerBox_yc,innerBox_zc), logicInnerBox, "InnerBox", logicChamber, false,	 0);
 
 
-	//DETECTOR
-	G4Box *InnerDetector = new G4Box("CheckDetector", 1.5*cm, 1.5*cm, 0.1*cm);
-	G4LogicalVolume* logicInnerDetector = new G4LogicalVolume(InnerDetector, GetMaterial(5), "Detector");
-	G4VPhysicalVolume *physicInnerDetector = new G4PVPlacement(0, G4ThreeVector(203*mm,0,-110*mm), logicInnerDetector , "CheckDetector",logicWorld, false,	 0);
-	G4Tubs *CollimatorHole = new G4Tubs("CollimatorHole", 0, 0.5*mm, 1*cm, 0, 360*deg);
-	G4Box *SimpleCollimator = new G4Box("InnerDetector2", 5.5*cm, 5.5*cm, 1*cm);
-	G4SubtractionSolid *CollimatorWithHole= new G4SubtractionSolid("CollimatorWithHole",
-			SimpleCollimator, CollimatorHole);
+//	//DETECTOR
+//	G4Box *InnerDetector = new G4Box("CheckDetector", 1.5*cm, 1.5*cm, 0.1*cm);
+//	G4LogicalVolume* logicInnerDetector = new G4LogicalVolume(InnerDetector, GetMaterial(5), "Detector");
+//	G4VPhysicalVolume *physicInnerDetector = new G4PVPlacement(0, G4ThreeVector(203*mm,0,-110*mm), logicInnerDetector , "CheckDetector",logicWorld, false,	 0);
+//	G4Tubs *CollimatorHole = new G4Tubs("CollimatorHole", 0, 0.5*mm, 1*cm, 0, 360*deg);
+//	G4Box *SimpleCollimator = new G4Box("InnerDetector2", 5.5*cm, 5.5*cm, 1*cm);
+//	G4SubtractionSolid *CollimatorWithHole= new G4SubtractionSolid("CollimatorWithHole",
+//			SimpleCollimator, CollimatorHole);
 /*
 	G4LogicalVolume* SimpleCollimator_log = new G4LogicalVolume(CollimatorWithHole, GetMaterial(5), "SimpleCollimator");
 	G4VPhysicalVolume *physicSimpleCollimator = new G4PVPlacement(0, G4ThreeVector(-203*mm,0,-137*mm),
@@ -426,13 +428,13 @@ myfile2.open("gun.mac");
 			false,
 			0);
 			*/
-G4LogicalVolume* SimpleCollimator2_log = new G4LogicalVolume(CollimatorWithHole, GetMaterial(7), "SimpleCollimator");
-		G4VPhysicalVolume *physicSimpleCollimator2 = new G4PVPlacement(0, G4ThreeVector(203*mm,0,-225*mm),
-				SimpleCollimator2_log ,
-				"SimpleCollimator",
-				logicWorld,
-				false,
-				0);
+//	G4LogicalVolume* SimpleCollimator2_log = new G4LogicalVolume(CollimatorWithHole, GetMaterial(7), "SimpleCollimator");
+//	G4VPhysicalVolume *physicSimpleCollimator2 = new G4PVPlacement(0, G4ThreeVector(203*mm,0,-225*mm),
+//				SimpleCollimator2_log ,
+//				"SimpleCollimator",
+//				logicWorld,
+//				false,
+//				0);
 
 
 	G4double thicknessOfColBox = 8*mm;
@@ -673,53 +675,60 @@ G4LogicalVolume* SimpleCollimator2_log = new G4LogicalVolume(CollimatorWithHole,
 	G4double detectorGap = 1*mm;
 	G4ThreeVector detectorCenter = phyExitWin->GetObjectTranslation() + G4ThreeVector(0, 0, - exitWin->GetZHalfLength() - detectorGap - detectorThick/2);
 
-	G4Tubs* solidSenDet1 = new G4Tubs("SenDet1", 0, radNeckRing, detectorThick, 0, 360.0*deg);
-	G4LogicalVolume* logicSenDet1 = new G4LogicalVolume(solidSenDet1,
-					 //beamVacuum,
-						GetMaterial(6),
-					 "SenDet1");
-//	G4ThreeVector detectorCenter = phyTarget->GetObjectTranslation() + G4ThreeVector(0, 0, target->GetZHalfLength()+solidSenDet1->GetZHalfLength()+1*mm);
-	G4VPhysicalVolume* physiSenDet1 = new G4PVPlacement(0,	//rotation
-				   detectorCenter,
-				   logicSenDet1,	//its logical volume
-				   "SenDet1",		//its name
-				   logicWorld,	     	//its mother  volume
-				   false,      		//no boolean operation
-				   0);			//copy number
+//	G4Tubs* solidSenDet1 = new G4Tubs("SenDet1", 0, radNeckRing, detectorThick, 0, 360.0*deg);
+//	G4LogicalVolume* logicSenDet1 = new G4LogicalVolume(solidSenDet1,
+//					 //beamVacuum,
+//						GetMaterial(6),
+//					 "SenDet1");
+////	G4ThreeVector detectorCenter = phyTarget->GetObjectTranslation() + G4ThreeVector(0, 0, target->GetZHalfLength()+solidSenDet1->GetZHalfLength()+1*mm);
+//	G4VPhysicalVolume* physiSenDet1 = new G4PVPlacement(0,	//rotation
+//				   detectorCenter,
+//				   logicSenDet1,	//its logical volume
+//				   "SenDet1",		//its name
+//				   logicWorld,	     	//its mother  volume
+//				   false,      		//no boolean operation
+//				   0);			//copy number
 
 	G4cout<<"BeamPipeCenter0"<<BeamPipeCenter0<<G4endl;
 	G4cout<<"GetTargetFaceCenter1"<<GetTargetFaceCenter0-G4ThreeVector(0, 0, _targetThickness/2)<<G4endl;
 	G4cout<<"GetTargetDirection"<<GetTargetFaceCenter0-G4ThreeVector(0, 0, _targetThickness/2) - BeamPipeCenter0<<G4endl;
-   G4ThreeVector targetDirection=GetTargetFaceCenter0-G4ThreeVector(0, 0, _targetThickness/2) - BeamPipeCenter0;
-		myfile2  <<std::setw(14)<<"/gps/position "<<std::setw(8)<< BeamPipeCenter0.x()<<" "<<std::setw(8)<<BeamPipeCenter0.y()<<" "<<std::setw(8)
-		 <<BeamPipeCenter0.z()<<std::setw(8)
-		 <<" mm"<<std::setw(8)
-		 <<" "<<std::endl;
-		 myfile2  <<std::setw(14)<<"/gps/direction "<<std::setw(8)<< targetDirection.x()<<" "<<std::setw(8)<<targetDirection.y()<<" "<<std::setw(8)
-				 <<targetDirection.z()<<std::setw(8)
-				 <<" "<<std::endl;
-	//
-/*myfile.open("Bfield.txt");
-fMagneticField = new MagneticField();
-         double Point[4];
-		 G4double Bx=0;
-		 G4double By=0;
-		 G4double Bz=0;
-		 for(double x=-100;x<=100;){
-		 for(double y=-60;y<=60;){
-		 for(double z=-600;z<=600;){
-			 Point[0]=x;
-			 Point[1]=y;
-			 Point[2]=z;
-		By=fMagneticField->SetField(Point,Bx, By, Bz);
-		 myfile<<std::setw(12)<<Bx<<" "<<std::setw(12)<<By<<std::setw(8)<<std::setw(8)<<Bz<<std::setw(8)<< Point[0]<<" "<<std::setw(8)<< Point[1]<<" "<<std::setw(8)
-				 << Point[2]<<std::setw(8)<<fMagneticField->SetField(Point,Bx, By, Bz)<<std::setw(8)<<" "<<std::endl;
+	G4ThreeVector targetDirection=GetTargetFaceCenter0-G4ThreeVector(0, 0, _targetThickness/2) - BeamPipeCenter0;
+	myfile2  <<std::setw(14)<<"/gps/position "<<std::setw(8)<< BeamPipeCenter0.x()<<" "<<std::setw(8)<<BeamPipeCenter0.y()<<" "<<std::setw(8)
+	<<BeamPipeCenter0.z()<<std::setw(8)
+	<<" mm"<<std::setw(8)
+	<<" "<<std::endl;
+	myfile2  <<std::setw(14)<<"/gps/direction "<<std::setw(8)<< targetDirection.x()<<" "<<std::setw(8)<<targetDirection.y()<<" "<<std::setw(8)
+	<<targetDirection.z()<<std::setw(8)
+	<<" "<<std::endl;
 
-		 z=z+10;
-		 }y=y+10;}x=x+10;}
-		 myfile.close();
-*/
-		 ///
+	/**
+	 * Ghost detectors
+	 */
+	G4ThreeVector afterTargetDetCenter = phyTarget->GetObjectTranslation() + G4ThreeVector(0., 0., target->GetZHalfLength()+10*um);
+//	AddPlaneDetector(new GhostDetector("AfterTarget", afterTargetDetCenter.getX(), afterTargetDetCenter.getZ(), radNeckRing, logicWorld));
+
+	G4ThreeVector beforeEntCollDetCenter = (physiColim22->GetObjectTranslation() + physiColim21->GetObjectTranslation())/2.
+			- G4ThreeVector(0., 0., solidColim22->GetZHalfLength() + 20*um);
+	AddPlaneDetector(new GhostDetector("BeforeEntranceColl", beforeEntCollDetCenter.getX(), beforeEntCollDetCenter.getZ(), 7*mm, logicWorld));
+
+	G4ThreeVector entrCollDetCenter = (physiColim11->GetObjectTranslation() + physiColim12->GetObjectTranslation())/2.
+			+ G4ThreeVector(0., 0., solidColim11->GetZHalfLength() + 20*um);
+	AddPlaneDetector(new GhostDetector("AfterEntranceColl", entrCollDetCenter.getX(), entrCollDetCenter.getZ(), radNeckRing+1*cm, logicWorld));
+
+	AddPlaneDetector(new GhostDetector("ExitChamber", detectorCenter.getX(), -innerMainBox->GetZHalfLength() + 20*um, radNeckRing-5*mm, logicInnerBox));
+
+	G4ThreeVector ex1BeforeCollDetCenter = (physiColim33->GetObjectTranslation() + physiColim34->GetObjectTranslation())/2.
+			+ G4ThreeVector(0., 0., solidColim33->GetZHalfLength() + 20*um);
+	AddPlaneDetector(new GhostDetector("BeforeExitColl", ex1BeforeCollDetCenter.getX(), ex1BeforeCollDetCenter.getZ(), radNeckRing+1*cm, logicWorld));
+
+	G4ThreeVector ex1AfterCollDetCenter = (physiColim44->GetObjectTranslation() + physiColim43->GetObjectTranslation())/2.
+			- G4ThreeVector(0., 0., solidColim44->GetZHalfLength() + 20*um);
+	AddPlaneDetector(new GhostDetector("AfterExitColl", ex1AfterCollDetCenter.getX(), ex1AfterCollDetCenter.getZ(), radNeckRing+1*cm, logicWorld));
+
+	AddPlaneDetector(new GhostDetector("AfterExitWindow", detectorCenter.getX(), detectorCenter.getZ(), radNeckRing, logicWorld));
+
+
+	///
 	// Inner shielding
 	//
 	G4Box *solidInnerBotShield1 = new G4Box("InnerBotShield1",InnerBotShield1X/2, InnerBotShield1Y/2, InnerBotShield1Z/2);
@@ -766,8 +775,8 @@ fMagneticField = new MagneticField();
 	//
 	// Visualization attributes
 	//
-	G4VisAttributes* detVisAtt = new G4VisAttributes(G4Colour(0.25,0.7,0.0));
-	logicSenDet1->SetVisAttributes(detVisAtt);
+//	G4VisAttributes* detVisAtt = new G4VisAttributes(G4Colour(0.25,0.7,0.0));
+//	logicSenDet1->SetVisAttributes(detVisAtt);
 
 	G4VisAttributes* pipeVisAtt = new G4VisAttributes(G4Colour(0.5,0.0,0.6));
 	logicBeamPipe->SetVisAttributes(pipeVisAtt);
@@ -796,31 +805,31 @@ fMagneticField = new MagneticField();
 	logicChamber->SetUserLimits(stepLimit);
 	logicInnerBox->SetUserLimits(stepLimit);
 
-	G4double thickness = 0.5*mm;
-	G4double width = 4*mm;
-	G4double height = 4*mm;
-
-	G4Box* solidDD =
-	new G4Box("DD", 0.5*height, 0.5*width, 0.5*thickness);
-
-	G4LogicalVolume* logicDD =
-	new G4LogicalVolume(solidDD,
-						DD_mat,
-						"DDLV");
-
-	new G4PVPlacement(0,
-				  G4ThreeVector(203*mm,0,-245*mm),
-				  logicDD,
-				  "DD",
-				  logicWorld,
-				  false,
-				  0);
-	 myfile2.close();
-	//always return the physical World
-	SensitiveDetector *detector = new SensitiveDetector("InnerDetector");
-     G4SDManager* SDman = G4SDManager::GetSDMpointer();
-     SDman->AddNewDetector(detector);
-     logicInnerDetector->SetSensitiveDetector(detector);
+//	G4double thickness = 0.5*mm;
+//	G4double width = 4*mm;
+//	G4double height = 4*mm;
+//
+//	G4Box* solidDD =
+//	new G4Box("DD", 0.5*height, 0.5*width, 0.5*thickness);
+//
+//	G4LogicalVolume* logicDD =
+//	new G4LogicalVolume(solidDD,
+//						DD_mat,
+//						"DDLV");
+//
+//	new G4PVPlacement(0,
+//				  G4ThreeVector(203*mm,0,-245*mm),
+//				  logicDD,
+//				  "DD",
+//				  logicWorld,
+//				  false,
+//				  0);
+//	 myfile2.close();
+//	//always return the physical World
+//	SensitiveDetector *detector = new SensitiveDetector("InnerDetector");
+//     G4SDManager* SDman = G4SDManager::GetSDMpointer();
+//     SDman->AddNewDetector(detector);
+//     logicInnerDetector->SetSensitiveDetector(detector);
 	return physWorld;
 
 }
@@ -830,11 +839,11 @@ fMagneticField = new MagneticField();
 void DetectorConstruction::ConstructSDandField()
 {
 	 fMagneticField = new MyMagneticField();
-	     fFieldMgr = new G4FieldManager();
-	     fFieldMgr->SetDetectorField(fMagneticField);
-	     fFieldMgr->CreateChordFinder(fMagneticField);
-	     G4bool forceToAllDaughters = true;
-	     logicInnerBox->SetFieldManager(fFieldMgr, forceToAllDaughters);
+	 fFieldMgr = new G4FieldManager();
+	 fFieldMgr->SetDetectorField(fMagneticField);
+	 fFieldMgr->CreateChordFinder(fMagneticField);
+	 G4bool forceToAllDaughters = true;
+	 logicInnerBox->SetFieldManager(fFieldMgr, forceToAllDaughters);
 
 }
 
@@ -954,4 +963,8 @@ G4ThreeVector DetectorConstruction::GettTargetFaceCenter()
 	return GetTargetFaceCenter1;
 }*/
 
+void DetectorConstruction::AddPlaneDetector(GhostDetector* d)
+{
+	ghostDetectors.push_back(d);
+}
 

@@ -26,18 +26,15 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 
 {
 	pgun = new G4GeneralParticleSource();
-		  fgInstance = this;
-		  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-		   G4ParticleDefinition* particle = particleTable->FindParticle("e-");
-		   pgun->SetParticleDefinition(particle);
+	fgInstance = this;
+	G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+	G4ParticleDefinition* particle = particleTable->FindParticle("e-");
+	pgun->SetParticleDefinition(particle);
 
 	Detector = (DetectorConstruction*)G4RunManager::GetRunManager()->GetUserDetectorConstruction();
 
-	G4ThreeVector beamPipeCenter = Detector->GetBeamPipeCenter();
-	G4ThreeVector targetCenter = Detector->GettTargetFaceCenter();
-	G4ThreeVector targetDirection = targetCenter - beamPipeCenter;
-
-	pgun->SetParticlePosition(G4ThreeVector(0.,0.,1.));
+//	pgun->SetParticlePosition(G4ThreeVector(0.,0.,1.));
+	pgun->SetParticlePosition(Detector->GetBeamPipeCenter());
 }
 
 
@@ -53,9 +50,6 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 {
-	//fParticleGun->SetParticleDefinition(FindParticle(_particleName));
-	//fParticleGun->SetParticleMomentumDirection(GenerateParticleDir());
-	//fParticleGun->SetParticleEnergy(GenerateEkin());
 	pgun->GeneratePrimaryVertex(event);
 }
 

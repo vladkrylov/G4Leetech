@@ -1,5 +1,3 @@
-/Micromegas/det/setField 525 gauss
-
 /Micromegas/det/setCupThick 2 mm
 
 /Leetech/det/SetCollimatorEntranceGapX 20 mm
@@ -22,7 +20,7 @@
 #distance from the edge to beginning of the collimator system
 /Micromegas/det/setDet1X 20 mm
 
-/Micromegas/det/setRotationDeg 0 deg
+/Micromegas/det/setRotationDeg 23 deg
 #/Micromegas/det/setRotationAddDist 6.5 cm
 /Micromegas/det/setRotationAddDist 65 cm
 
@@ -34,6 +32,8 @@
 
 /run/numberOfThreads 1
 /run/initialize
+
+/Leetech/det/setField 525 gauss
 
 # set messenger parameters
 /run/verbose 1
@@ -52,17 +52,27 @@
 # (if you prefer refreshing each event, comment out next line)
 /vis/scene/endOfEventAction accumulate
 
-#gamma, e-, e+, mu-, mu+, pi-, pi+, kaon-, kaon+, anti_proton, proton
-#/Micromegas/gun/PerticleType e- 
+#/gps/position -203.000        0 -397.101      mm        
+#/gps/direction  0        0  1 
+
+# direction corresponds to 23 degrees beam pipe angle
+
+# after entrance collimators
+#/gps/position -203    0    -150 mm
+#/gps/direction 0    0    -1
+
+# just before the main exit, in the chamber 
+#/gps/position 203    0    8 mm
+#/gps/direction 0    0    -1
+
+# beampipe (23 deg inclined) center
+/gps/position -281.146    0    -397.101 mm
+/gps/direction 0.3907311284892737    0    0.9205048534524404
+
+/gps/energy 3.5 MeV
 
 
-# FIGHT settings
-#/Micromegas/gun/ParticleDirection 39 0.0 92
-/Micromegas/gun/ParticleDirectionRMS 0.0 0.0 0.0
-/Micromegas/gun/ParticleEnergy 3.5 MeV
+#/Leetech/RootFile LeetechVis
 
-/Leetech/RootFile LeetechVis
-#/Micromegas/printModulo 100000
-
-/run/beamOn 500
+/run/beamOn 5000
 

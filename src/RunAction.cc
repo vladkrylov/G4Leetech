@@ -6,8 +6,12 @@
 #include "g4root.hh"
 #include "Randomize.hh"
 #include "G4HCofThisEvent.hh"
+#include "G4RunManager.hh"
+
 #include "EventAction.hh"
 #include "RunAction.hh"
+#include "GhostDetector.hh"
+#include "DetectorConstruction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -21,33 +25,12 @@ RunAction::RunAction()
     G4cout << "*******************" << G4endl;
     long seeds[2];
     time_t systime = time(NULL);
-    seeds[0] = (long) systime;
-    seeds[1] = (long) (systime*G4UniformRand());
+//    seeds[0] = (long) systime;
+//    seeds[1] = (long) (systime*G4UniformRand());
+    seeds[0] = (long) 1;
+    seeds[1] = (long) 2;
     G4Random::setTheSeeds(seeds);
     G4Random::showEngineStatus();
-
-    // Create analysis manager
-    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-    analysisManager->SetFileName(rootFileName);
-
-    // Creating ntuple
-    analysisManager->CreateNtuple("Hits", "Leetech simulation results");
-    analysisManager->CreateNtupleIColumn("TypeID");
-    analysisManager->CreateNtupleIColumn("TrackID");
-    analysisManager->CreateNtupleIColumn("ParentID");
-    analysisManager->CreateNtupleDColumn("Energy");
-    analysisManager->CreateNtupleDColumn("Time");
-    analysisManager->CreateNtupleDColumn("PosX");
-    analysisManager->CreateNtupleDColumn("PosY");
-    analysisManager->CreateNtupleDColumn("PosZ");
-    analysisManager->CreateNtupleDColumn("PX");
-    analysisManager->CreateNtupleDColumn("PY");
-    analysisManager->CreateNtupleDColumn("PZ");
-    analysisManager->CreateNtupleDColumn("P");
-    analysisManager->CreateNtupleDColumn("Theta");
-    analysisManager->CreateNtupleDColumn("Charge");
-    analysisManager->CreateNtupleDColumn("DepositedEnergy");
-    analysisManager->FinishNtuple();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,11 +44,36 @@ RunAction::~RunAction()
 
 void RunAction::BeginOfRunAction(const G4Run* /*run*/)
 {
-	G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+	// Get the information about detectors from DetectorConstruction
+	DetectorConstruction* geometry = (DetectorConstruction*)G4RunManager::GetRunManager()->GetUserDetectorConstruction();
+	const std::vector<GhostDetector*>* detectors = geometry->GetPlaneDetectorList();
 
-	// Open an output file
-	// The default file name is set in RunAction::RunAction(),
-	// it can be overwritten in a macro
+	G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+	analysisManager->SetFileName(rootFileName);
+
+    // Creating ntuples
+    for(size_t i=0; i<detectors->size(); i++)
+    {
+    	analysisManager->CreateNtuple(detectors->at(i)->GetName(), "Leetech simulation results");
+
+		analysisManager->CreateNtupleIColumn("TypeID");
+		analysisManager->CreateNtupleIColumn("TrackID");
+		analysisManager->CreateNtupleIColumn("ParentID");
+		analysisManager->CreateNtupleIColumn("PDGEncoding");
+		analysisManager->CreateNtupleDColumn("Energy");
+		analysisManager->CreateNtupleDColumn("Time");
+		analysisManager->CreateNtupleDColumn("PosX");
+		analysisManager->CreateNtupleDColumn("PosY");
+		analysisManager->CreateNtupleDColumn("PosZ");
+		analysisManager->CreateNtupleDColumn("PX");
+		analysisManager->CreateNtupleDColumn("PY");
+		analysisManager->CreateNtupleDColumn("PZ");
+		analysisManager->CreateNtupleDColumn("P");
+		analysisManager->CreateNtupleDColumn("Theta");
+		analysisManager->CreateNtupleDColumn("StepLength");
+		analysisManager->FinishNtuple();
+    }
+
 	analysisManager->OpenFile();
 }
 

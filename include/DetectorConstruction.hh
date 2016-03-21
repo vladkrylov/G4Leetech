@@ -47,6 +47,7 @@ class G4GenericMessenger;
 class MyMagneticField;
 class DetectorMessenger;
 class G4ChordFinder;
+class GhostDetector;
 
 /// Detector construction
 
@@ -65,16 +66,16 @@ public:
     G4ThreeVector GetTargetFaceCenter1;
     DetectorMessenger* detectorMessenger;
     G4ThreeVector GetBeamPipeCenter()const { return BeamPipeCenter; };
-
-
     G4ThreeVector GettTargetFaceCenter()const { return GetTargetFaceCenter1; };
-    //void GetThreeVector( G4ThreeVector); //const return BeamPipeCenter; }
-   // void GetThreeVector2( G4ThreeVector) ;//const { return (GetTargetFaceCenter1);}
+
+    void AddPlaneDetector(GhostDetector* d);
+    std::vector<GhostDetector*>* GetPlaneDetectorList();
 
 private:
-static G4ThreadLocal MyMagneticField* fMagneticField;
-static G4ThreadLocal G4FieldManager* fFieldMgr;
+	static G4ThreadLocal MyMagneticField* fMagneticField;
+	static G4ThreadLocal G4FieldManager* fFieldMgr;
 
+	std::vector<GhostDetector*> ghostDetectors;
 
 	void DefineMaterials();
     G4Material* GetMaterial(G4int t);
@@ -227,6 +228,10 @@ inline void DetectorConstruction::SetCollimatorGapExit1X(G4double valMy){
 
 inline void DetectorConstruction::SetCollimatorGapExit1Y(G4double valMy){
 	_collExit1GapY = valMy;
+}
+
+inline std::vector<GhostDetector*>* DetectorConstruction::GetPlaneDetectorList() {
+	return &ghostDetectors;
 }
 
 

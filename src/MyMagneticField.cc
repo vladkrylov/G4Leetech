@@ -63,12 +63,12 @@ void MyMagneticField::DefineCommands()
 {
     // Define /B5/field command directory using generic messenger class
     fMessenger = new G4GenericMessenger(this, 
-                                        "/Magnet/field/",
+                                        "/Leetech/det/",
                                         "Field control");
 
     // fieldValue command 
     G4GenericMessenger::Command& valueCmd
-      = fMessenger->DeclareMethodWithUnit("value","tesla",
+      = fMessenger->DeclareMethodWithUnit("setField","tesla",
                                   &MyMagneticField::SetField,
                                   "Set field strength.");
     valueCmd.SetParameterName("field", true);
