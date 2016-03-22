@@ -52,7 +52,7 @@ def run(number_of_processes, out_file, number_of_events, readme_enable):
 	# set the number of threads filebase to run.mac
 	change_parameter(run_mac, '/run/numberOfThreads', str(number_of_processes))
 	change_parameter(run_mac, '/Leetech/RootFile', filebase)
-	change_parameter(run_mac, '/run/beamOn', number_of_events)
+	change_parameter(run_mac, '/run/beamOn', int(number_of_events))
 	# copy the run.mac to the output file
 	call(['cp', run_mac, os.path.join(out_path, 'run.mac')])
 	

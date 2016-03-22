@@ -4,11 +4,18 @@ from subprocess import call
 
 import math
 import os
+import sys
 
+# set input parameter
+entrance_collimators = 20 # mm
+if len(sys.argv) > 1:
+    entrance_collimators = float(sys.argv[1])
+
+# options
 SavePlots = True
 save_base = "opening"
 save_files = []
-result_file = 'exit_coll_scan_fit.pdf'
+result_file = 'exit_fit_entrance=%dmm.pdf' % entrance_collimators
 
 gStyle.SetOptStat("emr")
 gStyle.SetOptFit(1111)
@@ -18,13 +25,15 @@ gStyle.SetStatX(0.6);    # Top right corner.
 gStyle.SetStatY(0.6);
 
 exit_opening = range(1,21)
+# exit_opening = [12]
 
 x = exit_opening
 y = []
+dy = []
 
 for d in exit_opening:
 # d = 1;
-    f = TFile("/home/vlad/10g4work/LeetechRuns/ExitCollScan_Entr1mm/opening=%dmm/leetech.root" % d)
+    f = TFile("/home/vlad/10g4work/LeetechRuns/ExitCollScan_Entr%dmm/opening=%dmm/leetech.root" % (entrance_collimators, d))
     tree = f.Get("AfterExitWindow")
     N = tree.GetEntriesFast()
     
@@ -61,6 +70,7 @@ for d in exit_opening:
     Hist_x.Fit("fit_func")
     
     y.append(fit_func.GetParameter(2))
+    dy.append(fit_func.GetParError(2))
     
     # Example of how to get e.g. means from a histogram and result of fit:
     print "Means:   mu_x = %6.3f"%(Hist_x.GetMean())
@@ -81,20 +91,27 @@ for d in exit_opening:
         canvas.SaveAs(file_name)
         
 g = TGraph(len(x), array("d", x), array("d", y))
- 
+  
 g.Draw("A*")
 g.SetTitle("")
 g.GetXaxis().SetTitle("Exit collimators opening, mm")
 g.GetYaxis().SetTitle("Sigma of exit Gaussian fit")
- 
+  
 canvas.SetGrid()
 canvas.Update()
-
+ 
 if (SavePlots):
     file_name = "%s_%s.pdf" % (save_base, 'fit')
     save_files.append(file_name)
     canvas.SaveAs(file_name)
     
+    with open("%s.txt" % result_file[:-4], 'w') as out_data:
+        template = "{0:20}{1:20}{2:20}"
+        out_data.write(template.format("#opening, mm", "sigma, MeV", "sigma error, MeV"))
+        out_data.write('\n')
+        for i in range(len(exit_opening)):
+            out_data.write(str(x[i]).ljust(20) + str(y[i]).ljust(20) + str(dy[i]).ljust(20) + "\n")
+     
     call(['pdfunite'] + save_files + [result_file])
     for f in save_files:
         os.remove(f)

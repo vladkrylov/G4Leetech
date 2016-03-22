@@ -1,1 +1,0 @@
-         %X           Y           Z       Theta         Phi       En_kin     Charge             
