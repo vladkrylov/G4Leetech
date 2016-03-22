@@ -6,16 +6,12 @@ import math
 import os
 import sys
 
-# set input parameter
-entrance_collimators = 20 # mm
-if len(sys.argv) > 1:
-    entrance_collimators = float(sys.argv[1])
 
 # options
 SavePlots = True
 save_base = "opening"
 save_files = []
-result_file = 'exit_fit_entrance=%dmm.pdf' % entrance_collimators
+result_file = 'entrance_fit_exit=20mm.pdf'
 
 gStyle.SetOptStat("emr")
 gStyle.SetOptFit(1111)
@@ -24,16 +20,16 @@ gStyle.SetOptFit(1111)
 gStyle.SetStatX(0.6);    # Top right corner.
 gStyle.SetStatY(0.6);
 
-exit_opening = range(1,21)
-# exit_opening = [12]
+# entrance_opening = range(1,21)
+entrance_opening = [7]
 
-x = exit_opening
+x = entrance_opening
 y = []
 dy = []
 
-for d in exit_opening:
+for d in entrance_opening:
 # d = 1;
-    f = TFile("/exp/leetech/simulations/ExitCollScan/ExitCollScan_Entr%dmm/opening=%dmm/leetech.root" % (entrance_collimators, d))
+    f = TFile("/exp/leetech/simulations/EntranceCollScan/B=400gauss/opening=%dmm_E=3500keV/leetech.root" % d)
     tree = f.Get("AfterExitWindow")
     N = tree.GetEntriesFast()
     
@@ -47,7 +43,7 @@ for d in exit_opening:
     # ------------
     canvas = TCanvas( "canvas", "canvas", 50, 50, 1200, 600 )
     
-    Hist_x.SetTitle("LEETECH exit energy fit, d_exit=%d mm" % d)
+    Hist_x.SetTitle("LEETECH entrance energy fit, d_entrance=%d mm" % d)
     Hist_x.GetXaxis().SetRangeUser(1., 3.)
     Hist_x.GetXaxis().SetTitle("Energy, MeV")
     Hist_x.GetYaxis().SetTitle("Counts")
@@ -85,36 +81,36 @@ for d in exit_opening:
     leg.Draw()
     
     canvas.Update()
-#     if (SavePlots):
-#         file_name = "%s=%dmm.pdf" % (save_base, d)
-#         save_files.append(file_name)
-#         canvas.SaveAs(file_name)
-        
+    if (SavePlots):
+        file_name = "%s=%dmm.pdf" % (save_base, d)
+        save_files.append(file_name)
+        canvas.SaveAs(file_name)
+         
 g = TGraph(len(x), array("d", x), array("d", y))
-  
+   
 g.Draw("A*")
 g.SetTitle("")
-g.GetXaxis().SetTitle("Exit collimators opening, mm")
-g.GetYaxis().SetTitle("Sigma of exit Gaussian fit")
-  
+g.GetXaxis().SetTitle("Entrance collimators opening, mm")
+g.GetYaxis().SetTitle("Sigma of entrance Gaussian fit")
+   
 canvas.SetGrid()
 canvas.Update()
- 
+  
 if (SavePlots):
     file_name = "%s_%s.pdf" % (save_base, 'fit')
     save_files.append(file_name)
     canvas.SaveAs(file_name)
-    
+     
     with open("%s.txt" % result_file[:-4], 'w') as out_data:
         template = "{0:20}{1:20}{2:20}"
         out_data.write(template.format("#opening, mm", "sigma, MeV", "sigma error, MeV"))
         out_data.write('\n')
-        for i in range(len(exit_opening)):
+        for i in range(len(entrance_opening)):
             out_data.write(str(x[i]).ljust(20) + str(y[i]).ljust(20) + str(dy[i]).ljust(20) + "\n")
-     
-#     call(['pdfunite'] + save_files + [result_file])
-#     for f in save_files:
-#         os.remove(f)
+       
+    call(['pdfunite'] + save_files + [result_file])
+    for f in save_files:
+        os.remove(f)
     
 # ---------------------------------------------------------------------------------- 
 raw_input('Press Enter to exit')
