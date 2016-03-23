@@ -12,6 +12,7 @@
 #include "RunAction.hh"
 #include "GhostDetector.hh"
 #include "DetectorConstruction.hh"
+#include "RunActionMessenger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -19,6 +20,8 @@ RunAction::RunAction()
 : G4UserRunAction()
 , rootFileName("leetech")
 {
+	runMessenger = new RunActionMessenger(this);
+
     // automatic (time-based) random seeds for each run
     G4cout << "*******************" << G4endl;
     G4cout << "*** AUTOSEED ON ***" << G4endl;
@@ -38,6 +41,7 @@ RunAction::RunAction()
 RunAction::~RunAction()
 {
   delete G4AnalysisManager::Instance();
+  delete runMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -86,6 +90,13 @@ void RunAction::EndOfRunAction(const G4Run* /*run*/)
 	G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 	analysisManager->Write();
 	analysisManager->CloseFile();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::SetOutRootFile(G4String newValue)
+{
+	rootFileName = newValue;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -74,5 +74,7 @@
 /Leetech/gun/SourceROOTFile /home/vlad/10g4work/LeetechRuns/EntranceCollScans/EntranceCollScan_7detectors/opening=19mm_E=3500keV/leetech.root
 /Leetech/gun/tree AfterEntranceColl
 
+/Leetech/OutRootFile leetech1
+
 /run/beamOn 5000
 

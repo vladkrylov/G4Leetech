@@ -2,8 +2,8 @@
 
 /Leetech/det/SetCollimatorEntranceGapX 20.000000 mm
 /Leetech/det/SetCollimatorEntranceGapY 20.000000 mm
-/Leetech/det/SetCollimatorExit1GapX 20 mm
-/Leetech/det/SetCollimatorExit1GapY 20 mm
+/Leetech/det/SetCollimatorExit1GapX 1.000000 mm
+/Leetech/det/SetCollimatorExit1GapY 1.000000 mm
 
 #equal to first colim gap
 #/Micromegas/det/setApertureRaduis 1 cm
@@ -30,7 +30,7 @@
 /Micromegas/det/setMinEkin 10 keV
 /Micromegas/det/setMionRang 0.01 mm
 
-/run/numberOfThreads 4
+/run/numberOfThreads 1
 /run/initialize
 
 /Leetech/det/setField 525 gauss
@@ -51,7 +51,9 @@
 #/gps/energy 3.5 MeV
 
 /Leetech/gun/SourceROOTFile /home/vlad/10g4work/LeetechRuns/EntranceCollScans/EntranceCollScan_7detectors/opening=19mm_E=3500keV/leetech.root
-/Leetech/gun/tree AfterEntranceColl
+/Leetech/gun/tree BeforeExitColl
 
-/run/beamOn 10000
+/Leetech/OutRootFile leetech_p1
+
+/run/beamOn 100
 

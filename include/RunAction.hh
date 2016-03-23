@@ -5,7 +5,7 @@
 #include "globals.hh"
 
 class G4Run;
-/// Run action class
+class RunActionMessenger;
 
 class RunAction : public G4UserRunAction
 {
@@ -16,8 +16,11 @@ public:
     virtual void BeginOfRunAction(const G4Run*);
     virtual void   EndOfRunAction(const G4Run*);
 
+    void SetOutRootFile(G4String newValue);
+
 private:
     G4String rootFileName;
+    RunActionMessenger* runMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
