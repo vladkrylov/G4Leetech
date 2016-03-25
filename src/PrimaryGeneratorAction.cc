@@ -75,10 +75,11 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 		// choose only electrons
 		if (type == 11) {
 			eventsCounter++;
-			G4cout <<"Event " << eventsCounter << G4endl;
+			if (eventsCounter%1000 == 0)
+				G4cout <<"Event " << eventsCounter << G4endl;
 
-			fParticleGun->SetParticlePosition(G4ThreeVector(x0, y0, z0));
-			fParticleGun->SetParticleEnergy(kinEnergy);
+			fParticleGun->SetParticlePosition(G4ThreeVector(x0 + 0.5*mm*(G4UniformRand()-0.5), y0 + 0.5*mm*(G4UniformRand()-0.5), z0));
+			fParticleGun->SetParticleEnergy(kinEnergy + 20*keV*(G4UniformRand()-0.5));
 			fParticleGun->SetParticleMomentumDirection(G4ThreeVector(Px, Py, Pz));
 			fParticleGun->GeneratePrimaryVertex(event);
 			break;
