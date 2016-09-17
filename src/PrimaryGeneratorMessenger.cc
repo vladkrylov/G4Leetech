@@ -9,36 +9,36 @@
 PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(PrimaryGeneratorAction* Gun)
 : primGenAction(Gun)
 {
-	gunDir = new G4UIdirectory("/Micromegas/gun/");
+	gunDir = new G4UIdirectory("/Leetech/gun/");
 	gunDir->SetGuidance("PrimaryGenerator control");
 
-	ParticleCmd = new G4UIcmdWithAString("/Micromegas/gun/PerticleType",this);
+	ParticleCmd = new G4UIcmdWithAString("/Leetech/gun/PerticleType",this);
 	ParticleCmd->SetGuidance("Choose particle type: gamma, e-, e+, mu-, mu+, pi-, pi+, kaon-, kaon+, anti_proton, proton");
 	ParticleCmd->SetParameterName("PrticleType",false);
 	ParticleCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-	ParticlePositionCmd = new G4UIcmdWith3Vector("/Micromegas/gun/ParticlePosition", this);
+	ParticlePositionCmd = new G4UIcmdWith3Vector("/Leetech/gun/ParticlePosition", this);
 	ParticlePositionCmd -> SetGuidance("Choose initial particle position.");
 	ParticlePositionCmd -> SetParameterName("ParticlePositionX",
 					  "ParticlePositionY",
 					  "ParticlePositionZ", false);
 	ParticlePositionCmd -> AvailableForStates(G4State_Idle);
 
-	ParticleDirectionCmd = new G4UIcmdWith3Vector("/Micromegas/gun/ParticleDirection", this);
+	ParticleDirectionCmd = new G4UIcmdWith3Vector("/Leetech/gun/ParticleDirection", this);
 	ParticleDirectionCmd -> SetGuidance("Choose initial particle direction.");
 	ParticleDirectionCmd -> SetParameterName("ParticleDirX",
 					   "ParticleDirY",
 					   "ParticleDirZ", false);
 	ParticleDirectionCmd -> AvailableForStates(G4State_Idle);
 
-	ParticleDirectionRMSCmd = new G4UIcmdWith3Vector("/Micromegas/gun/ParticleDirectionRMS", this);
+	ParticleDirectionRMSCmd = new G4UIcmdWith3Vector("/Leetech/gun/ParticleDirectionRMS", this);
 	ParticleDirectionRMSCmd -> SetGuidance("Choose initial particle smearing of the direction.");
 	ParticleDirectionRMSCmd -> SetParameterName("ParticleDirRMSX",
 						  "ParticleDirRMSY",
 						  "ParticleDirRMSZ", false);
 	ParticleDirectionRMSCmd -> AvailableForStates(G4State_Idle);
 
-	ParticleEnergyCmd = new G4UIcmdWithADoubleAndUnit("/Micromegas/gun/ParticleEnergy", this);
+	ParticleEnergyCmd = new G4UIcmdWithADoubleAndUnit("/Leetech/gun/ParticleEnergy", this);
 	ParticleEnergyCmd -> SetGuidance("Choose initial particle kinetic energy.");
 	ParticleEnergyCmd -> SetParameterName("Energy", false);
 	ParticleEnergyCmd -> SetRange("Energy>=0.");
@@ -69,30 +69,26 @@ void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, G4String newVa
 {
 
 //	if( command == ParticleCmd ){
-//		Action->SetParticleName(newValue);
+//		primGenAction->SetParticleName(newValue);
 //	}
 //	if( command == ParticlePositionCmd ){
-//		Action->SetParticlePosition(ParticlePositionCmd->GetNew3VectorValue(newValue).x(),
+//		primGenAction->SetParticlePosition(ParticlePositionCmd->GetNew3VectorValue(newValue).x(),
 //					ParticlePositionCmd->GetNew3VectorValue(newValue).y(),
 //					ParticlePositionCmd->GetNew3VectorValue(newValue).z());
 //	}
 //	if( command == ParticleDirectionCmd ){
-//		Action->SetParticleDir(ParticleDirectionCmd->GetNew3VectorValue(newValue).x(),
+//		primGenAction->SetParticleDir(ParticleDirectionCmd->GetNew3VectorValue(newValue).x(),
 //			   ParticleDirectionCmd->GetNew3VectorValue(newValue).y(),
 //			   ParticleDirectionCmd->GetNew3VectorValue(newValue).z());
 //	}
 //	if( command == ParticleDirectionRMSCmd ){
-//		Action->SetParticleDirRMS(ParticleDirectionRMSCmd->GetNew3VectorValue(newValue).x(),
+//		primGenAction->SetParticleDirRMS(ParticleDirectionRMSCmd->GetNew3VectorValue(newValue).x(),
 //				  ParticleDirectionRMSCmd->GetNew3VectorValue(newValue).y(),
 //				  ParticleDirectionRMSCmd->GetNew3VectorValue(newValue).z());
 //	}
-//	if( command == ParticleEnergyCmd ){
-//		Action->SetParticleEnergy(ParticleEnergyCmd->GetNewDoubleValue(newValue));
-//	}
-	if (command == ROOTFileCmd)
-		primGenAction->SetRootFile(newValue);
-	else if (command == TreeNameCmd)
-		primGenAction->SetTreeName(newValue);
+	if( command == ParticleEnergyCmd ){
+		primGenAction->SetParticleEnergy(ParticleEnergyCmd->GetNewDoubleValue(newValue));
+	}
 }
 
 

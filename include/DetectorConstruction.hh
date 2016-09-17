@@ -59,14 +59,13 @@ public:
     
     virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField();
-    std::ofstream myfile;
-    std::ofstream myfile2;
-    G4ThreeVector GetTargetFaceCenter;
-    G4ThreeVector BeamPipeCenter;
-    G4ThreeVector GetTargetFaceCenter1;
+
     DetectorMessenger* detectorMessenger;
-    G4ThreeVector GetBeamPipeCenter()const { return BeamPipeCenter; };
-    G4ThreeVector GettTargetFaceCenter()const { return GetTargetFaceCenter1; };
+
+    G4ThreeVector beamPipeCenter;
+    G4ThreeVector targetFaceCenter;
+    G4ThreeVector GetBeamPipeCenter() const { return beamPipeCenter; };
+    G4ThreeVector GetTargetFaceCenter() const { return targetFaceCenter; };
 
     void AddPlaneDetector(GhostDetector* d);
     std::vector<GhostDetector*>* GetPlaneDetectorList();

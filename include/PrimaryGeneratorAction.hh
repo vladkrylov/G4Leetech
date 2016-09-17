@@ -21,13 +21,12 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 public:
     PrimaryGeneratorAction();
     virtual ~PrimaryGeneratorAction();
+    static const PrimaryGeneratorAction* Instance();
     
     virtual void GeneratePrimaries(G4Event*);
     
-	static const PrimaryGeneratorAction* Instance();
-
-	void SetRootFile(G4String newValue);
-	void SetTreeName(G4String newValue);
+	// Messenger access functions
+    void SetParticleEnergy(G4double newValue);
 
 private:
 	static PrimaryGeneratorAction* fgInstance;
@@ -45,11 +44,6 @@ private:
 	G4double Px, Py, Pz;
 	G4double x0, y0, z0;
 	G4int type;
-
-	G4String rootFileName;
-	G4String rootTreeName;
-	TFile* f;
-	TTree* tree;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

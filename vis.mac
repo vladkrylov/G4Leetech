@@ -47,34 +47,14 @@
 
 # for drawing the tracks
 /vis/scene/add/trajectories
-/vis/scene/add/axes
+#/vis/scene/add/axes
 
 # (if you prefer refreshing each event, comment out next line)
 /vis/scene/endOfEventAction accumulate
 
-#/gps/position -203.000        0 -397.101      mm        
-#/gps/direction  0        0  1 
+/Leetech/gun/ParticleEnergy 3.5 MeV
 
-# direction corresponds to 23 degrees beam pipe angle
-
-# after entrance collimators
-#/gps/position -203    0    -150 mm
-#/gps/direction 0    0    -1
-
-# just before the main exit, in the chamber 
-#/gps/position 203    0    8 mm
-#/gps/direction 0    0    -1
-
-# beampipe (23 deg inclined) center
-#/gps/position -281.146    0    -397.101 mm
-#/gps/direction 0.3907311284892737    0    0.9205048534524404
-#
-#/gps/energy 3.5 MeV
-
-/Leetech/gun/SourceROOTFile /home/vlad/10g4work/LeetechRuns/EntranceCollScans/EntranceCollScan_7detectors/opening=19mm_E=3500keV/leetech.root
-/Leetech/gun/tree AfterEntranceColl
-
-/Leetech/OutRootFile leetech1
+#/Leetech/OutRootFile leetech1
 
 /run/beamOn 5000
 

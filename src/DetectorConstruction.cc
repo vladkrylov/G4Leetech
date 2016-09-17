@@ -45,8 +45,6 @@ DetectorConstruction::DetectorConstruction()
 : G4VUserDetectorConstruction()
 , _RotationDeg(0)
 , detectorMessenger(NULL)
-, BeamPipeCenter(0, 0, 0)
-, GetTargetFaceCenter1(0)
 {
 //	magField = new MagneticField();
 
@@ -73,7 +71,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 
 
-myfile2.open("gun.mac");
 	DefineMaterials();
 
 	G4double gap_between_collimators = 3*cm;
@@ -492,14 +489,15 @@ myfile2.open("gun.mac");
 
 	G4Tubs *target = new G4Tubs("Target", 0, radNeckRing, _targetThickness/2, 0, 360*deg);
 	G4LogicalVolume *logicTarget = new G4LogicalVolume(target, GetMaterial(1), "Target");
-	G4ThreeVector GetTargetFaceCenter0 (-electronsRadius,0,
-				-(2*neckSolid->GetZHalfLength()
-				  + 2*collimOutNeckMain->GetZHalfLength()
-				  + 2*colBoxMain->GetZHalfLength()
-				  + 2*collimInNeckMain->GetZHalfLength()
-				  + target->GetZHalfLength()));
-	phyTarget = new G4PVPlacement(0, GetTargetFaceCenter0,
-											  logicTarget, "Target", logicWorld, false, 0);
+	G4ThreeVector targetCenter (-electronsRadius,0,
+							  -(2*neckSolid->GetZHalfLength()
+							  + 2*collimOutNeckMain->GetZHalfLength()
+							  + 2*colBoxMain->GetZHalfLength()
+							  + 2*collimInNeckMain->GetZHalfLength()
+							  + target->GetZHalfLength()));
+	targetFaceCenter = targetCenter - G4ThreeVector(0, 0, target->GetZHalfLength());
+	phyTarget = new G4PVPlacement(0, targetCenter,
+								  logicTarget, "Target", logicWorld, false, 0);
 
 
 	/* construct collimators */
@@ -627,21 +625,23 @@ myfile2.open("gun.mac");
 	 /*G4ThreeVector *BeamPipeCenter = phyTarget->GetObjectTranslation()
 								 + G4ThreeVector(-(beamPipeLenght/2+distPipeToTarget)*sin(rotAngle), 0,
 											   -target->GetZHalfLength() - (beamPipeLenght/2+distPipeToTarget)*cos(rotAngle));*/
-	G4ThreeVector BeamPipeCenter0 = GetTargetFaceCenter0+G4ThreeVector(-(beamPipeLenght/2+distPipeToTarget)*sin(rotAngle), 0,
-												   -target->GetZHalfLength() - (beamPipeLenght/2+distPipeToTarget)*cos(rotAngle));
+	beamPipeCenter = targetFaceCenter +  G4ThreeVector(
+					-(beamPipeLenght/2+distPipeToTarget)*sin(rotAngle),
+					0,
+					- (beamPipeLenght/2+distPipeToTarget)*cos(rotAngle));
+
 	G4Tubs* solidBeamPipe = new G4Tubs("BeamPipe", beamPipeInRadius, beamPipeOutRadius, beamPipeLenght/2.0, 0, 360.0*deg);
 	G4LogicalVolume* logicBeamPipe = new G4LogicalVolume(solidBeamPipe, GetMaterial(2),"BeamPipe");
-	G4VPhysicalVolume* physiBeamPipe = new G4PVPlacement(RM1, BeamPipeCenter0, logicBeamPipe, "BeamPipe",  logicWorld,false,0);
+	G4VPhysicalVolume* physiBeamPipe = new G4PVPlacement(RM1, beamPipeCenter, logicBeamPipe, "BeamPipe",  logicWorld,false,0);
 	///////////////////////
 	/////////////
-		BeamPipeCenter=BeamPipeCenter0;
-	GetTargetFaceCenter1 = GetTargetFaceCenter0-G4ThreeVector(0, 0, _targetThickness/2);
+
 	//
 	// Beampipe Vacuum
 	//
 	G4Tubs* solidBeamPipeV = new G4Tubs("BeamPipeV", 0.0, beamPipeVOutRadius, beamPipeLenght/2.0, 0, 360.0*deg);
 	G4LogicalVolume* logicBeamPipeV = new G4LogicalVolume(solidBeamPipeV, GetMaterial(6),"BeamPipeV");
-	physiBeamPipeV = new G4PVPlacement(RM1, BeamPipeCenter, logicBeamPipeV,"BeamPipeV",logicWorld, false, 0);
+	physiBeamPipeV = new G4PVPlacement(RM1, beamPipeCenter, logicBeamPipeV,"BeamPipeV",logicWorld, false, 0);
 
 
 
@@ -689,17 +689,6 @@ myfile2.open("gun.mac");
 //				   false,      		//no boolean operation
 //				   0);			//copy number
 
-	G4cout<<"BeamPipeCenter0"<<BeamPipeCenter0<<G4endl;
-	G4cout<<"GetTargetFaceCenter1"<<GetTargetFaceCenter0-G4ThreeVector(0, 0, _targetThickness/2)<<G4endl;
-	G4cout<<"GetTargetDirection"<<GetTargetFaceCenter0-G4ThreeVector(0, 0, _targetThickness/2) - BeamPipeCenter0<<G4endl;
-	G4ThreeVector targetDirection=GetTargetFaceCenter0-G4ThreeVector(0, 0, _targetThickness/2) - BeamPipeCenter0;
-	myfile2  <<std::setw(14)<<"/gps/position "<<std::setw(8)<< BeamPipeCenter0.x()<<" "<<std::setw(8)<<BeamPipeCenter0.y()<<" "<<std::setw(8)
-	<<BeamPipeCenter0.z()<<std::setw(8)
-	<<" mm"<<std::setw(8)
-	<<" "<<std::endl;
-	myfile2  <<std::setw(14)<<"/gps/direction "<<std::setw(8)<< targetDirection.x()<<" "<<std::setw(8)<<targetDirection.y()<<" "<<std::setw(8)
-	<<targetDirection.z()<<std::setw(8)
-	<<" "<<std::endl;
 
 	/**
 	 * Ghost detectors
@@ -824,7 +813,6 @@ myfile2.open("gun.mac");
 //				  logicWorld,
 //				  false,
 //				  0);
-//	 myfile2.close();
 //	//always return the physical World
 //	SensitiveDetector *detector = new SensitiveDetector("InnerDetector");
 //     G4SDManager* SDman = G4SDManager::GetSDMpointer();
