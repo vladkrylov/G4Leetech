@@ -47,7 +47,6 @@ DetectorConstruction::DetectorConstruction()
 , detectorMessenger(NULL)
 {
 //	magField = new MagneticField();
-
 	detectorMessenger = new DetectorMessenger(this);
 }
 
