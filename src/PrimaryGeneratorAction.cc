@@ -9,6 +9,7 @@
 #include "Randomize.hh"
 #include "G4RandomDirection.hh"
 #include "G4ParticleGun.hh"
+#include "TRandom3.h"
 
 #include "TFile.h"
 #include "TTree.h"
@@ -35,6 +36,11 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 	gunMessenger = new PrimaryGeneratorMessenger(this);
 
 	Detector = (DetectorConstruction*)G4RunManager::GetRunManager()->GetUserDetectorConstruction();
+	G4double LeetechRotationAngle = Detector->GetLeetechRotation();
+	M = new G4RotationMatrix(G4ThreeVector(cos(LeetechRotationAngle), 0, -sin(LeetechRotationAngle)),
+						     G4ThreeVector(0, 1, 0),
+						     G4ThreeVector(sin(LeetechRotationAngle), 0, -cos(LeetechRotationAngle)));
+
 	G4ThreeVector beamPipeCenter = Detector->GetBeamPipeCenter();
 	G4ThreeVector targetCenter = Detector->GetTargetFaceCenter();
 
@@ -46,6 +52,12 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 
 	fParticleGun->SetParticlePosition(beamPipeCenter);
 	fParticleGun->SetParticleMomentumDirection(targetCenter - beamPipeCenter);
+
+	//	randomization with seed
+	//  from ROOT documentation:
+	//  If seed is 0, the seed is automatically computed via a TUUID object.
+	//  In this case the seed is guaranteed to be unique in space and time.
+	rndEngine = new TRandom3(0);
 }
 
 
@@ -56,12 +68,14 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 	delete fParticleGun;
 	delete gunMessenger;
 	fgInstance = 0;
+	delete M;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 {
+	fParticleGun->SetParticleMomentumDirection(GenerateParticleDir());
 	fParticleGun->SetParticleEnergy(kinEnergy);
 	fParticleGun->GeneratePrimaryVertex(event);
 }
@@ -78,4 +92,21 @@ void PrimaryGeneratorAction::SetParticleEnergy(G4double newValue)
 	kinEnergy = newValue;
 }
 
+void PrimaryGeneratorAction::SetDirectionRMS(G4double newValue)
+{
+	dirRMS = newValue;
+}
+
+G4ThreeVector PrimaryGeneratorAction::GenerateParticleDir()
+{
+	G4ThreeVector d(0, 0, 1);
+	//generation direction of the particle distributed by Gauss
+	if (dirRMS != 0.0) {
+		d += G4ThreeVector(rndEngine->Gaus(0, dirRMS),
+						   rndEngine->Gaus(0, dirRMS),
+						   0);
+	}
+	d *= *M;
+	return d;
+}
 

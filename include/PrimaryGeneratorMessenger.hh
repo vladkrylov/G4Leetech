@@ -24,7 +24,7 @@ private:
 	G4UIcmdWithAString*     ParticleCmd;
 	G4UIcmdWith3Vector*     ParticlePositionCmd;
 	G4UIcmdWith3Vector*     ParticleDirectionCmd;
-	G4UIcmdWith3Vector*     ParticleDirectionRMSCmd;
+	G4UIcmdWithADoubleAndUnit*     ParticleDirectionRMSCmd;
 	G4UIcmdWithADoubleAndUnit*     ParticleEnergyCmd;
 
 	G4UIcmdWithAString*     ROOTFileCmd;

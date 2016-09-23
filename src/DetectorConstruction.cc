@@ -146,7 +146,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	G4double AdditionalInnerBoxZ	=	AdditionalBoxZ-ThicknesOfSmallChamber;
 
 	G4double  windowToCup 	= 	3*cm;
-	G4RotationMatrix*RM1 = new G4RotationMatrix(89.9*deg, rotAngle, 0);
+	RM1 = new G4RotationMatrix(89.9*deg, rotAngle, 0);
 
 	//distance between system of cordiantes of beampipe and chamber
 	G4double fromOriginToOrigin 	=	AdditionalBoxZ+2*cm;
@@ -196,15 +196,15 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 	G4double InnerShield3_xc	    =       InnerBotShield1_xc - InnerBotShield1X/2 - InnerShield3X/2;
 	G4double InnerShield3_yc 	    =       0;
-	G4double InnerShield3_zc   	=       -fieldBoxZ/2+gapSize+InnerBotShield1Z - InnerShield3Z/2;
+	G4double InnerShield3_zc   		=       -fieldBoxZ/2+gapSize+InnerBotShield1Z - InnerShield3Z/2;
 
 	G4double InnerShield4_xc	    =       180*mm;
 	G4double InnerShield4_yc 	    =       0;
-	G4double InnerShield4_zc   	=       62*mm;
+	G4double InnerShield4_zc   		=       62*mm;
 
 	G4double InnerShield5_xc	    =       -180*mm;
 	G4double InnerShield5_yc 	    =       0;
-	G4double InnerShield5_zc   	=       62*mm;
+	G4double InnerShield5_zc   		=       62*mm;
 
 	G4double fieldBox_xc         	= 	0;
 	G4double fieldBox_yc         	= 	0;
@@ -692,13 +692,16 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	/**
 	 * Ghost detectors
 	 */
-	G4ThreeVector afterTargetDetCenter = phyTarget->GetObjectTranslation() + G4ThreeVector(0., 0., target->GetZHalfLength()+10*um);
-	AddPlaneDetector(new GhostDetector("AfterTarget", afterTargetDetCenter.getX(), afterTargetDetCenter.getZ(), radNeckRing, logicWorld));
-
-	G4ThreeVector beforeEntCollDetCenter = (physiColim22->GetObjectTranslation() + physiColim21->GetObjectTranslation())/2.
-			- G4ThreeVector(0., 0., solidColim22->GetZHalfLength() + 20*um);
-	AddPlaneDetector(new GhostDetector("BeforeEntranceColl", beforeEntCollDetCenter.getX(), beforeEntCollDetCenter.getZ(), 7*mm, logicWorld));
-
+//	G4ThreeVector beforeTargetDetCenter = phyTarget->GetObjectTranslation() - G4ThreeVector(0., 0., target->GetZHalfLength()+10*um);
+//	AddPlaneDetector(new GhostDetector("OnTarget", beforeTargetDetCenter.getX(), beforeTargetDetCenter.getZ(), radNeckRing, logicWorld));
+//
+//	G4ThreeVector afterTargetDetCenter = phyTarget->GetObjectTranslation() + G4ThreeVector(0., 0., target->GetZHalfLength()+10*um);
+//	AddPlaneDetector(new GhostDetector("AfterTarget", afterTargetDetCenter.getX(), afterTargetDetCenter.getZ(), radNeckRing, logicWorld));
+//
+//	G4ThreeVector beforeEntCollDetCenter = (physiColim22->GetObjectTranslation() + physiColim21->GetObjectTranslation())/2.
+//			- G4ThreeVector(0., 0., solidColim22->GetZHalfLength() + 20*um);
+//	AddPlaneDetector(new GhostDetector("BeforeEntranceColl", beforeEntCollDetCenter.getX(), beforeEntCollDetCenter.getZ(), 7*mm, logicWorld));
+//
 	G4ThreeVector entrCollDetCenter = (physiColim11->GetObjectTranslation() + physiColim12->GetObjectTranslation())/2.
 			+ G4ThreeVector(0., 0., solidColim11->GetZHalfLength() + 20*um);
 	AddPlaneDetector(new GhostDetector("AfterEntranceColl", entrCollDetCenter.getX(), entrCollDetCenter.getZ(), radNeckRing+1*cm, logicWorld));

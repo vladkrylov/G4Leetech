@@ -4,7 +4,7 @@
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ThreeVector.hh"
 #include "globals.hh"
-
+#include "G4RotationMatrix.hh"
 
 class G4GeneralParticleSource;
 class G4ParticleGun;
@@ -13,6 +13,8 @@ class G4Event;
 class G4ParticleDefinition;
 class DetectorConstruction;
 class PrimaryGeneratorMessenger;
+//class G4RotationMatrix;
+class TRandom3;
 class TFile;
 class TTree;
 
@@ -24,17 +26,24 @@ public:
     static const PrimaryGeneratorAction* Instance();
     
     virtual void GeneratePrimaries(G4Event*);
+    G4ThreeVector GenerateParticleDir();
     
 	// Messenger access functions
     void SetParticleEnergy(G4double newValue);
+    void SetDirectionRMS(G4double newValue);
+
 
 private:
 	static PrimaryGeneratorAction* fgInstance;
 	PrimaryGeneratorMessenger* gunMessenger;
+	TRandom3 *rndEngine;
+
+	G4RotationMatrix *M;
 
 	G4ParticleGun* fParticleGun;
     DetectorConstruction* Detector;
 	G4String _particleName;
+	G4double dirRMS;
 
 	G4ParticleDefinition* FindParticle(G4String particleName);
 

@@ -66,6 +66,7 @@ public:
     G4ThreeVector targetFaceCenter;
     G4ThreeVector GetBeamPipeCenter() const { return beamPipeCenter; };
     G4ThreeVector GetTargetFaceCenter() const { return targetFaceCenter; };
+    G4double GetLeetechRotation() const { return _RotationDeg; };
 
     void AddPlaneDetector(GhostDetector* d);
     std::vector<GhostDetector*>* GetPlaneDetectorList();
@@ -84,9 +85,9 @@ private:
     G4LogicalVolume *logicInnerBox;
     G4LogicalVolume *SimpleMagnetBox;
 
-    	G4double innerBoxX;
-    	G4double innerBoxY;
-    	G4double innerBoxZ;
+	G4double innerBoxX;
+	G4double innerBoxY;
+	G4double innerBoxZ;
 
    	G4double chamber_xc;
     G4double chamber_yc;
@@ -126,6 +127,8 @@ private:
   	G4double _Det1X;
   	G4double _RotationDeg;
   	G4double _RotAddDist;
+
+  	G4RotationMatrix* RM1;
 
 // messenger access functions
 public:

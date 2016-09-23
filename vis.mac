@@ -20,7 +20,7 @@
 #distance from the edge to beginning of the collimator system
 /Micromegas/det/setDet1X 20 mm
 
-/Micromegas/det/setRotationDeg 23 deg
+/Micromegas/det/setRotationDeg 10 deg
 #/Micromegas/det/setRotationAddDist 6.5 cm
 /Micromegas/det/setRotationAddDist 65 cm
 
@@ -52,9 +52,10 @@
 # (if you prefer refreshing each event, comment out next line)
 /vis/scene/endOfEventAction accumulate
 
+/Leetech/gun/ParticleDirectionRMS 4 deg
 /Leetech/gun/ParticleEnergy 3.5 MeV
 
 #/Leetech/OutRootFile leetech1
 
-/run/beamOn 5000
+/run/beamOn 100
 

@@ -1,9 +1,9 @@
 /Micromegas/det/setCupThick 2 mm
 
-/Leetech/det/SetCollimatorEntranceGapX 20.000000 mm
-/Leetech/det/SetCollimatorEntranceGapY 20.000000 mm
-/Leetech/det/SetCollimatorExit1GapX 1.000000 mm
-/Leetech/det/SetCollimatorExit1GapY 1.000000 mm
+/Leetech/det/SetCollimatorEntranceGapX 1.000000 mm
+/Leetech/det/SetCollimatorEntranceGapY 1.000000 mm
+/Leetech/det/SetCollimatorExit1GapX 10.000000 mm
+/Leetech/det/SetCollimatorExit1GapY 10.000000 mm
 
 #equal to first colim gap
 #/Micromegas/det/setApertureRaduis 1 cm
@@ -33,11 +33,11 @@
 /run/numberOfThreads 4
 /run/initialize
 
-/Leetech/det/setField 525 gauss
+/Leetech/det/setField 520 gauss
 
 /Leetech/gun/ParticleEnergy 3500.000000 keV
+/Leetech/gun/ParticleDirectionRMS 2 deg
+/Leetech/OutRootFile rms2
 
-/Leetech/OutRootFile phi=23_deg
-
-/run/beamOn 10000
+/run/beamOn 1000000
 

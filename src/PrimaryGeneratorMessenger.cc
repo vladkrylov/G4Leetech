@@ -31,11 +31,9 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(PrimaryGeneratorAction* Gun
 					   "ParticleDirZ", false);
 	ParticleDirectionCmd -> AvailableForStates(G4State_Idle);
 
-	ParticleDirectionRMSCmd = new G4UIcmdWith3Vector("/Leetech/gun/ParticleDirectionRMS", this);
+	ParticleDirectionRMSCmd = new G4UIcmdWithADoubleAndUnit("/Leetech/gun/ParticleDirectionRMS", this);
 	ParticleDirectionRMSCmd -> SetGuidance("Choose initial particle smearing of the direction.");
-	ParticleDirectionRMSCmd -> SetParameterName("ParticleDirRMSX",
-						  "ParticleDirRMSY",
-						  "ParticleDirRMSZ", false);
+	ParticleDirectionRMSCmd -> SetParameterName("DirectionRMS", false);
 	ParticleDirectionRMSCmd -> AvailableForStates(G4State_Idle);
 
 	ParticleEnergyCmd = new G4UIcmdWithADoubleAndUnit("/Leetech/gun/ParticleEnergy", this);
@@ -81,11 +79,9 @@ void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, G4String newVa
 //			   ParticleDirectionCmd->GetNew3VectorValue(newValue).y(),
 //			   ParticleDirectionCmd->GetNew3VectorValue(newValue).z());
 //	}
-//	if( command == ParticleDirectionRMSCmd ){
-//		primGenAction->SetParticleDirRMS(ParticleDirectionRMSCmd->GetNew3VectorValue(newValue).x(),
-//				  ParticleDirectionRMSCmd->GetNew3VectorValue(newValue).y(),
-//				  ParticleDirectionRMSCmd->GetNew3VectorValue(newValue).z());
-//	}
+	if( command == ParticleDirectionRMSCmd ){
+		primGenAction->SetDirectionRMS(ParticleDirectionRMSCmd->GetNewDoubleValue(newValue));
+	}
 	if( command == ParticleEnergyCmd ){
 		primGenAction->SetParticleEnergy(ParticleEnergyCmd->GetNewDoubleValue(newValue));
 	}

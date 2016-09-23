@@ -9,11 +9,11 @@ run_mac = os.path.join('/exp/leetech/simulations/geant4_workdir/Leetech/run.mac'
 E = 3500 # keV
 change_parameter(run_mac, "/Leetech/gun/ParticleEnergy", "%f keV" % E)
 
-angles = range(0, 36, 5)  # degrees
-for phi in angles:
-    change_parameter(run_mac, "/Micromegas/det/setRotationDeg", "%d deg" % int(phi))
+rmss = range(0, 3, 2)  # degrees
+for rms in rmss:
+    change_parameter(run_mac, "/Leetech/gun/ParticleDirectionRMS", "%d deg" % int(rms))
      
-    out_file = os.path.abspath("/exp/leetech/simulations/LeetechRotation/phi=%d_deg/phi=%d_deg.root" % (int(phi), int(phi)))
+    out_file = os.path.abspath("/exp/leetech/simulations/BeamSizeEffect/sgm=%d/leetech.root" % int(rms))
     run(number_of_processes=8,
         number_of_events=1e8,
         out_file=out_file,

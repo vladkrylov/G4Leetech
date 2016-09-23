@@ -12,6 +12,7 @@ core
 *.heprep
 *.properties
 *.log
+*.pdf
 
 *.pyc
 
