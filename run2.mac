@@ -37,7 +37,7 @@
 
 /Leetech/gun/ParticleEnergy 3500.000000 keV
 /Leetech/gun/ParticleDirectionRMS 2 deg
-/Leetech/OutRootFile displacement_p1
+/Leetech/OutRootFile displacement_p2
 
 /run/beamOn 50000
 
