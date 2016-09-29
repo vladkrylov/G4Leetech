@@ -99,8 +99,8 @@ void PrimaryGeneratorAction::SetDirectionRMS(G4double newValue)
 
 G4ThreeVector PrimaryGeneratorAction::GenerateParticleDir()
 {
-	double dev = 0.02;
-	G4ThreeVector d(dev, dev, 1);
+	double dispacement = 0.0;
+	G4ThreeVector d(dispacement, dispacement, 1);
 	//generation direction of the particle distributed by Gauss
 	if (dirRMS != 0.0) {
 		d += G4ThreeVector(rndEngine->Gaus(0, dirRMS),

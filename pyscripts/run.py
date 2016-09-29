@@ -24,7 +24,7 @@ except KeyError:
 	exit(1)
 
 exe = os.path.join(G4_work_dir, "bin/Linux-g++/Leetech")
-project_dir = os.path.join(G4_work_dir, "Leetech")
+project_dir = os.path.join(G4_work_dir, "G4Leetech")
 favorite_editor = "vim"
 
 run_command = [exe, os.path.join(project_dir, 'run.mac')]

@@ -1,7 +1,7 @@
 /Micromegas/det/setCupThick 2 mm
 
-/Leetech/det/SetCollimatorEntranceGapX 1.000000 mm
-/Leetech/det/SetCollimatorEntranceGapY 1.000000 mm
+/Leetech/det/SetCollimatorEntranceGapX 2.563 mm
+/Leetech/det/SetCollimatorEntranceGapY 1.795 mm
 /Leetech/det/SetCollimatorExit1GapX 10.000000 mm
 /Leetech/det/SetCollimatorExit1GapY 10.000000 mm
 
@@ -30,14 +30,14 @@
 /Micromegas/det/setMinEkin 10 keV
 /Micromegas/det/setMionRang 0.01 mm
 
-/run/numberOfThreads 8
+/run/numberOfThreads 4
 /run/initialize
 
-/Leetech/det/setField 525 gauss
+/Leetech/det/setField 446 gauss
 
-/Leetech/gun/ParticleEnergy 3500.000000 keV
-/Leetech/gun/ParticleDirectionRMS 2 deg
-/Leetech/OutRootFile displacement_p1
+/Leetech/gun/ParticleEnergy 3300.000000 keV
+/Leetech/gun/ParticleDirectionRMS 0 deg
+/Leetech/OutRootFile leetech
 
-/run/beamOn 50000
+/run/beamOn 100000
 
