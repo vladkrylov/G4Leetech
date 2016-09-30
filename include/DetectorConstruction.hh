@@ -67,6 +67,7 @@ public:
     G4ThreeVector GetBeamPipeCenter() const { return beamPipeCenter; };
     G4ThreeVector GetTargetFaceCenter() const { return targetFaceCenter; };
     G4double GetLeetechRotation() const { return _RotationDeg; };
+    G4VPhysicalVolume* GetDetectorPhys() const { return physiDD; };
 
     void AddPlaneDetector(GhostDetector* d);
     std::vector<GhostDetector*>* GetPlaneDetectorList();
@@ -129,6 +130,7 @@ private:
   	G4double _RotAddDist;
 
   	G4RotationMatrix* RM1;
+  	G4VPhysicalVolume* physiDD;
 
 // messenger access functions
 public:

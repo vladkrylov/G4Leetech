@@ -2,8 +2,8 @@
 
 /Leetech/det/SetCollimatorEntranceGapX 2.563 mm
 /Leetech/det/SetCollimatorEntranceGapY 1.795 mm
-/Leetech/det/SetCollimatorExit1GapX 10.000000 mm
-/Leetech/det/SetCollimatorExit1GapY 10.000000 mm
+/Leetech/det/SetCollimatorExit1GapX 1.000000 mm
+/Leetech/det/SetCollimatorExit1GapY 1.000000 mm
 
 #equal to first colim gap
 #/Micromegas/det/setApertureRaduis 1 cm
@@ -35,9 +35,7 @@
 
 /Leetech/det/setField 446 gauss
 
-/Leetech/gun/ParticleEnergy 3300.000000 keV
-/Leetech/gun/ParticleDirectionRMS 0 deg
 /Leetech/OutRootFile leetech
 
-/run/beamOn 100000
+/run/beamOn 5
 

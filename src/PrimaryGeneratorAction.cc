@@ -9,8 +9,8 @@
 #include "Randomize.hh"
 #include "G4RandomDirection.hh"
 #include "G4ParticleGun.hh"
-#include "TRandom3.h"
 
+#include "TRandom3.h"
 #include "TFile.h"
 #include "TTree.h"
 
@@ -50,8 +50,8 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 	fParticleGun->SetNumberOfParticles(1);
 	fParticleGun->SetParticleDefinition(FindParticle("e-"));
 
-	fParticleGun->SetParticlePosition(beamPipeCenter);
-	fParticleGun->SetParticleMomentumDirection(targetCenter - beamPipeCenter);
+//	fParticleGun->SetParticlePosition(beamPipeCenter);
+//	fParticleGun->SetParticleMomentumDirection(targetCenter - beamPipeCenter);
 
 	//	randomization with seed
 	//  from ROOT documentation:
@@ -75,9 +75,27 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 {
-	fParticleGun->SetParticleMomentumDirection(GenerateParticleDir());
-	fParticleGun->SetParticleEnergy(kinEnergy);
-	fParticleGun->GeneratePrimaryVertex(event);
+	G4double x, y, z, P, m;
+	int N = 1;
+//	int N = 9626;
+	m = fParticleGun->GetParticleDefinition()->GetPDGMass();
+
+	for(int i=0; i<N; i++) {
+		Px = GeneratePX();
+		Py = GeneratePY();
+		Pz = GeneratePZ();
+		P = std::sqrt(Px*Px + Py*Py + Pz*Pz);
+
+		fParticleGun->SetParticleEnergy(std::sqrt(P*P + m*m) - m);
+		fParticleGun->SetParticleMomentumDirection(G4ThreeVector(Px, Py, Pz));
+
+		x = GeneratePosX();
+		y = GeneratePosY();
+		z = GeneratePosZ();
+		fParticleGun->SetParticlePosition(G4ThreeVector(x, y, z));
+
+		fParticleGun->GeneratePrimaryVertex(event);
+	}
 }
 
 G4ParticleDefinition* PrimaryGeneratorAction::FindParticle(G4String particleName)
@@ -97,17 +115,32 @@ void PrimaryGeneratorAction::SetDirectionRMS(G4double newValue)
 	dirRMS = newValue;
 }
 
-G4ThreeVector PrimaryGeneratorAction::GenerateParticleDir()
+G4double PrimaryGeneratorAction::GeneratePX()
 {
-	double dispacement = 0.0;
-	G4ThreeVector d(dispacement, dispacement, 1);
-	//generation direction of the particle distributed by Gauss
-	if (dirRMS != 0.0) {
-		d += G4ThreeVector(rndEngine->Gaus(0, dirRMS),
-						   rndEngine->Gaus(0, dirRMS),
-						   0);
-	}
-	d *= *M;
-	return d;
+	return rndEngine->Gaus(-2.79e-02, 2.52e-02);
 }
 
+G4double PrimaryGeneratorAction::GeneratePY()
+{
+	return rndEngine->Gaus(0., 2.91904e-02);
+}
+
+G4double PrimaryGeneratorAction::GeneratePZ()
+{
+	return rndEngine->Uniform(-2.88, -2.67);
+}
+
+G4double PrimaryGeneratorAction::GeneratePosX()
+{
+	return rndEngine->Uniform(188., 218.);
+}
+
+G4double PrimaryGeneratorAction::GeneratePosY()
+{
+	return rndEngine->Gaus(0., 9.56);
+}
+
+G4double PrimaryGeneratorAction::GeneratePosZ()
+{
+	return 7.021;
+}

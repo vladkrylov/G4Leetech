@@ -53,7 +53,7 @@
 /vis/scene/endOfEventAction accumulate
 
 /Leetech/gun/ParticleDirectionRMS 0 deg
-/Leetech/gun/ParticleEnergy 3.5 MeV
+#/Leetech/gun/ParticleEnergy 3.5 MeV
 
 #/Leetech/OutRootFile leetech1
 

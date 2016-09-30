@@ -37,6 +37,9 @@
 #include "G4Event.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4RunManager.hh"
+
+#include "SteppingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -53,21 +56,16 @@ EventAction::~EventAction()
 
 void EventAction::BeginOfEventAction( const G4Event*)
 { 
- //initializations   
- fTotalEnergyDeposit = 0.;
+	//initializations
+	stepAction = (SteppingAction*)G4RunManager::GetRunManager()->GetUserSteppingAction();
+	stepAction->ResetEDep();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::EndOfEventAction( const G4Event*)
 {                          
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-
-  if(fTotalEnergyDeposit>0){analysisManager->FillNtupleDColumn(14, fTotalEnergyDeposit);
-  analysisManager->AddNtupleRow();
-   G4cout<<fTotalEnergyDeposit<<G4endl;
-};
-
+	stepAction->FillDiamondTuple();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

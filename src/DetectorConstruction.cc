@@ -692,19 +692,19 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	/**
 	 * Ghost detectors
 	 */
-	G4ThreeVector beforeTargetDetCenter = phyTarget->GetObjectTranslation() - G4ThreeVector(0., 0., target->GetZHalfLength()+10*um);
-	AddPlaneDetector(new GhostDetector("OnTarget", beforeTargetDetCenter.getX(), beforeTargetDetCenter.getZ(), radNeckRing, logicWorld));
-
-	G4ThreeVector afterTargetDetCenter = phyTarget->GetObjectTranslation() + G4ThreeVector(0., 0., target->GetZHalfLength()+10*um);
-	AddPlaneDetector(new GhostDetector("AfterTarget", afterTargetDetCenter.getX(), afterTargetDetCenter.getZ(), radNeckRing, logicWorld));
-
-	G4ThreeVector beforeEntCollDetCenter = (physiColim22->GetObjectTranslation() + physiColim21->GetObjectTranslation())/2.
-			- G4ThreeVector(0., 0., solidColim22->GetZHalfLength() + 20*um);
-	AddPlaneDetector(new GhostDetector("BeforeEntranceColl", beforeEntCollDetCenter.getX(), beforeEntCollDetCenter.getZ(), 7*mm, logicWorld));
-
-	G4ThreeVector entrCollDetCenter = (physiColim11->GetObjectTranslation() + physiColim12->GetObjectTranslation())/2.
-			+ G4ThreeVector(0., 0., solidColim11->GetZHalfLength() + 20*um);
-	AddPlaneDetector(new GhostDetector("AfterEntranceColl", entrCollDetCenter.getX(), entrCollDetCenter.getZ(), radNeckRing+1*cm, logicWorld));
+//	G4ThreeVector beforeTargetDetCenter = phyTarget->GetObjectTranslation() - G4ThreeVector(0., 0., target->GetZHalfLength()+10*um);
+//	AddPlaneDetector(new GhostDetector("OnTarget", beforeTargetDetCenter.getX(), beforeTargetDetCenter.getZ(), radNeckRing, logicWorld));
+//
+//	G4ThreeVector afterTargetDetCenter = phyTarget->GetObjectTranslation() + G4ThreeVector(0., 0., target->GetZHalfLength()+10*um);
+//	AddPlaneDetector(new GhostDetector("AfterTarget", afterTargetDetCenter.getX(), afterTargetDetCenter.getZ(), radNeckRing, logicWorld));
+//
+//	G4ThreeVector beforeEntCollDetCenter = (physiColim22->GetObjectTranslation() + physiColim21->GetObjectTranslation())/2.
+//			- G4ThreeVector(0., 0., solidColim22->GetZHalfLength() + 20*um);
+//	AddPlaneDetector(new GhostDetector("BeforeEntranceColl", beforeEntCollDetCenter.getX(), beforeEntCollDetCenter.getZ(), 7*mm, logicWorld));
+//
+//	G4ThreeVector entrCollDetCenter = (physiColim11->GetObjectTranslation() + physiColim12->GetObjectTranslation())/2.
+//			+ G4ThreeVector(0., 0., solidColim11->GetZHalfLength() + 20*um);
+//	AddPlaneDetector(new GhostDetector("AfterEntranceColl", entrCollDetCenter.getX(), entrCollDetCenter.getZ(), radNeckRing+1*cm, logicWorld));
 
 	AddPlaneDetector(new GhostDetector("ExitChamber", detectorCenter.getX(), -innerMainBox->GetZHalfLength() + 20*um, radNeckRing-5*mm, logicInnerBox));
 
@@ -796,25 +796,26 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	logicChamber->SetUserLimits(stepLimit);
 	logicInnerBox->SetUserLimits(stepLimit);
 
-//	G4double thickness = 0.5*mm;
-//	G4double width = 4*mm;
-//	G4double height = 4*mm;
-//
-//	G4Box* solidDD =
-//	new G4Box("DD", 0.5*height, 0.5*width, 0.5*thickness);
-//
-//	G4LogicalVolume* logicDD =
-//	new G4LogicalVolume(solidDD,
-//						DD_mat,
-//						"DDLV");
-//
-//	new G4PVPlacement(0,
-//				  G4ThreeVector(203*mm,0,-245*mm),
-//				  logicDD,
-//				  "DD",
-//				  logicWorld,
-//				  false,
-//				  0);
+	G4double thickness = 0.5*mm;
+	G4double width = 4*mm;
+	G4double height = 4*mm;
+	G4ThreeVector exitWindowFaceCenter = exitWinCenter - G4ThreeVector(0,0,exitWin->GetZHalfLength());
+
+	G4Box* solidDD =
+	new G4Box("DD", 0.5*height, 0.5*width, 0.5*thickness);
+
+	G4LogicalVolume* logicDD =
+	new G4LogicalVolume(solidDD,
+						DD_mat,
+						"DDLV");
+
+	physiDD = new G4PVPlacement(0,
+				  exitWindowFaceCenter - G4ThreeVector(0,0,6*cm),
+				  logicDD,
+				  "DD",
+				  logicWorld,
+				  false,
+				  0);
 //	//always return the physical World
 //	SensitiveDetector *detector = new SensitiveDetector("InnerDetector");
 //     G4SDManager* SDman = G4SDManager::GetSDMpointer();

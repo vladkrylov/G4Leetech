@@ -40,6 +40,8 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
+class SteppingAction;
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class EventAction : public G4UserEventAction
@@ -52,11 +54,8 @@ class EventAction : public G4UserEventAction
     virtual void BeginOfEventAction(const G4Event*);
     virtual void   EndOfEventAction(const G4Event*);
     
-    void addEdep(G4double Edep)     {fTotalEnergyDeposit += Edep;};
-    G4double GetEnergyDeposit()     {return fTotalEnergyDeposit;};    
-        
   private:
-    G4double fTotalEnergyDeposit;   // Energy deposited in c6f6
+    SteppingAction* stepAction;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

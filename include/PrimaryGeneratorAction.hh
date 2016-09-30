@@ -26,7 +26,6 @@ public:
     static const PrimaryGeneratorAction* Instance();
     
     virtual void GeneratePrimaries(G4Event*);
-    G4ThreeVector GenerateParticleDir();
     
 	// Messenger access functions
     void SetParticleEnergy(G4double newValue);
@@ -53,6 +52,15 @@ private:
 	G4double Px, Py, Pz;
 	G4double x0, y0, z0;
 	G4int type;
+
+	//
+	G4double GeneratePX();
+	G4double GeneratePY();
+	G4double GeneratePZ();
+
+	G4double GeneratePosX();
+	G4double GeneratePosY();
+	G4double GeneratePosZ();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

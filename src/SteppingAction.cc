@@ -13,6 +13,9 @@ SteppingAction::SteppingAction(EventAction* EvAct):G4UserSteppingAction(),fEvent
 {
 	DetectorConstruction* geometry = (DetectorConstruction*)G4RunManager::GetRunManager()->GetUserDetectorConstruction();
 	detectors = geometry->GetPlaneDetectorList();
+	diamond = geometry->GetDetectorPhys();
+
+	ResetEDep();
 
     // Get analysis manager
     analysisManager = G4AnalysisManager::Instance();
@@ -57,6 +60,50 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 			break;
 		}
 	}
+
+	if (aStep->GetPostStepPoint()->GetPhysicalVolume() == diamond) {
+	if (aStep->GetPreStepPoint()->GetPhysicalVolume() != diamond) {
+		// particle enters the diamond
+		det_PDG = aStep->GetTrack()->GetDefinition()->GetPDGEncoding();
+		det_eDep = 0;
+		det_eBefore = aStep->GetTrack()->GetKineticEnergy();
+		det_time = aStep->GetPostStepPoint()->GetGlobalTime();
+		det_posX = aStep->GetPostStepPoint()->GetPosition().getX();
+		det_posY = aStep->GetPostStepPoint()->GetPosition().getY();
+		det_posZ = aStep->GetPostStepPoint()->GetPosition().getZ();
+		det_theta = aStep->GetPostStepPoint()->GetMomentumDirection().theta() * 180 / M_PI;
+		det_maxStepLength = 0;
+	} else {
+		// particle is inside diamond
+		det_eDep += aStep->GetTotalEnergyDeposit();
+		if (aStep->GetStepLength() > det_maxStepLength)
+			det_maxStepLength = aStep->GetStepLength();
+	}
+	} else {
+		if (aStep->GetPreStepPoint()->GetPhysicalVolume() != diamond) {
+			// particle leaves the diamond
+
+		}
+	}
+
 }
 
+void SteppingAction::ResetEDep()
+{
+	det_eDep = 0.;
+}
 
+void SteppingAction::FillDiamondTuple()
+{
+	int diamondTupleID = detectors->size();  // diamond tuple is the next after all ghost detectors
+	analysisManager->FillNtupleIColumn(diamondTupleID, BranchId=0, det_PDG);
+	analysisManager->FillNtupleDColumn(diamondTupleID, BranchId=1, det_eBefore);
+	analysisManager->FillNtupleDColumn(diamondTupleID, BranchId=2, det_eDep);
+	analysisManager->FillNtupleDColumn(diamondTupleID, BranchId=3, det_time);
+	analysisManager->FillNtupleDColumn(diamondTupleID, BranchId=4, det_posX);
+	analysisManager->FillNtupleDColumn(diamondTupleID, BranchId=5, det_posY);
+	analysisManager->FillNtupleDColumn(diamondTupleID, BranchId=6, det_posZ);
+	analysisManager->FillNtupleDColumn(diamondTupleID, BranchId=7, det_theta);
+	analysisManager->FillNtupleDColumn(diamondTupleID, BranchId=8, det_maxStepLength);
+	analysisManager->AddNtupleRow(diamondTupleID);
+}
