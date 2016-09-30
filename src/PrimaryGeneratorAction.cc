@@ -76,8 +76,8 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 {
 	G4double x, y, z, P, m;
-	int N = 1;
-//	int N = 9626;
+//	int N = 2;
+	int N = 9626; // corresponding to 1 PHIL bunch of 32 pC charge
 	m = fParticleGun->GetParticleDefinition()->GetPDGMass();
 
 	/**
@@ -85,22 +85,22 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 	 * make a point unidirectional source in front of diamond
 	 */
 	G4ThreeVector diamondCenter = Detector->GetDetectorPhys()->GetObjectTranslation();
-	Px = 0;
-	Py = 0;
-	Pz = -3*MeV;
-
-	x = diamondCenter.getX();
-	y = diamondCenter.getY();
-	z = diamondCenter.getZ() + 5*mm;
+//	Px = 0;
+//	Py = 0;
+//	Pz = -3*MeV;
+//
+//	x = diamondCenter.getX();
+//	y = diamondCenter.getY();
+//	z = diamondCenter.getZ() + 5*mm;
 
 	for(int i=0; i<N; i++) {
-//		Px = GeneratePX();
-//		Py = GeneratePY();
-//		Pz = GeneratePZ();
-//
-//		x = GeneratePosX();
-//		y = GeneratePosY();
-//		z = GeneratePosZ();
+		Px = GeneratePX();
+		Py = GeneratePY();
+		Pz = GeneratePZ();
+
+		x = GeneratePosX();
+		y = GeneratePosY();
+		z = GeneratePosZ();
 
 		P = std::sqrt(Px*Px + Py*Py + Pz*Pz);
 		fParticleGun->SetParticleEnergy(std::sqrt(P*P + m*m) - m);

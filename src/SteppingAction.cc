@@ -71,11 +71,12 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 		det_posY = aStep->GetPostStepPoint()->GetPosition().getY();
 		det_posZ = aStep->GetPostStepPoint()->GetPosition().getZ();
 		det_theta = aStep->GetPostStepPoint()->GetMomentumDirection().theta() * 180 / M_PI;
+		FillDiamondHitsTuple();
 	}}
 
-	if (aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume() == diamond)
+	if (aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume() == diamond) {
 		det_eDep += aStep->GetTotalEnergyDeposit();
-
+	}
 }
 
 void SteppingAction::ResetEDep()
@@ -83,16 +84,23 @@ void SteppingAction::ResetEDep()
 	det_eDep = 0.;
 }
 
-void SteppingAction::FillDiamondTuple()
+void SteppingAction::FillDiamondHitsTuple()
 {
-	int diamondTupleID = detectors->size();  // diamond tuple is the next after all ghost detectors
-	analysisManager->FillNtupleIColumn(diamondTupleID, BranchId=0, det_PDG);
-	analysisManager->FillNtupleDColumn(diamondTupleID, BranchId=1, det_eBefore);
-	analysisManager->FillNtupleDColumn(diamondTupleID, BranchId=2, det_eDep);
-	analysisManager->FillNtupleDColumn(diamondTupleID, BranchId=3, det_time);
-	analysisManager->FillNtupleDColumn(diamondTupleID, BranchId=4, det_posX);
-	analysisManager->FillNtupleDColumn(diamondTupleID, BranchId=5, det_posY);
-	analysisManager->FillNtupleDColumn(diamondTupleID, BranchId=6, det_posZ);
-	analysisManager->FillNtupleDColumn(diamondTupleID, BranchId=7, det_theta);
-	analysisManager->AddNtupleRow(diamondTupleID);
+	int diamondHitsTupleID = detectors->size();  // diamond tuple is the next after all ghost detectors
+	analysisManager->FillNtupleIColumn(diamondHitsTupleID, BranchId=0, det_PDG);
+	analysisManager->FillNtupleDColumn(diamondHitsTupleID, BranchId=1, det_eBefore);
+	analysisManager->FillNtupleDColumn(diamondHitsTupleID, BranchId=2, det_time);
+	analysisManager->FillNtupleDColumn(diamondHitsTupleID, BranchId=3, det_posX);
+	analysisManager->FillNtupleDColumn(diamondHitsTupleID, BranchId=4, det_posY);
+	analysisManager->FillNtupleDColumn(diamondHitsTupleID, BranchId=5, det_posZ);
+	analysisManager->FillNtupleDColumn(diamondHitsTupleID, BranchId=6, det_theta);
+	analysisManager->AddNtupleRow(diamondHitsTupleID);
 }
+
+void SteppingAction::FillDiamondEventsTuple()
+{
+	int diamondEventsTupleID = detectors->size()+1;
+	analysisManager->FillNtupleDColumn(diamondEventsTupleID, BranchId=0, det_eDep);
+	analysisManager->AddNtupleRow(diamondEventsTupleID);
+}
+

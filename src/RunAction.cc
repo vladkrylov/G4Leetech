@@ -78,16 +78,21 @@ void RunAction::BeginOfRunAction(const G4Run* /*run*/)
 		analysisManager->FinishNtuple();
     }
 
-    // tuple for diamond detector
-	analysisManager->CreateNtuple("Diamond", "Leetech simulation results");
+    // tuples for diamond detector
+    // tuple for particle characteristics
+	analysisManager->CreateNtuple("DiamondHits", "Leetech simulation results");
 	analysisManager->CreateNtupleIColumn("PDGEncoding");
-	analysisManager->CreateNtupleDColumn("EnergyBefore");
-	analysisManager->CreateNtupleDColumn("EnergyDeposited");
+	analysisManager->CreateNtupleDColumn("KinEnergy");
 	analysisManager->CreateNtupleDColumn("Time");
 	analysisManager->CreateNtupleDColumn("PosX");
 	analysisManager->CreateNtupleDColumn("PosY");
 	analysisManager->CreateNtupleDColumn("PosZ");
 	analysisManager->CreateNtupleDColumn("Theta");
+	analysisManager->FinishNtuple();
+
+	// tuple for event characteristics
+	analysisManager->CreateNtuple("DiamondEvents", "Leetech simulation results");
+	analysisManager->CreateNtupleDColumn("EnergyDeposited");
 	analysisManager->FinishNtuple();
 
 	analysisManager->OpenFile();

@@ -65,7 +65,7 @@ void EventAction::BeginOfEventAction( const G4Event*)
 
 void EventAction::EndOfEventAction( const G4Event*)
 {                          
-	stepAction->FillDiamondTuple();
+	stepAction->FillDiamondEventsTuple();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

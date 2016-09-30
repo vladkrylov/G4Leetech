@@ -1,6 +1,8 @@
 #ifndef RunAction_h
 #define RunAction_h 1
 
+#include <vector>
+
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 
@@ -21,6 +23,7 @@ public:
 private:
     G4String rootFileName;
     RunActionMessenger* runMessenger;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -2,8 +2,8 @@
 
 /Leetech/det/SetCollimatorEntranceGapX 2.563 mm
 /Leetech/det/SetCollimatorEntranceGapY 1.795 mm
-/Leetech/det/SetCollimatorExit1GapX 1.000000 mm
-/Leetech/det/SetCollimatorExit1GapY 1.000000 mm
+/Leetech/det/SetCollimatorExit1GapX 9.88 mm
+/Leetech/det/SetCollimatorExit1GapY 3.13 mm
 
 #equal to first colim gap
 #/Micromegas/det/setApertureRaduis 1 cm
@@ -37,5 +37,5 @@
 
 /Leetech/OutRootFile leetech
 
-/run/beamOn 5
+/run/beamOn 200
 

@@ -17,7 +17,8 @@ public:
 
 	void UserSteppingAction(const G4Step*);
 	void ResetEDep();
-	void FillDiamondTuple();
+	void FillDiamondHitsTuple();
+	void FillDiamondEventsTuple();
 private:
   EventAction* fEventAction;
 	std::vector<GhostDetector*>* detectors;
