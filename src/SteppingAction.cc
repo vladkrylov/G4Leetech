@@ -75,12 +75,14 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 	}}
 
 	if (aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume() == diamond) {
+		det_NPartPerEvent++;
 		det_eDep += aStep->GetTotalEnergyDeposit();
 	}
 }
 
 void SteppingAction::ResetEDep()
 {
+	det_NPartPerEvent = 0;
 	det_eDep = 0.;
 }
 
@@ -100,7 +102,8 @@ void SteppingAction::FillDiamondHitsTuple()
 void SteppingAction::FillDiamondEventsTuple()
 {
 	int diamondEventsTupleID = detectors->size()+1;
-	analysisManager->FillNtupleDColumn(diamondEventsTupleID, BranchId=0, det_eDep);
+	analysisManager->FillNtupleIColumn(diamondEventsTupleID, BranchId=0, det_NPartPerEvent);
+	analysisManager->FillNtupleDColumn(diamondEventsTupleID, BranchId=1, det_eDep);
 	analysisManager->AddNtupleRow(diamondEventsTupleID);
 }
 

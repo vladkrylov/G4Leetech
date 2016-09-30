@@ -92,6 +92,7 @@ void RunAction::BeginOfRunAction(const G4Run* /*run*/)
 
 	// tuple for event characteristics
 	analysisManager->CreateNtuple("DiamondEvents", "Leetech simulation results");
+	analysisManager->CreateNtupleIColumn("NParticles");
 	analysisManager->CreateNtupleDColumn("EnergyDeposited");
 	analysisManager->FinishNtuple();
 

@@ -31,6 +31,7 @@ private:
 	// diamond relative variables
 	G4VPhysicalVolume* diamond;
 
+	G4int det_NPartPerEvent;
 	G4double det_PDG;
 	G4double det_eDep;
 	G4double det_eBefore;
