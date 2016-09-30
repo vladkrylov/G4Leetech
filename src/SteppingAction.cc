@@ -65,26 +65,16 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 	if (aStep->GetPreStepPoint()->GetPhysicalVolume() != diamond) {
 		// particle enters the diamond
 		det_PDG = aStep->GetTrack()->GetDefinition()->GetPDGEncoding();
-		det_eDep = 0;
 		det_eBefore = aStep->GetTrack()->GetKineticEnergy();
 		det_time = aStep->GetPostStepPoint()->GetGlobalTime();
 		det_posX = aStep->GetPostStepPoint()->GetPosition().getX();
 		det_posY = aStep->GetPostStepPoint()->GetPosition().getY();
 		det_posZ = aStep->GetPostStepPoint()->GetPosition().getZ();
 		det_theta = aStep->GetPostStepPoint()->GetMomentumDirection().theta() * 180 / M_PI;
-		det_maxStepLength = 0;
-	} else {
-		// particle is inside diamond
-		det_eDep += aStep->GetTotalEnergyDeposit();
-		if (aStep->GetStepLength() > det_maxStepLength)
-			det_maxStepLength = aStep->GetStepLength();
-	}
-	} else {
-		if (aStep->GetPreStepPoint()->GetPhysicalVolume() != diamond) {
-			// particle leaves the diamond
+	}}
 
-		}
-	}
+	if (aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume() == diamond)
+		det_eDep += aStep->GetTotalEnergyDeposit();
 
 }
 
@@ -104,6 +94,5 @@ void SteppingAction::FillDiamondTuple()
 	analysisManager->FillNtupleDColumn(diamondTupleID, BranchId=5, det_posY);
 	analysisManager->FillNtupleDColumn(diamondTupleID, BranchId=6, det_posZ);
 	analysisManager->FillNtupleDColumn(diamondTupleID, BranchId=7, det_theta);
-	analysisManager->FillNtupleDColumn(diamondTupleID, BranchId=8, det_maxStepLength);
 	analysisManager->AddNtupleRow(diamondTupleID);
 }

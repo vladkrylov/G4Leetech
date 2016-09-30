@@ -88,7 +88,6 @@ void RunAction::BeginOfRunAction(const G4Run* /*run*/)
 	analysisManager->CreateNtupleDColumn("PosY");
 	analysisManager->CreateNtupleDColumn("PosZ");
 	analysisManager->CreateNtupleDColumn("Theta");
-	analysisManager->CreateNtupleDColumn("MaxStepLength");
 	analysisManager->FinishNtuple();
 
 	analysisManager->OpenFile();

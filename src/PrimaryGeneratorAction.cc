@@ -80,18 +80,31 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 //	int N = 9626;
 	m = fParticleGun->GetParticleDefinition()->GetPDGMass();
 
-	for(int i=0; i<N; i++) {
-		Px = GeneratePX();
-		Py = GeneratePY();
-		Pz = GeneratePZ();
-		P = std::sqrt(Px*Px + Py*Py + Pz*Pz);
+	/**
+	 * Test for EDep calculations
+	 * make a point unidirectional source in front of diamond
+	 */
+	G4ThreeVector diamondCenter = Detector->GetDetectorPhys()->GetObjectTranslation();
+	Px = 0;
+	Py = 0;
+	Pz = -3*MeV;
 
+	x = diamondCenter.getX();
+	y = diamondCenter.getY();
+	z = diamondCenter.getZ() + 5*mm;
+
+	for(int i=0; i<N; i++) {
+//		Px = GeneratePX();
+//		Py = GeneratePY();
+//		Pz = GeneratePZ();
+//
+//		x = GeneratePosX();
+//		y = GeneratePosY();
+//		z = GeneratePosZ();
+
+		P = std::sqrt(Px*Px + Py*Py + Pz*Pz);
 		fParticleGun->SetParticleEnergy(std::sqrt(P*P + m*m) - m);
 		fParticleGun->SetParticleMomentumDirection(G4ThreeVector(Px, Py, Pz));
-
-		x = GeneratePosX();
-		y = GeneratePosY();
-		z = GeneratePosZ();
 		fParticleGun->SetParticlePosition(G4ThreeVector(x, y, z));
 
 		fParticleGun->GeneratePrimaryVertex(event);
