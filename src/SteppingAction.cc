@@ -64,6 +64,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 	if (aStep->GetPostStepPoint()->GetPhysicalVolume() == diamond) {
 	if (aStep->GetPreStepPoint()->GetPhysicalVolume() != diamond) {
 		// particle enters the diamond
+		det_NPartPerEvent++;
+
 		det_PDG = aStep->GetTrack()->GetDefinition()->GetPDGEncoding();
 		det_eBefore = aStep->GetTrack()->GetKineticEnergy();
 		det_time = aStep->GetPostStepPoint()->GetGlobalTime();
@@ -75,7 +77,6 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 	}}
 
 	if (aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume() == diamond) {
-		det_NPartPerEvent++;
 		det_eDep += aStep->GetTotalEnergyDeposit();
 	}
 }
