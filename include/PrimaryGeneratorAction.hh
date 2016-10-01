@@ -14,7 +14,6 @@ class G4ParticleDefinition;
 class DetectorConstruction;
 class PrimaryGeneratorMessenger;
 //class G4RotationMatrix;
-class TRandom3;
 class TFile;
 class TTree;
 
@@ -35,7 +34,6 @@ public:
 private:
 	static PrimaryGeneratorAction* fgInstance;
 	PrimaryGeneratorMessenger* gunMessenger;
-	TRandom3 *rndEngine;
 
 	G4RotationMatrix *M;
 

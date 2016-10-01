@@ -10,10 +10,6 @@
 #include "G4RandomDirection.hh"
 #include "G4ParticleGun.hh"
 
-#include "TRandom3.h"
-#include "TFile.h"
-#include "TTree.h"
-
 #include "PrimaryGeneratorMessenger.hh"
 #include "G4GeneralParticleSource.hh"
 #include "DetectorConstruction.hh"
@@ -52,12 +48,6 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 
 //	fParticleGun->SetParticlePosition(beamPipeCenter);
 //	fParticleGun->SetParticleMomentumDirection(targetCenter - beamPipeCenter);
-
-	//	randomization with seed
-	//  from ROOT documentation:
-	//  If seed is 0, the seed is automatically computed via a TUUID object.
-	//  In this case the seed is guaranteed to be unique in space and time.
-	rndEngine = new TRandom3(0);
 }
 
 
@@ -130,27 +120,27 @@ void PrimaryGeneratorAction::SetDirectionRMS(G4double newValue)
 
 G4double PrimaryGeneratorAction::GeneratePX()
 {
-	return rndEngine->Gaus(-2.79e-02, 2.52e-02);
+	return G4RandGauss::shoot(-2.79e-02, 2.52e-02);
 }
 
 G4double PrimaryGeneratorAction::GeneratePY()
 {
-	return rndEngine->Gaus(0., 2.91904e-02);
+	return G4RandGauss::shoot(0., 2.91904e-02);
 }
 
 G4double PrimaryGeneratorAction::GeneratePZ()
 {
-	return rndEngine->Uniform(-2.88, -2.67);
+	return G4RandFlat::shoot(-2.88, -2.67);
 }
 
 G4double PrimaryGeneratorAction::GeneratePosX()
 {
-	return rndEngine->Uniform(188., 218.);
+	return G4RandFlat::shoot(188., 218.);
 }
 
 G4double PrimaryGeneratorAction::GeneratePosY()
 {
-	return rndEngine->Gaus(0., 9.56);
+	return G4RandGauss::shoot(0., 9.56);
 }
 
 G4double PrimaryGeneratorAction::GeneratePosZ()
