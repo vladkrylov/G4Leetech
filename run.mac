@@ -1,9 +1,9 @@
-/Micromegas/det/setCupThick 2 mm
+/Micromegas/det/setCupThick 4.000000 mm
 
-/Leetech/det/SetCollimatorEntranceGapX 2.563 mm
-/Leetech/det/SetCollimatorEntranceGapY 1.795 mm
-/Leetech/det/SetCollimatorExit1GapX 10.000000 mm
-/Leetech/det/SetCollimatorExit1GapY 10.000000 mm
+/Leetech/det/SetCollimatorEntranceGapX 2 mm
+/Leetech/det/SetCollimatorEntranceGapY 2 mm
+/Leetech/det/SetCollimatorExit1GapX 20.000000 mm
+/Leetech/det/SetCollimatorExit1GapY 20.000000 mm
 
 #equal to first colim gap
 #/Micromegas/det/setApertureRaduis 1 cm
@@ -20,7 +20,7 @@
 #distance from the edge to beginning of the collimator system
 /Micromegas/det/setDet1X 20 mm
 
-/Micromegas/det/setRotationDeg 23 deg
+/Micromegas/det/setRotationDeg 0 deg
 #/Micromegas/det/setRotationAddDist 6.5 cm
 /Micromegas/det/setRotationAddDist 65 cm
 
@@ -33,11 +33,11 @@
 /run/numberOfThreads 4
 /run/initialize
 
-/Leetech/det/setField 446 gauss
+/Leetech/det/setField 82.4 gauss
 
-/Leetech/gun/ParticleEnergy 3300.000000 keV
+/Leetech/gun/ParticleEnergy 3500.000000 keV
 /Leetech/gun/ParticleDirectionRMS 0 deg
 /Leetech/OutRootFile leetech
 
-/run/beamOn 100000
+/run/beamOn 20000
 

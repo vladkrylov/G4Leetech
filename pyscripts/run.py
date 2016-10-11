@@ -64,7 +64,7 @@ def run(number_of_processes, out_file, number_of_events, readme_enable):
 	out_files = [os.path.abspath(f) 
 				for f in os.listdir(os.getcwd()) 
 				if os.path.isfile(os.path.abspath(f)) 
-				and f.startswith(filebase)
+				and f.startswith(filebase + "_t")
 				and f.endswith(".root")]
 	if out_files:
 		call(['hadd', '-f', out_file] + out_files)

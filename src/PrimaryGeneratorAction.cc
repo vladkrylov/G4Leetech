@@ -9,7 +9,6 @@
 #include "Randomize.hh"
 #include "G4RandomDirection.hh"
 #include "G4ParticleGun.hh"
-#include "TRandom3.h"
 
 #include "TFile.h"
 #include "TTree.h"
@@ -53,11 +52,6 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 	fParticleGun->SetParticlePosition(beamPipeCenter);
 	fParticleGun->SetParticleMomentumDirection(targetCenter - beamPipeCenter);
 
-	//	randomization with seed
-	//  from ROOT documentation:
-	//  If seed is 0, the seed is automatically computed via a TUUID object.
-	//  In this case the seed is guaranteed to be unique in space and time.
-	rndEngine = new TRandom3(0);
 }
 
 
@@ -103,8 +97,8 @@ G4ThreeVector PrimaryGeneratorAction::GenerateParticleDir()
 	G4ThreeVector d(dispacement, dispacement, 1);
 	//generation direction of the particle distributed by Gauss
 	if (dirRMS != 0.0) {
-		d += G4ThreeVector(rndEngine->Gaus(0, dirRMS),
-						   rndEngine->Gaus(0, dirRMS),
+		d += G4ThreeVector(G4RandGauss::shoot(0, dirRMS),
+						   G4RandGauss::shoot(0, dirRMS),
 						   0);
 	}
 	d *= *M;

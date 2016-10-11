@@ -13,15 +13,15 @@ out_dir = os.path.join('/home/vlad/10g4work/LeetechRuns')
 E = 3500 # keV
 change_parameter(run_mac, "/Leetech/gun/ParticleEnergy", "%f keV" % E)
 
-rmss = [0.2, 0.4, 0.6, 0.8, 1, 1.5, 2]  # degrees
-for rms in rmss:
-    change_parameter(run_mac, "/Leetech/gun/ParticleDirectionRMS", "%f deg" % rms)
+targets = [0.1, 0.5, 1, 2, 3, 4, 5, 6, 7, 8]  # degrees
+for d in targets:
+    change_parameter(run_mac, "/Micromegas/det/setCupThick", "%f mm" % d)
     
-    rms_string = str(rms).replace('.', '_')
+    d_string = str(d).replace('.', '_')
     out_file = os.path.abspath(os.path.join(out_dir,
-               "BeamTime6/4gps/leetech.root"))
+               "t_leetech_%smm.root" % d_string))
     run(number_of_processes=4,
-        number_of_events=2e4,
+        number_of_events=1e4,
         out_file=out_file,
         readme_enable=False)
 

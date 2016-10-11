@@ -692,15 +692,15 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	/**
 	 * Ghost detectors
 	 */
-	G4ThreeVector beforeTargetDetCenter = phyTarget->GetObjectTranslation() - G4ThreeVector(0., 0., target->GetZHalfLength()+10*um);
-	AddPlaneDetector(new GhostDetector("OnTarget", beforeTargetDetCenter.getX(), beforeTargetDetCenter.getZ(), radNeckRing, logicWorld));
-
-	G4ThreeVector afterTargetDetCenter = phyTarget->GetObjectTranslation() + G4ThreeVector(0., 0., target->GetZHalfLength()+10*um);
-	AddPlaneDetector(new GhostDetector("AfterTarget", afterTargetDetCenter.getX(), afterTargetDetCenter.getZ(), radNeckRing, logicWorld));
-
-	G4ThreeVector beforeEntCollDetCenter = (physiColim22->GetObjectTranslation() + physiColim21->GetObjectTranslation())/2.
-			- G4ThreeVector(0., 0., solidColim22->GetZHalfLength() + 20*um);
-	AddPlaneDetector(new GhostDetector("BeforeEntranceColl", beforeEntCollDetCenter.getX(), beforeEntCollDetCenter.getZ(), 7*mm, logicWorld));
+//	G4ThreeVector beforeTargetDetCenter = phyTarget->GetObjectTranslation() - G4ThreeVector(0., 0., target->GetZHalfLength()+10*um);
+//	AddPlaneDetector(new GhostDetector("OnTarget", beforeTargetDetCenter.getX(), beforeTargetDetCenter.getZ(), radNeckRing, logicWorld));
+//
+//	G4ThreeVector afterTargetDetCenter = phyTarget->GetObjectTranslation() + G4ThreeVector(0., 0., target->GetZHalfLength()+10*um);
+//	AddPlaneDetector(new GhostDetector("AfterTarget", afterTargetDetCenter.getX(), afterTargetDetCenter.getZ(), radNeckRing, logicWorld));
+//
+//	G4ThreeVector beforeEntCollDetCenter = (physiColim22->GetObjectTranslation() + physiColim21->GetObjectTranslation())/2.
+//			- G4ThreeVector(0., 0., solidColim22->GetZHalfLength() + 20*um);
+//	AddPlaneDetector(new GhostDetector("BeforeEntranceColl", beforeEntCollDetCenter.getX(), beforeEntCollDetCenter.getZ(), 7*mm, logicWorld));
 
 	G4ThreeVector entrCollDetCenter = (physiColim11->GetObjectTranslation() + physiColim12->GetObjectTranslation())/2.
 			+ G4ThreeVector(0., 0., solidColim11->GetZHalfLength() + 20*um);

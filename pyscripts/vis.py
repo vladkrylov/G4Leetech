@@ -11,7 +11,7 @@ for o, a in opts:
             launch_heprapp = True
 
 G4_work_dir = os.environ['G4WORKDIR']
-project_dir = "%s/Leetech" % G4_work_dir
+project_dir = "%s/G4Leetech" % G4_work_dir
 G4HepRapp = "%s/HepRApp.jar" % G4_work_dir
 exe = "%s/bin/Linux-g++/Leetech" % G4_work_dir
 G4java = "/home/vlad/Program_Files/java/jre1.6.0_30/bin/java"
