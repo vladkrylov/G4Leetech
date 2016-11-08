@@ -830,6 +830,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 void DetectorConstruction::ConstructSDandField()
 {
 	 fMagneticField = new RealMagneticField();
+//	 fMagneticField = new MyMagneticField();
 	 fFieldMgr = new G4FieldManager();
 	 fFieldMgr->SetDetectorField(fMagneticField);
 	 fFieldMgr->CreateChordFinder(fMagneticField);

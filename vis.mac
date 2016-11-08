@@ -1,4 +1,4 @@
-/Micromegas/det/setCupThick 0.01 mm
+/Micromegas/det/setCupThick 0.02 mm
 
 /Leetech/det/SetCollimatorEntranceGapX 20 mm
 /Leetech/det/SetCollimatorEntranceGapY 20 mm
