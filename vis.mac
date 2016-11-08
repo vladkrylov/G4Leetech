@@ -1,4 +1,4 @@
-/Micromegas/det/setCupThick 2 mm
+/Micromegas/det/setCupThick 0.01 mm
 
 /Leetech/det/SetCollimatorEntranceGapX 20 mm
 /Leetech/det/SetCollimatorEntranceGapY 20 mm
@@ -6,11 +6,9 @@
 /Leetech/det/SetCollimatorExit1GapY 20 mm
 
 #equal to first colim gap
-#/Micromegas/det/setApertureRaduis 1 cm
 /Micromegas/det/setApertureRaduis 2 cm
 
 #equal to sec colim gap
-#/Micromegas/det/setApertureThick 1.4 cm
 /Micromegas/det/setApertureThick 2 cm
 
 #/Micromegas/det/setDet1InRad 0 mm unusable for now
@@ -21,7 +19,6 @@
 /Micromegas/det/setDet1X 20 mm
 
 /Micromegas/det/setRotationDeg 0 deg
-#/Micromegas/det/setRotationAddDist 6.5 cm
 /Micromegas/det/setRotationAddDist 65 cm
 
 /Micromegas/det/setMaxStep 10 mm
@@ -47,7 +44,7 @@
 
 # for drawing the tracks
 /vis/scene/add/trajectories
-#/vis/scene/add/axes
+/vis/scene/add/axes
 
 # (if you prefer refreshing each event, comment out next line)
 /vis/scene/endOfEventAction accumulate

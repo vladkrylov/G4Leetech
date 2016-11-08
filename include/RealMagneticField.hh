@@ -23,56 +23,50 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5MagneticField.cc 77656 2013-11-27 08:52:57Z gcosmo $
+// $Id: B5MagneticField.hh 76474 2013-11-11 10:36:34Z gcosmo $
 //
-/// \file B5MagneticField.cc
-/// \brief Implementation of the B5MagneticField class
+/// \file B5MagneticField.hh
+/// \brief Definition of the B5MagneticField class
 
-#include "MyMagneticField.hh"
+#ifndef RealMagneticField_H
+#define RealMagneticField_H 1
 
-#include "G4GenericMessenger.hh"
-#include "G4SystemOfUnits.hh"
+#include <vector>
+
 #include "globals.hh"
+#include "G4MagneticField.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+class G4GenericMessenger;
+class DetectorConstruction;
 
-MyMagneticField::MyMagneticField()
-: G4MagneticField(), fMessenger(0), fBy(1.0*tesla)
+/// Magnetic field
+
+class RealMagneticField : public G4MagneticField
 {
-    // define commands for this class
-    DefineCommands();
-}
+public:
+	RealMagneticField();
+    virtual ~RealMagneticField();
+    
+    virtual void GetFieldValue(const G4double point[4], G4double* bField ) const;
+    
+    void SetField(G4double val) { By = val; }
+    G4double GetField() const { return By; }
+    
+private:
+    void DefineCommands();
+
+    G4GenericMessenger* fMessenger;
+    DetectorConstruction* detector;
+    G4double By;
+
+    G4double z0, zmin, zmax;
+    std::vector<G4double> zmap;
+    std::vector<G4double> Bzmap;
+
+    void AddBZPoint(G4double z, G4double B);
+    void CreateBZMap();
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-MyMagneticField::~MyMagneticField()
-{ 
-    delete fMessenger; 
-}
-
-void MyMagneticField::GetFieldValue(const G4double point[4],double *bField) const
-{
-    bField[0] = 0.;
-    bField[1] = fBy;
-    bField[2] = 0.;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void MyMagneticField::DefineCommands()
-{
-    // Define /B5/field command directory using generic messenger class
-    fMessenger = new G4GenericMessenger(this, 
-                                        "/Leetech/det/",
-                                        "Field control");
-
-    // fieldValue command 
-    G4GenericMessenger::Command& valueCmd
-      = fMessenger->DeclareMethodWithUnit("setField","tesla",
-                                  &MyMagneticField::SetField,
-                                  "Set field strength.");
-    valueCmd.SetParameterName("field", true);
-    valueCmd.SetDefaultValue("1.");
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#endif
