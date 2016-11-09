@@ -1,4 +1,4 @@
-/Micromegas/det/setCupThick 4.000000 mm
+/Micromegas/det/setCupThick 2.000000 mm
 
 /Leetech/det/SetCollimatorEntranceGapX 2 mm
 /Leetech/det/SetCollimatorEntranceGapY 2 mm
@@ -33,11 +33,11 @@
 /run/numberOfThreads 4
 /run/initialize
 
-/Leetech/det/setField 82.4 gauss
+/Leetech/det/setField 525 gauss
 
 /Leetech/gun/ParticleEnergy 3500.000000 keV
 /Leetech/gun/ParticleDirectionRMS 0 deg
-/Leetech/OutRootFile leetech
+/Leetech/OutRootFile realleetech
 
-/run/beamOn 20000
+/run/beamOn 100000
 

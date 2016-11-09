@@ -20,7 +20,6 @@
 #include "G4Colour.hh"
 #include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
-#include "MyMagneticField.hh"
 #include "G4UserLimits.hh"
 #include "G4RunManager.hh"
 #include "G4AutoDelete.hh"
@@ -33,10 +32,12 @@
 #include "DetectorConstruction.hh"
 #include "DetectorMessenger.hh"
 #include "GhostDetector.hh"
+#include "MyMagneticField.hh"
+#include "RealMagneticField.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ThreadLocal MyMagneticField* DetectorConstruction::fMagneticField = 0;
+G4ThreadLocal G4MagneticField* DetectorConstruction::fMagneticField = 0;
 G4ThreadLocal G4FieldManager* DetectorConstruction::fFieldMgr = 0;
     
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -338,7 +339,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	G4RotationMatrix RMZero(0,0,0);
 
 	G4Box* solidWorld = new G4Box("World",WorldSizeX/2,WorldSizeY/2,WorldSizeZ/2);
-	G4LogicalVolume* logicWorld = new G4LogicalVolume(solidWorld,
+	logicWorld = new G4LogicalVolume(solidWorld,
 		  //GetMaterial(3), air
 		  GetMaterial(6),  //myvacuum
 		  "World");
@@ -387,7 +388,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	G4SubtractionSolid* ChamberWithHoles = new G4SubtractionSolid("ChamberWithHoles", ChamberWithEntrHole,ChamberHole, ChamberHoleSubExit);
 
 	G4LogicalVolume* logicChamber = new G4LogicalVolume(ChamberWithHoles, GetMaterial(1), "Chamber");
-	G4VPhysicalVolume* physiChamber = new G4PVPlacement(0, G4ThreeVector(chamber_xc,chamber_yc,chamber_zc), logicChamber, "Chamber",	 logicWorld, false, 0);
+	physiChamber = new G4PVPlacement(0, G4ThreeVector(chamber_xc,chamber_yc,chamber_zc), logicChamber, "Chamber",	 logicWorld, false, 0);
 
 	//
 	//	InnerBox
@@ -404,7 +405,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	G4UnionSolid *innerMainEnEx1Ex2Box = new G4UnionSolid("InnerBox", innerMainEnEx1Box, neckHole, transExit2NeckHole);
 
 	logicInnerBox = new G4LogicalVolume(innerMainBox, GetMaterial(5),"InnerBox");
-	G4VPhysicalVolume *physiInnerBox = new G4PVPlacement(0, G4ThreeVector(innerBox_xc,innerBox_yc,innerBox_zc), logicInnerBox, "InnerBox", logicChamber, false,	 0);
+	physiInnerBox = new G4PVPlacement(0, G4ThreeVector(innerBox_xc,innerBox_yc,innerBox_zc), logicInnerBox, "InnerBox", logicChamber, false,	 0);
 
 
 //	//DETECTOR
@@ -828,13 +829,14 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 void DetectorConstruction::ConstructSDandField()
 {
-	 fMagneticField = new MyMagneticField();
+	 fMagneticField = new RealMagneticField();
+//	 fMagneticField = new MyMagneticField();
 	 fFieldMgr = new G4FieldManager();
 	 fFieldMgr->SetDetectorField(fMagneticField);
 	 fFieldMgr->CreateChordFinder(fMagneticField);
 	 G4bool forceToAllDaughters = true;
 	 logicInnerBox->SetFieldManager(fFieldMgr, forceToAllDaughters);
-
+	 logicWorld->SetFieldManager(fFieldMgr, forceToAllDaughters);
 }
 
 void DetectorConstruction::DefineMaterials()
@@ -958,3 +960,7 @@ void DetectorConstruction::AddPlaneDetector(GhostDetector* d)
 	ghostDetectors.push_back(d);
 }
 
+G4double DetectorConstruction::GetMagnetZCenter()
+{
+	return physiChamber->GetObjectTranslation().getZ();
+}

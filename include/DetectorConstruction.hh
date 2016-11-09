@@ -65,6 +65,7 @@ public:
     G4ThreeVector beamPipeCenter;
     G4ThreeVector targetFaceCenter;
     G4ThreeVector GetBeamPipeCenter() const { return beamPipeCenter; };
+    G4double GetMagnetZCenter();
     G4ThreeVector GetTargetFaceCenter() const { return targetFaceCenter; };
     G4double GetLeetechRotation() const { return _RotationDeg; };
 
@@ -72,7 +73,7 @@ public:
     std::vector<GhostDetector*>* GetPlaneDetectorList();
 
 private:
-	static G4ThreadLocal MyMagneticField* fMagneticField;
+	static G4ThreadLocal G4MagneticField* fMagneticField;
 	static G4ThreadLocal G4FieldManager* fFieldMgr;
 
 	std::vector<GhostDetector*> ghostDetectors;
@@ -80,9 +81,12 @@ private:
 	void DefineMaterials();
     G4Material* GetMaterial(G4int t);
 
+    G4LogicalVolume* logicWorld;
     G4VPhysicalVolume* physiBeamPipeV;
     G4VPhysicalVolume* phyTarget;
     G4LogicalVolume *logicInnerBox;
+    G4VPhysicalVolume *physiInnerBox;
+    G4VPhysicalVolume *physiChamber;
     G4LogicalVolume *SimpleMagnetBox;
 
 	G4double innerBoxX;
