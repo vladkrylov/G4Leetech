@@ -4,7 +4,7 @@
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ThreeVector.hh"
 #include "globals.hh"
-
+#include "G4RotationMatrix.hh"
 
 class G4GeneralParticleSource;
 class G4ParticleGun;
@@ -13,6 +13,7 @@ class G4Event;
 class G4ParticleDefinition;
 class DetectorConstruction;
 class PrimaryGeneratorMessenger;
+//class G4RotationMatrix;
 class TFile;
 class TTree;
 
@@ -21,21 +22,26 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 public:
     PrimaryGeneratorAction();
     virtual ~PrimaryGeneratorAction();
+    static const PrimaryGeneratorAction* Instance();
     
     virtual void GeneratePrimaries(G4Event*);
+    G4ThreeVector GenerateParticleDir();
     
-	static const PrimaryGeneratorAction* Instance();
+	// Messenger access functions
+    void SetParticleEnergy(G4double newValue);
+    void SetDirectionRMS(G4double newValue);
 
-	void SetRootFile(G4String newValue);
-	void SetTreeName(G4String newValue);
 
 private:
 	static PrimaryGeneratorAction* fgInstance;
 	PrimaryGeneratorMessenger* gunMessenger;
 
+	G4RotationMatrix *M;
+
 	G4ParticleGun* fParticleGun;
     DetectorConstruction* Detector;
 	G4String _particleName;
+	G4double dirRMS;
 
 	G4ParticleDefinition* FindParticle(G4String particleName);
 
@@ -45,11 +51,6 @@ private:
 	G4double Px, Py, Pz;
 	G4double x0, y0, z0;
 	G4int type;
-
-	G4String rootFileName;
-	G4String rootTreeName;
-	TFile* f;
-	TTree* tree;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

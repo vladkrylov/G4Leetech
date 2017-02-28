@@ -24,7 +24,7 @@ except KeyError:
 	exit(1)
 
 exe = os.path.join(G4_work_dir, "bin/Linux-g++/Leetech")
-project_dir = os.path.join(G4_work_dir, "Leetech")
+project_dir = os.path.join(G4_work_dir, "G4Leetech")
 favorite_editor = "vim"
 
 run_command = [exe, os.path.join(project_dir, 'run.mac')]
@@ -64,7 +64,7 @@ def run(number_of_processes, out_file, number_of_events, readme_enable):
 	out_files = [os.path.abspath(f) 
 				for f in os.listdir(os.getcwd()) 
 				if os.path.isfile(os.path.abspath(f)) 
-				and f.startswith(filebase)
+				and f.startswith(filebase + "_t")
 				and f.endswith(".root")]
 	if out_files:
 		call(['hadd', '-f', out_file] + out_files)

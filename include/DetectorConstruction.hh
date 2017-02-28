@@ -59,20 +59,21 @@ public:
     
     virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField();
-    std::ofstream myfile;
-    std::ofstream myfile2;
-    G4ThreeVector GetTargetFaceCenter;
-    G4ThreeVector BeamPipeCenter;
-    G4ThreeVector GetTargetFaceCenter1;
+
     DetectorMessenger* detectorMessenger;
-    G4ThreeVector GetBeamPipeCenter()const { return BeamPipeCenter; };
-    G4ThreeVector GettTargetFaceCenter()const { return GetTargetFaceCenter1; };
+
+    G4ThreeVector beamPipeCenter;
+    G4ThreeVector targetFaceCenter;
+    G4ThreeVector GetBeamPipeCenter() const { return beamPipeCenter; };
+    G4double GetMagnetZCenter();
+    G4ThreeVector GetTargetFaceCenter() const { return targetFaceCenter; };
+    G4double GetLeetechRotation() const { return _RotationDeg; };
 
     void AddPlaneDetector(GhostDetector* d);
     std::vector<GhostDetector*>* GetPlaneDetectorList();
 
 private:
-	static G4ThreadLocal MyMagneticField* fMagneticField;
+	static G4ThreadLocal G4MagneticField* fMagneticField;
 	static G4ThreadLocal G4FieldManager* fFieldMgr;
 
 	std::vector<GhostDetector*> ghostDetectors;
@@ -80,14 +81,17 @@ private:
 	void DefineMaterials();
     G4Material* GetMaterial(G4int t);
 
+    G4LogicalVolume* logicWorld;
     G4VPhysicalVolume* physiBeamPipeV;
     G4VPhysicalVolume* phyTarget;
     G4LogicalVolume *logicInnerBox;
+    G4VPhysicalVolume *physiInnerBox;
+    G4VPhysicalVolume *physiChamber;
     G4LogicalVolume *SimpleMagnetBox;
 
-    	G4double innerBoxX;
-    	G4double innerBoxY;
-    	G4double innerBoxZ;
+	G4double innerBoxX;
+	G4double innerBoxY;
+	G4double innerBoxZ;
 
    	G4double chamber_xc;
     G4double chamber_yc;
@@ -127,6 +131,8 @@ private:
   	G4double _Det1X;
   	G4double _RotationDeg;
   	G4double _RotAddDist;
+
+  	G4RotationMatrix* RM1;
 
 // messenger access functions
 public:
